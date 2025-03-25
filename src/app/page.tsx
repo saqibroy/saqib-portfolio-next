@@ -16,11 +16,8 @@ interface BackgroundElement {
 
 const Home: React.FC = () => {
   const [stage, setStage] = useState<number>(0);
-  const [typedText, setTypedText] = useState<string>('');
   const [backgroundElements, setBackgroundElements] = useState<BackgroundElement[]>([]);
   const [isWaitingPeriod, setIsWaitingPeriod] = useState<boolean>(true);
-
-  const codeSnippet = "await get('saqib')";
 
   // Generate background elements once on component mount
   useEffect(() => {
@@ -39,20 +36,14 @@ const Home: React.FC = () => {
   useEffect(() => {
     const stages = [
       () => {
-        let index = 0;
         const typeInterval = setInterval(() => {
-          if (index <= codeSnippet.length) {
-            setTypedText(codeSnippet.slice(0, index));
-            index++;
-          } else {
-            clearInterval(typeInterval);
+          clearInterval(typeInterval);
             // Set waiting period and trigger faster background
             setIsWaitingPeriod(true);
             setTimeout(() => {
               setIsWaitingPeriod(false);
               setStage(1);// Instantly set hero text
             }, 1500);
-          }
         }, 50);
 
         return () => clearInterval(typeInterval);
