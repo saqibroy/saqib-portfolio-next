@@ -161,7 +161,7 @@ const Home: React.FC = () => {
                       <span className="text-[#569CD6]">await</span>{' '}
                       <span className="text-[#4EC9B0]">get</span>
                       <span className="text-[#D4D4D4]">(</span>
-                      <span className="text-[#CE9178]">'saqib'</span>
+                      <span className="text-[#CE9178]">&apos;saqib&apos;</span>
                       <span className="text-[#D4D4D4]">)</span>
                       <motion.span 
                         className="inline-block ml-1 w-[2px] h-7 bg-white opacity-80"
