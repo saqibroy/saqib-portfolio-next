@@ -90,9 +90,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## 📫 Contact
 
 Saqib Sohail 
-- GitHub: [@saqibsohail](https://github.com/saqibsohail)
-- LinkedIn: [Saqib Sohail](https://linkedin.com/in/saqibsohail)
-- Twitter: [@saqibsohail](https://twitter.com/saqibsohail)
+- GitHub: [@saqibroy](https://github.com/saqibroy)
+- LinkedIn: [Saqib Sohail](https://linkedin.com/in/saqibroy)
 
 ## 🌟 Show Your Support
 
