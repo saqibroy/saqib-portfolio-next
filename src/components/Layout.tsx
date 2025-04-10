@@ -13,8 +13,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isWaitingPeriod, setIsWaitingPeriod] = useState<boolean>(true);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   const pathname = usePathname();
   const isHomePage = pathname === '/';
@@ -29,22 +27,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', message: '' });
-      setIsContactOpen(false);
-    }, 3000);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email);
