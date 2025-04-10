@@ -388,6 +388,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variants, custom }) 
 };
 
 const CVPage: React.FC = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
   const shouldReduceMotion = useReducedMotion();
 
   const experiences = [
@@ -623,12 +627,7 @@ const CVPage: React.FC = () => {
     }
   ];
 
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const containerVariants = useMemo(() => ({
+  const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -636,9 +635,9 @@ const CVPage: React.FC = () => {
         staggerChildren: 0.1,
       },
     },
-  }), []);
+  };
 
-  const itemVariants = useMemo(() => ({
+  const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -647,7 +646,7 @@ const CVPage: React.FC = () => {
         duration: 0.5,
       },
     },
-  }), []);
+  };
 
   const renderProjects = useCallback((project: typeof projects[0], index: number) => {
     return (
@@ -658,7 +657,7 @@ const CVPage: React.FC = () => {
         custom={index}
       />
     );
-  }, []);
+  }, [itemVariants]);
 
   return (
     <Layout>

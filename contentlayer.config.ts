@@ -1,4 +1,4 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files'
+import { defineDocumentType, makeSource } from 'contentlayer/source-files';
 
 export const BlogPost = defineDocumentType(() => ({
   name: 'BlogPost',
@@ -12,12 +12,12 @@ export const BlogPost = defineDocumentType(() => ({
   computedFields: {
     slug: {
       type: 'string',
-      resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx$/, '')
-    }
-  }
-}))
+      resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx$/, ''),
+    },
+  },
+}));
 
 export default makeSource({
   contentDirPath: 'src/content/blog',
-  documentTypes: [BlogPost]
-})
+  documentTypes: [BlogPost],
+});

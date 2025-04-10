@@ -41,17 +41,20 @@ A modern, performant personal portfolio website showcasing my web development sk
 ### Installation
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/yourusername/portfolio-website.git
    ```
 
 2. Install dependencies
+
    ```bash
    cd portfolio-website
    npm install
    ```
 
 3. Run development server
+
    ```bash
    npm run dev
    ```
@@ -61,6 +64,7 @@ A modern, performant personal portfolio website showcasing my web development sk
 ## 🔧 Customization
 
 Easily customize the content by modifying:
+
 - `codeSnippet` text
 - Social media links
 - Background element generation
@@ -89,7 +93,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📫 Contact
 
-Saqib Sohail 
+Saqib Sohail
+
 - GitHub: [@saqibroy](https://github.com/saqibroy)
 - LinkedIn: [Saqib Sohail](https://linkedin.com/in/saqibroy)
 

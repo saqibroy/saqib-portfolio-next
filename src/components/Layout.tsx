@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -49,6 +50,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     navigator.clipboard.writeText(email);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleCloseContact = () => {
+    setIsContactOpen(false);
   };
 
   return (
@@ -221,7 +226,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {isContactOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={() => setIsContactOpen(false)}
+          onClick={handleCloseContact}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -235,7 +240,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 Get in Touch
               </h2>
               <button
-                onClick={() => setIsContactOpen(false)}
+                onClick={handleCloseContact}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
