@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-favicons": "node scripts/generate-favicons.js"
   },
   "dependencies": {
     "@next/font": "^14.2.15",
@@ -17,6 +18,10 @@
     "next-seo": "^6.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-intersection-observer": "^9.16.0",
+    "recharts": "^2.15.2",
+    "source-map-js": "^1.2.1",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
@@ -27,6 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
+    "sharp": "^0.34.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

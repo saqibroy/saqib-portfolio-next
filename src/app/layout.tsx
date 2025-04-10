@@ -4,52 +4,90 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Saqib - Modern Web Developer',
-    template: '%s | Saqib Portfolio'
+  title: "Saqib Sohail - Full Stack Developer",
+  description: "Full stack developer and software engineer specializing in modern web technologies. Experienced in React, TypeScript, Node.js, and more.",
+  keywords: ["Full Stack Developer", "React", "TypeScript", "Node.js", "Next.js", "Web Development", "Software Engineer"],
+  authors: [{ name: "Saqib Sohail" }],
+  creator: "Saqib Sohail",
+  publisher: "Saqib Sohail",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
-  description: 'A modern web developer focused on performance and accessibility, creating innovative and user-centric web solutions.',
-  metadataBase: new URL('https://your-website.com'),
+  metadataBase: new URL('https://saqibroy.vercel.app'),
   alternates: {
-    canonical: '/'
+    canonical: '/',
   },
   openGraph: {
-    type: 'website',
+    title: "Saqib Sohail - Full Stack Developer",
+    description: "Full stack developer and software engineer specializing in modern web technologies.",
+    url: 'https://saqibroy.vercel.app',
+    siteName: "Saqib Sohail Portfolio",
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Saqib Sohail - Full Stack Developer',
+      },
+    ],
     locale: 'en_US',
-    url: 'https://your-website.com',
-    siteName: 'Saqib Portfolio',
-    title: 'Saqib - Modern Web Developer',
-    description: 'A modern web developer focused on performance and accessibility'
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Saqib - Modern Web Developer',
-    description: 'A modern web developer focused on performance and accessibility',
-    creator: '@your_twitter_handle'
+    title: "Saqib Sohail - Full Stack Developer",
+    description: "Full stack developer and software engineer specializing in modern web technologies.",
+    images: ['/og-image.png'],
   },
-  keywords: [
-    'web development', 
-    'performance optimization', 
-    'accessibility', 
-    'React', 
-    'Next.js', 
-    'TypeScript'
-  ]
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#000000',
+      },
+    ],
+  },
+  manifest: '/site.webmanifest',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#111827' },
+  ],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html 
-      lang="en" 
-      className={`${GeistSans.className} ${GeistMono.className}`}
-    >
-      <body 
-        className="antialiased bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white selection:bg-blue-200 selection:text-blue-900"
-      >
+    <html lang="en" className={`${GeistSans.className} ${GeistMono.className}`}>
+      <body className="bg-gray-900 text-white antialiased">
         {children}
       </body>
     </html>
