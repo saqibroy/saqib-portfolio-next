@@ -136,12 +136,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 rel="noopener noreferrer"
                 className="inline-block"
               >
-                <Image 
-                  src="https://wakatime.com/badge/user/04f32415-555b-4fa9-8569-af46c61a4ea1.svg" 
-                  alt="WakaTime stats" 
-                  width={120}
-                  height={24}
-                  className="h-6"
+                <img 
+                  src="https://wakatime.com/badge/user/04f32415-555b-4fa9-8569-af46c61a4ea1.svg"
+                  alt="WakaTime stats"
+                  className="h-6 w-auto"
+                  style={{ imageRendering: 'crisp-edges' }}
                 />
               </a>
             </motion.div>
