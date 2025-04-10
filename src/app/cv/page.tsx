@@ -637,18 +637,18 @@ const CVPage: React.FC = () => {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
   const renderProjects = useCallback((project: typeof projects[0], index: number) => {
+    const itemVariants = {
+      hidden: { opacity: 0, y: 20 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 0.5,
+        },
+      },
+    };
+
     return (
       <ProjectCard
         key={project.title}
@@ -657,7 +657,7 @@ const CVPage: React.FC = () => {
         custom={index}
       />
     );
-  }, [itemVariants]);
+  }, []);
 
   return (
     <Layout>
