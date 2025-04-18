@@ -1,17 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['wakatime.com'],
+    domains: ["wakatime.com"],
     minimumCacheTTL: 60,
   },
-  experimental: {
-    optimizeCss: true,
-  },
+  // Removing the optimizeCss experimental feature
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: process.env.NODE_ENV === "production",
   },
   poweredByHeader: false,
   reactStrictMode: true,
-};
+}
 
-module.exports = nextConfig; 
+module.exports = nextConfig
