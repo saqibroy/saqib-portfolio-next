@@ -4,6 +4,8 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Inter } from 'next/font/google';
 
+import { Analytics } from '@vercel/analytics/react';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -95,6 +97,7 @@ export default function RootLayout({
       </head>
       <body className="bg-gray-900 text-white antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );
