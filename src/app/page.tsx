@@ -133,7 +133,7 @@ const Home: React.FC = () => {
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.2 }}
                 className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto"
               >
-                Building scalable applications with clean, optimized code and modern technologies
+                Building performant, accessible, and scalable web applications using modern technologies like React, Next.js, Node.js, and TypeScript.
               </motion.p>
             </motion.div>
 

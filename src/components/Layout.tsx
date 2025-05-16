@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isCVPage = pathname === '/cv';
-  const email = 'sohail.cpp@gmail.com';
+  const email = 'saqib@ssohail.com';
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
 
   useEffect(() => {
@@ -39,17 +39,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`${isHomePage ? 'h-screen overflow-hidden' : 'min-h-screen'} flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white`}>
-      {/* Fixed Indicator Dot */}
-      <div className="fixed top-4 right-4">
-        <div
-          className={`w-2 h-2 rounded-full ${
-            isWaitingPeriod
-              ? "bg-red-400 animate-[pulse_0.5s_infinite]"
-              : "bg-blue-400 animate-pulse"
-          }`}
-        />
-      </div>
-
       {/* Navigation */}
       <header className="absolute top-0 left-0 w-full p-4 z-20">
         <nav className="container mx-auto flex justify-between items-center">
@@ -123,27 +112,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             transition={{ duration: shouldReduceMotion ? 0.5 : 1, delay: 0.5 }}
             className="flex flex-col items-center space-y-2"
           >
-            {/* WakaTime Badge */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: shouldReduceMotion ? 0.5 : 1, delay: 0.6 }}
-            >
-              <a 
-                href="https://wakatime.com/@04f32415-555b-4fa9-8569-af46c61a4ea1" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-block"
-              >
-                <img 
-                  src="https://wakatime.com/badge/user/04f32415-555b-4fa9-8569-af46c61a4ea1.svg"
-                  alt="WakaTime stats"
-                  className="h-6 w-auto"
-                  style={{ imageRendering: 'crisp-edges' }}
-                />
-              </a>
-            </motion.div>
-
             <div className="flex flex-col items-center space-y-3">
               <div className="flex justify-center space-x-3">
                 {[
@@ -167,7 +135,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   },
                   { 
                     name: 'Email', 
-                    url: 'mailto:saqibroy@example.com',
+                    url: `mailto:${email}`,
                     icon: (
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

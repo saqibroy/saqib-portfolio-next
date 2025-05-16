@@ -21,7 +21,7 @@ export const defaultSEOConfig = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://your-website.com',
+    url: 'https://ssohail.com',
     siteName: 'Saqib Portfolio',
     title: 'Saqib - Modern Web Developer',
     description: 'A modern web developer focused on performance and accessibility',
@@ -30,6 +30,6 @@ export const defaultSEOConfig = {
     card: 'summary_large_image',
     title: 'Saqib - Modern Web Developer',
     description: 'A modern web developer focused on performance and accessibility',
-    creator: '@your_twitter_handle',
+    creator: '// @your_twitter_handle',
   },
 };
