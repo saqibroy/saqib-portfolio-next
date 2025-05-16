@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Layout from '@/components/Layout';
 
-const ExperienceCard = ({ title, company, duration, location, type, items, index }: {
+const ExperienceCard = ({ title, company, duration, location, type, items, index, locationType }: {
   title: string;
   company: string;
   duration: string;
@@ -12,6 +12,7 @@ const ExperienceCard = ({ title, company, duration, location, type, items, index
   type: string;
   items: string[];
   index: number;
+  locationType?: string | null;
 }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -85,10 +86,14 @@ const ExperienceCard = ({ title, company, duration, location, type, items, index
             
             {/* Stacked badges */}
             <div className="flex flex-wrap gap-2 justify-start md:justify-end">
-              {location.includes('(') && (
+               {/* Location Type Badge (Remote/Onsite) */}
+              {locationType && (
                 <span className="px-3 py-1 rounded-lg text-xs font-medium bg-gray-800 text-gray-300 ring-1 ring-gray-700">
-                  {location.split('(')[1].replace(')', '')}
+                  {locationType}
                 </span>
+              )}
+              {company.includes('(NGO') && (
+                <span className="px-3 py-1 rounded-lg text-xs font-medium bg-blue-900/20 text-blue-300 ring-1 ring-blue-800/30">NGO</span>
               )}
               {type && (
                 <span className={`px-3 py-1 rounded-lg text-xs font-medium ${getJobTypeStyles(type)}`}>
@@ -288,8 +293,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variants, custom }) 
       custom={custom}
       className="overflow-hidden rounded-xl bg-gradient-to-b from-gray-800/50 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/80 transition-all duration-300 shadow-lg shadow-black/20 flex flex-col h-full"
     >
-       {/* Gradient header */}
-       <div className={`bg-gradient-to-r from-blue-800/30 to-transparent h-1.5 w-full`}></div>
+      {/* Gradient header */}
+      <div className={`bg-gradient-to-r from-blue-800/30 to-transparent h-1.5 w-full`}></div>
 
       <div className="p-6 flex flex-col h-full">
         <h3 className="text-xl font-semibold mb-2 text-white">{project.title}</h3>
@@ -364,6 +369,7 @@ const CVPage: React.FC = () => {
       company: "Tactical Tech (NGO)",
       duration: "08/2019 - 04/2025",
       location: "Berlin, Germany",
+      locationType: "Remote",
       type: "Full Time",
       items: [
         "Modernized 3 legacy apps via Next.js and Nuxt.js migration, achieving faster load times through code splitting and lazy loading.",
@@ -380,6 +386,7 @@ const CVPage: React.FC = () => {
       company: "Durch die Stadt GmbH",
       duration: "06/2018 - 08/2019",
       location: "Berlin, Germany",
+      locationType: "Onsite",
       type: "Working Student",
       items: [
         "Designed and developed RESTful APIs using Ruby on Rails, seamlessly integrating them with Vue.js.",
@@ -395,6 +402,7 @@ const CVPage: React.FC = () => {
       company: "TurboAd GmbH",
       duration: "01/2018 - 05/2018",
       location: "Berlin, Germany",
+      locationType: "Onsite",
       type: "Working Student",
       items: [
         "Designed and developed robust web applications using Symfony 3, leveraging Doctrine ORM for efficient data management.",
@@ -408,6 +416,7 @@ const CVPage: React.FC = () => {
       company: "Octasolutions",
       duration: "01/2016 - 11/2016",
       location: "Gujranwala, Pakistan",
+      locationType: "Onsite",
       type: "Freelance",
       items: [
         "Developed full-stack web applications from scratch using Ruby on Rails, implementing features like user authentication and e-commerce functionalities.",
