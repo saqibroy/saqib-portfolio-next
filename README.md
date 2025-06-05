@@ -101,3 +101,14 @@ Saqib Sohail
 ## 🌟 Show Your Support
 
 Give a ⭐️ if this project helped you!
+
+## Blog Setup
+
+After making changes for the blog feature, run:
+
+```
+npm install
+npm run dev
+```
+
+This will install new dependencies (Contentlayer, date-fns, @tailwindcss/typography, @types/date-fns, @types/contentlayer, @types/next-contentlayer) and start the development server.

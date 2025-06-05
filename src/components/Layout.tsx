@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isCVPage = pathname === '/cv';
-  const email = 'saqib@ssohail.com';
+  const email = 'your.email@example.com'; // TODO: Update this email to your real contact email
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
 
   useEffect(() => {
@@ -86,6 +86,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </motion.div>
               </Link>
             )}
+            <Link href="/blog" className="group">
+              <motion.div
+                className="text-gray-300 hover:text-white transition-colors"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+              >
+                Blog
+              </motion.div>
+            </Link>
             <motion.button
               onClick={() => setIsContactOpen(true)}
               className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white text-sm font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300"

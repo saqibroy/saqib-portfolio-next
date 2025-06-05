@@ -1,0 +1,27 @@
+{
+  "title": "My First Post",
+  "date": "2024-06-01T00:00:00.000Z",
+  "description": "This is a sample blog post created with Contentlayer and MDX.",
+  "author": "Saqib Sohail",
+  "tags": [
+    "Next.js",
+    "Contentlayer",
+    "MDX"
+  ],
+  "image": "/blog/sample-image.jpg",
+  "body": {
+    "raw": "\n# Welcome to My Blog\n\nThis is the **first post** in my new blog powered by Contentlayer and MDX!\n\n- Write posts in Markdown or MDX\n- Enjoy code highlighting, images, and more\n\n```js\nconsole.log('Hello, Contentlayer!');\n```\n\nHappy blogging! ",
+    "code": "var Component=(()=>{var g=Object.create;var i=Object.defineProperty;var h=Object.getOwnPropertyDescriptor;var p=Object.getOwnPropertyNames;var m=Object.getPrototypeOf,u=Object.prototype.hasOwnProperty;var j=(n,e)=>()=>(e||n((e={exports:{}}).exports,e),e.exports),y=(n,e)=>{for(var o in e)i(n,o,{get:e[o],enumerable:!0})},l=(n,e,o,s)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let r of p(e))!u.call(n,r)&&r!==o&&i(n,r,{get:()=>e[r],enumerable:!(s=h(e,r))||s.enumerable});return n};var x=(n,e,o)=>(o=n!=null?g(m(n)):{},l(e||!n||!n.__esModule?i(o,\"default\",{value:n,enumerable:!0}):o,n)),M=n=>l(i({},\"__esModule\",{value:!0}),n);var c=j((X,a)=>{a.exports=_jsx_runtime});var C={};y(C,{default:()=>f,frontmatter:()=>b});var t=x(c()),b={title:\"My First Post\",date:\"2024-06-01\",description:\"This is a sample blog post created with Contentlayer and MDX.\",author:\"Saqib Sohail\",tags:[\"Next.js\",\"Contentlayer\",\"MDX\"],image:\"/blog/sample-image.jpg\"};function d(n){let e=Object.assign({h1:\"h1\",p:\"p\",strong:\"strong\",ul:\"ul\",li:\"li\",pre:\"pre\",code:\"code\"},n.components);return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsx)(e.h1,{children:\"Welcome to My Blog\"}),`\n`,(0,t.jsxs)(e.p,{children:[\"This is the \",(0,t.jsx)(e.strong,{children:\"first post\"}),\" in my new blog powered by Contentlayer and MDX!\"]}),`\n`,(0,t.jsxs)(e.ul,{children:[`\n`,(0,t.jsx)(e.li,{children:\"Write posts in Markdown or MDX\"}),`\n`,(0,t.jsx)(e.li,{children:\"Enjoy code highlighting, images, and more\"}),`\n`]}),`\n`,(0,t.jsx)(e.pre,{children:(0,t.jsx)(e.code,{className:\"language-js\",children:`console.log('Hello, Contentlayer!');\n`})}),`\n`,(0,t.jsx)(e.p,{children:\"Happy blogging!\"})]})}function _(n={}){let{wrapper:e}=n.components||{};return e?(0,t.jsx)(e,Object.assign({},n,{children:(0,t.jsx)(d,n)})):d(n)}var f=_;return M(C);})();\n;return Component;"
+  },
+  "_id": "blog/my-first-post.mdx",
+  "_raw": {
+    "sourceFilePath": "blog/my-first-post.mdx",
+    "sourceFileName": "my-first-post.mdx",
+    "sourceFileDir": "blog",
+    "contentType": "mdx",
+    "flattenedPath": "blog/my-first-post"
+  },
+  "type": "Post",
+  "slug": "my-first-post",
+  "url": "/blog/my-first-post"
+}

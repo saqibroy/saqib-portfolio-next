@@ -1,0 +1,36 @@
+{
+  "cacheItemsMap": {
+    "blog/my-first-post.mdx": {
+      "document": {
+        "title": "My First Post",
+        "date": "2024-06-01T00:00:00.000Z",
+        "description": "This is a sample blog post created with Contentlayer and MDX.",
+        "author": "Saqib Sohail",
+        "tags": [
+          "Next.js",
+          "Contentlayer",
+          "MDX"
+        ],
+        "image": "/blog/sample-image.jpg",
+        "body": {
+          "raw": "\n# Welcome to My Blog\n\nThis is the **first post** in my new blog powered by Contentlayer and MDX!\n\n- Write posts in Markdown or MDX\n- Enjoy code highlighting, images, and more\n\n```js\nconsole.log('Hello, Contentlayer!');\n```\n\nHappy blogging! ",
+          "html": "<h1>Welcome to My Blog</h1>\n<p>This is the <strong>first post</strong> in my new blog powered by Contentlayer and MDX!</p>\n<ul>\n<li>Write posts in Markdown or MDX</li>\n<li>Enjoy code highlighting, images, and more</li>\n</ul>\n<pre><code class=\"language-js\">console.log('Hello, Contentlayer!');\n</code></pre>\n<p>Happy blogging!</p>"
+        },
+        "_id": "blog/my-first-post.mdx",
+        "_raw": {
+          "sourceFilePath": "blog/my-first-post.mdx",
+          "sourceFileName": "my-first-post.mdx",
+          "sourceFileDir": "blog",
+          "contentType": "mdx",
+          "flattenedPath": "blog/my-first-post"
+        },
+        "type": "Post",
+        "slug": "my-first-post",
+        "url": "/blog/my-first-post"
+      },
+      "documentHash": "1749146445872",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    }
+  }
+}

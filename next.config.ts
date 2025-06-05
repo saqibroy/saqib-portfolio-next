@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withContentlayer } from 'next-contentlayer';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -53,4 +54,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withContentlayer(nextConfig);

@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
+const { withContentlayer } = require('next-contentlayer');
+
 const nextConfig = {
   images: {
-    domains: ["wakatime.com"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'wakatime.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      }
+    ],
     minimumCacheTTL: 60,
   },
   // Removing the optimizeCss experimental feature
@@ -12,4 +23,4 @@ const nextConfig = {
   reactStrictMode: true,
 }
 
-module.exports = nextConfig
+module.exports = withContentlayer(nextConfig);
