@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isCVPage = pathname === '/cv';
-  const email = 'your.email@example.com'; // TODO: Update this email to your real contact email
+  const email = 'saqib@ssohail.com'; // TODO: Update this email to your real contact email
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
 
   useEffect(() => {
