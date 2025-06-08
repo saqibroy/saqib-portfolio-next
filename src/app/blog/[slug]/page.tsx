@@ -4,8 +4,10 @@ import { format } from 'date-fns';
 import Layout from '@/components/Layout';
 import Image from 'next/image';
 import MDXContent from '@/components/MDXContent';
-import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, User, Tag, ArrowLeft, Volume2, Pause, Play, Download, ChevronsUp, ChevronsDown } from 'lucide-react';
 import Link from 'next/link';
+import { useState, useRef, useEffect } from "react";
+import AudioSummaryPlayer from "./AudioSummaryPlayer";
 
 export async function generateStaticParams() {
   return allPosts.map((post: Post) => ({ slug: post.slug }));
@@ -181,6 +183,11 @@ export default async function PostPage({
               ))}
             </div>
           )}
+
+          {/* Audio Summary Section */}
+          <div className="my-16">
+            <AudioSummaryPlayer postContent={post.body.raw} postTitle={post.title} />
+          </div>
         </div>
       </section>
 
@@ -252,4 +259,14 @@ export default async function PostPage({
       </article>
     </Layout>
   );
+}
+
+function formatTime(seconds: number) {
+  const m = Math.floor(seconds / 60)
+    .toString()
+    .padStart(1, "0");
+  const s = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
 }
