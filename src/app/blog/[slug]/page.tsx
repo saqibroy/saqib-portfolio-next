@@ -6,7 +6,6 @@ import Image from 'next/image';
 import MDXContent from '@/components/MDXContent';
 import { Calendar, Clock, User, Tag, ArrowLeft, Volume2, Pause, Play, Download, ChevronsUp, ChevronsDown } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useRef, useEffect } from "react";
 import AudioSummaryPlayer from "./AudioSummaryPlayer";
 
 export async function generateStaticParams() {
