@@ -122,6 +122,7 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           text: summary,
           voice: selectedVoice,
