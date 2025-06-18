@@ -71,6 +71,13 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
         // Fallback voices matching your service
         setAvailableVoices([
           {
+            id: 'en-GB-Standard-B',
+            language_code: 'en-GB',
+            name: 'en-GB-Standard-B',
+            gender: 'MALE',
+            description: 'British male voice'
+          },
+          {
             id: 'en-US-Standard-C',
             language_code: 'en-US',
             name: 'en-US-Standard-C',
@@ -78,25 +85,25 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
             description: 'Standard female voice'
           },
           {
-            id: 'en-US-Wavenet-A',
+            id: 'en-US-Wavenet-D',
             language_code: 'en-US',
-            name: 'en-US-Wavenet-A',
+            name: 'en-US-Wavenet-D',
             gender: 'MALE',
-            description: 'WaveNet male voice'
+            description: 'WaveNet male voice (deep)'
           },
           {
-            id: 'en-US-Neural2-C',
-            language_code: 'en-US',
-            name: 'en-US-Neural2-C',
-            gender: 'FEMALE',
-            description: 'Neural2 female voice'
+            id: "en-GB-Standard-A",
+            language_code: "en-GB",
+            name: "en-GB-Standard-A",
+            gender: 'Male',
+            description: "British female voice"
           },
           {
-            id: 'en-GB-Standard-B',
-            language_code: 'en-GB',
-            name: 'en-GB-Standard-B',
-            gender: 'MALE',
-            description: 'British male voice'
+            id: "en-AU-Standard-A",
+            language_code: "en-AU",
+            name: "en-AU-Standard-A",
+            gender: "Female",
+            description: "Australian female voice"
           }
         ]);
       } finally {
