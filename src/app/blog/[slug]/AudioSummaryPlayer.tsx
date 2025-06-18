@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, Pause, Play, Settings, Loader2, Sparkles, Zap, Download, RefreshCw, VolumeX } from 'lucide-react';
+import { Volume2, Pause, Play, Settings, Loader2, Sparkles, Zap, Download, RefreshCw, VolumeX, Trash2, Database } from 'lucide-react';
 
 interface AudioSummaryPlayerProps {
   postContent: string;
@@ -14,6 +14,21 @@ interface GoogleVoice {
   name: string;
   gender: string;
   description: string;
+}
+
+interface CachedSummary {
+  text: string;
+  contentHash: string;
+  timestamp: number;
+}
+
+interface CachedAudio {
+  blob: string; // Base64 encoded blob
+  voice: string;
+  speed: number;
+  pitch: number;
+  summaryHash: string;
+  timestamp: number;
 }
 
 const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, postTitle }) => {
@@ -33,31 +48,213 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
   const [duration, setDuration] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Cache status indicators
+  const [summaryFromCache, setSummaryFromCache] = useState(false);
+  const [audioFromCache, setAudioFromCache] = useState(false);
+  const [cacheSize, setCacheSize] = useState(0);
+  
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // TTS Microservice URL
   const TTS_SERVICE_URL = process.env.NEXT_PUBLIC_TTS_SERVICE_URL || 'https://ai-tts-service.onrender.com';
 
-  // Load available voices from Google Cloud TTS service
+  // Cache configuration
+  const CACHE_EXPIRY_HOURS = 24; // 24 hours
+  const MAX_CACHE_SIZE_MB = 50; // 50MB limit
+
+  // Generate hash for content
+  const generateHash = (content: string): string => {
+    let hash = 0;
+    for (let i = 0; i < content.length; i++) {
+      const char = content.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(36);
+  };
+
+  // Convert blob to base64 for localStorage
+  const blobToBase64 = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  // Convert base64 to blob
+  const base64ToBlob = (base64: string): Blob => {
+    const byteCharacters = atob(base64.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: 'audio/wav' });
+  };
+
+  // Cache helper functions
+  const getCachedSummary = (contentHash: string): CachedSummary | null => {
+    try {
+      const cached = localStorage.getItem(`tts_summary_${contentHash}`);
+      if (cached) {
+        const data: CachedSummary = JSON.parse(cached);
+        if (Date.now() - data.timestamp < CACHE_EXPIRY_HOURS * 60 * 60 * 1000) {
+          return data;
+        }
+        localStorage.removeItem(`tts_summary_${contentHash}`);
+      }
+    } catch (error) {
+      console.error('Error reading cached summary:', error);
+    }
+    return null;
+  };
+
+  const setCachedSummary = (contentHash: string, text: string): void => {
+  try {
+    const data: CachedSummary = {
+      text,
+      contentHash,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(`tts_summary_${contentHash}`, JSON.stringify(data));
+  } catch (error: unknown) { // Explicitly type error as unknown (optional, but good for clarity)
+    console.error('Error caching summary:', error);
+    // Handle quota exceeded
+    if (error instanceof DOMException && error.name === 'QuotaExceededError') { // Check if error is DOMException
+      clearOldCache();
+    } else if (error instanceof Error) { // General Error type check
+      // Handle other types of errors if needed
+      console.error('An unexpected error occurred:', error.message);
+    }
+  }
+};
+
+  const getCachedAudio = (audioKey: string): CachedAudio | null => {
+    try {
+      const cached = localStorage.getItem(`tts_audio_${audioKey}`);
+      if (cached) {
+        const data: CachedAudio = JSON.parse(cached);
+        if (Date.now() - data.timestamp < CACHE_EXPIRY_HOURS * 60 * 60 * 1000) {
+          return data;
+        }
+        localStorage.removeItem(`tts_audio_${audioKey}`);
+      }
+    } catch (error) {
+      console.error('Error reading cached audio:', error);
+    }
+    return null;
+  };
+
+  const setCachedAudio = async (audioKey: string, audioBlob: Blob, audioData: Omit<CachedAudio, 'blob' | 'timestamp'>): Promise<void> => {
+  try {
+    const base64 = await blobToBase64(audioBlob);
+    const data: CachedAudio = {
+      ...audioData,
+      blob: base64,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(`tts_audio_${audioKey}`, JSON.stringify(data));
+  } catch (error: unknown) {
+    console.error('Error caching audio:', error);
+    // Handle quota exceeded
+    if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+      clearOldCache();
+    } else if (error instanceof Error) {
+      console.error('An unexpected error occurred during audio caching:', error.message);
+    }
+  }
+};
+
+  const calculateCacheSize = (): void => {
+    try {
+      let totalSize = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('tts_summary_') || key.startsWith('tts_audio_'))) {
+          const value = localStorage.getItem(key);
+          if (value) {
+            totalSize += new Blob([value]).size;
+          }
+        }
+      }
+      setCacheSize(Math.round(totalSize / (1024 * 1024) * 100) / 100);
+    } catch (error) {
+      console.error('Error calculating cache size:', error);
+    }
+  };
+
+  const clearCache = (): void => {
+    try {
+      const keys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('tts_summary_') || key.startsWith('tts_audio_'))) {
+          keys.push(key);
+        }
+      }
+      keys.forEach(key => localStorage.removeItem(key));
+      
+      // Clean up current audio
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+        setAudioUrl(null);
+      }
+      
+      setSummary('');
+      setSummaryFromCache(false);
+      setAudioFromCache(false);
+      setCacheSize(0);
+    } catch (error) {
+      console.error('Error clearing cache:', error);
+    }
+  };
+
+  const clearOldCache = (): void => {
+    try {
+      const keys = [];
+      const now = Date.now();
+      
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('tts_summary_') || key.startsWith('tts_audio_'))) {
+          const value = localStorage.getItem(key);
+          if (value) {
+            try {
+              const data = JSON.parse(value);
+              if (now - data.timestamp > CACHE_EXPIRY_HOURS * 60 * 60 * 1000) {
+                keys.push(key);
+              }
+            } catch (e) {
+              keys.push(key); // Remove corrupted entries
+            }
+          }
+        }
+      }
+      
+      keys.forEach(key => localStorage.removeItem(key));
+      calculateCacheSize();
+    } catch (error) {
+      console.error('Error clearing old cache:', error);
+    }
+  };
+
+  // Load available voices
   useEffect(() => {
     const loadVoices = async () => {
       setIsLoading(true);
       try {
-        console.log('Loading voices from:', TTS_SERVICE_URL);
         const response = await fetch(`${TTS_SERVICE_URL}/voices`, {
           method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-          },
+          headers: { 'Accept': 'application/json' },
         });
         
         if (response.ok) {
           const data = await response.json();
-          console.log('Voices loaded:', data);
-          
           if (data.voices && Array.isArray(data.voices)) {
             setAvailableVoices(data.voices);
-            // Set first voice as default if current selection is not available
             if (data.voices.length > 0 && !data.voices.find((v: GoogleVoice) => v.id === selectedVoice)) {
               setSelectedVoice(data.voices[0].id);
             }
@@ -68,43 +265,13 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
       } catch (error) {
         console.error('Failed to load voices:', error);
         setError('Failed to connect to TTS service. Please check your connection.');
-        // Fallback voices matching your service
+        // Fallback voices
         setAvailableVoices([
-          {
-            id: 'en-GB-Standard-B',
-            language_code: 'en-GB',
-            name: 'en-GB-Standard-B',
-            gender: 'MALE',
-            description: 'British male voice'
-          },
-          {
-            id: 'en-US-Standard-C',
-            language_code: 'en-US',
-            name: 'en-US-Standard-C',
-            gender: 'FEMALE',
-            description: 'Standard female voice'
-          },
-          {
-            id: 'en-US-Wavenet-D',
-            language_code: 'en-US',
-            name: 'en-US-Wavenet-D',
-            gender: 'MALE',
-            description: 'WaveNet male voice (deep)'
-          },
-          {
-            id: "en-GB-Standard-A",
-            language_code: "en-GB",
-            name: "en-GB-Standard-A",
-            gender: 'Male',
-            description: "British female voice"
-          },
-          {
-            id: "en-AU-Standard-A",
-            language_code: "en-AU",
-            name: "en-AU-Standard-A",
-            gender: "Female",
-            description: "Australian female voice"
-          }
+          { id: 'en-GB-Standard-B', language_code: 'en-GB', name: 'en-GB-Standard-B', gender: 'MALE', description: 'British male voice' },
+          { id: 'en-US-Standard-C', language_code: 'en-US', name: 'en-US-Standard-C', gender: 'FEMALE', description: 'Standard female voice' },
+          { id: 'en-US-Wavenet-D', language_code: 'en-US', name: 'en-US-Wavenet-D', gender: 'MALE', description: 'WaveNet male voice (deep)' },
+          { id: "en-GB-Standard-A", language_code: "en-GB", name: "en-GB-Standard-A", gender: 'FEMALE', description: "British female voice" },
+          { id: "en-AU-Standard-A", language_code: "en-AU", name: "en-AU-Standard-A", gender: "FEMALE", description: "Australian female voice" }
         ]);
       } finally {
         setIsLoading(false);
@@ -112,19 +279,44 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
     };
 
     loadVoices();
+    clearOldCache(); // Clean up expired cache on load
   }, [TTS_SERVICE_URL]);
 
-  // Generate summary using your existing API
+  // Check for cached summary on mount and content change
+  useEffect(() => {
+    const contentHash = generateHash(postContent);
+    const cached = getCachedSummary(contentHash);
+    
+    if (cached) {
+      setSummary(cached.text);
+      setSummaryFromCache(true);
+    } else {
+      setSummaryFromCache(false);
+    }
+    
+    calculateCacheSize();
+  }, [postContent]);
+
+  // Generate summary with caching
   const generateSummary = async () => {
+    const contentHash = generateHash(postContent);
+    
+    // Check cache first
+    const cached = getCachedSummary(contentHash);
+    if (cached) {
+      setSummary(cached.text);
+      setSummaryFromCache(true);
+      return cached.text;
+    }
+
     setIsGenerating(true);
     setError('');
+    setSummaryFromCache(false);
     
     try {
       const response = await fetch('/api/generate-audio-summary', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           content: postContent,
           model: 'gemini',
@@ -139,46 +331,63 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
       
       if (data.summary) {
         setSummary(data.summary);
+        setCachedSummary(contentHash, data.summary);
+        
         if (data.warning) {
           setError(data.warning);
         }
+        
+        calculateCacheSize();
+        return data.summary;
       } else {
         throw new Error('No summary received');
       }
     } catch (err) {
       console.error('Summary generation error:', err);
-      // Fallback: use first 500 characters of content
       const fallbackSummary = postContent.substring(0, 500) + (postContent.length > 500 ? '...' : '');
       setSummary(fallbackSummary);
+      setCachedSummary(contentHash, fallbackSummary);
       setError('Using original content as summary. AI summary service unavailable.');
+      return fallbackSummary;
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // Generate audio using Google Cloud TTS microservice
+  // Generate audio with caching
   const generateAudio = async () => {
     if (!summary) return null;
 
+    const summaryHash = generateHash(summary);
+    const audioKey = `${summaryHash}_${selectedVoice}_${speed}_${pitch}`;
+    
+    // Check cache first
+    const cached = getCachedAudio(audioKey);
+    if (cached) {
+      try {
+        const audioBlob = base64ToBlob(cached.blob);
+        const url = URL.createObjectURL(audioBlob);
+        setAudioUrl(url);
+        setAudioFromCache(true);
+        return url;
+      } catch (error) {
+        console.error('Error loading cached audio:', error);
+        // Remove corrupted cache entry
+        localStorage.removeItem(`tts_audio_${audioKey}`);
+      }
+    }
+
     setIsGeneratingAudio(true);
     setError('');
+    setAudioFromCache(false);
 
     try {
-      console.log('Generating audio with:', { 
-        voice: selectedVoice, 
-        speed, 
-        pitch,
-        textLength: summary.length 
-      });
-      
       const response = await fetch(`${TTS_SERVICE_URL}/generate-speech`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: summary,
-          voice: selectedVoice, // Now using correct Google Cloud voice ID
+          voice: selectedVoice,
           speed: speed,
           pitch: pitch,
         }),
@@ -186,22 +395,28 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('TTS API Error:', errorText);
         throw new Error(`TTS Service Error: ${response.status} - ${errorText}`);
       }
 
-      // Create blob URL for audio
       const audioBlob = await response.blob();
-      console.log('Audio generated successfully:', audioBlob.size, 'bytes');
       
-      // Revoke previous URL to prevent memory leaks
+      // Revoke previous URL
       if (audioUrl) {
         URL.revokeObjectURL(audioUrl);
       }
       
       const url = URL.createObjectURL(audioBlob);
       setAudioUrl(url);
-
+      
+      // Cache the audio
+      await setCachedAudio(audioKey, audioBlob, {
+        voice: selectedVoice,
+        speed,
+        pitch,
+        summaryHash
+      });
+      
+      calculateCacheSize();
       return url;
     } catch (err) {
       console.error('Audio generation error:', err);
@@ -219,7 +434,6 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
     }
 
     if (isPlaying) {
-      // Pause audio
       if (audioRef.current) {
         audioRef.current.pause();
       }
@@ -227,7 +441,6 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
       return;
     }
 
-    // Play audio
     let url = audioUrl;
     if (!url) {
       url = await generateAudio();
@@ -327,7 +540,6 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
   // Regenerate audio when voice or pitch changes
   useEffect(() => {
     if (audioUrl && summary) {
-      // Clear current audio URL to force regeneration
       URL.revokeObjectURL(audioUrl);
       setAudioUrl(null);
       setProgress(0);
@@ -391,6 +603,23 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
             </div>
             
             <div className="flex items-center gap-3">
+              {/* Cache indicators */}
+              <div className="flex items-center gap-2 px-3 py-2 bg-gray-800/50 rounded-xl">
+                <Database className="w-4 h-4 text-blue-400" />
+                <span className="text-xs text-gray-300">{cacheSize.toFixed(2)}MB</span>
+                {(summaryFromCache || audioFromCache) && (
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Using cached data"></div>
+                )}
+              </div>
+              
+              <button
+                onClick={clearCache}
+                className="p-3 rounded-xl bg-gray-800/50 text-gray-400 hover:bg-red-600/20 hover:text-red-400 transition-all duration-300 hover:scale-105"
+                title="Clear Cache"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+              
               {audioUrl && (
                 <>
                   <button
@@ -423,6 +652,20 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
               </button>
             </div>
           </div>
+
+          {/* Cache Status */}
+          {(summaryFromCache || audioFromCache) && (
+            <div className="mb-6 p-4 bg-green-900/20 border border-green-500/30 rounded-xl backdrop-blur-sm">
+              <div className="flex items-center gap-2">
+                <Database className="w-5 h-5 text-green-400" />
+                <p className="text-green-300 text-sm font-medium">
+                  {summaryFromCache && audioFromCache ? 'Using cached summary and audio' :
+                   summaryFromCache ? 'Using cached summary' :
+                   'Using cached audio'} - Instant loading!
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Settings Panel */}
           {showSettings && (
@@ -550,7 +793,14 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-lg font-semibold text-white mb-2">AI Generated Summary</h4>
+                  <h4 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+                    AI Generated Summary
+                    {summaryFromCache && (
+                      <span className="text-xs bg-green-600/20 text-green-400 px-2 py-1 rounded-full border border-green-500/30">
+                        Cached
+                      </span>
+                    )}
+                  </h4>
                   <p className="text-gray-200 leading-relaxed">
                     {summary}
                   </p>
@@ -570,6 +820,12 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
                     <span>{formatTime(currentTime)}</span>
                     <span>{formatTime(duration)}</span>
                   </div>
+                  {audioFromCache && (
+                    <div className="flex items-center gap-2 text-xs text-green-400">
+                      <Database className="w-3 h-3" />
+                      <span>Audio loaded from cache</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -619,7 +875,7 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
 
           {/* Info Footer */}
           <div className="mt-8 pt-6 border-t border-gray-700/50">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-400">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span>AI-powered intelligent summarization</span>
@@ -631,6 +887,10 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <span>Multiple voice types & controls</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Database className="w-3 h-3 text-amber-400" />
+                <span>Smart caching system</span>
               </div>
             </div>
           </div>
