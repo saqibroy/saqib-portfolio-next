@@ -4,9 +4,10 @@ import { format } from 'date-fns';
 import Layout from '@/components/Layout';
 import Image from 'next/image';
 import MDXContent from '@/components/MDXContent';
-import { Calendar, Clock, User, Tag, ArrowLeft, Volume2, Pause, Play, Download, ChevronsUp, ChevronsDown } from 'lucide-react';
+import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AudioSummaryPlayer from "./AudioSummaryPlayer";
+import { GiscusComments, SocialShareButtons, LikeButton } from './ClientComponents';
 
 export async function generateStaticParams() {
   return allPosts.map((post: Post) => ({ slug: post.slug }));
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function PostPage({
+export default function PostPage({
   params,
 }: {
   params: { slug: string };
@@ -98,6 +99,8 @@ export default async function PostPage({
     const minutes = Math.ceil(wordCount / wordsPerMinute);
     return `${minutes} min read`;
   };
+
+  const currentUrl = `https://ssohail.com/blog/${post.slug}`;
 
   return (
     <Layout>
@@ -197,6 +200,24 @@ export default async function PostPage({
           <div className="prose prose-invert prose-xl max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:mt-12 prose-h3:mb-6 prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:transition-all prose-strong:text-white prose-strong:font-semibold prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-900/10 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-lg prose-ul:my-8 prose-li:text-gray-300 prose-li:mb-2">
             <MDXContent code={post.body.code} />
           </div>
+
+          {/* Like and Share Section */}
+          <div className="mt-16 mb-12 p-6 rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <LikeButton postSlug={post.slug} />
+                <span className="text-gray-400">|</span>
+                <SocialShareButtons 
+                  url={currentUrl} 
+                  title={post.title} 
+                  description={post.description} 
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Giscus Comments Section */}
+          <GiscusComments postSlug={post.slug} postTitle={post.title} />
 
           {/* Author Bio */}
           {post.author && (
