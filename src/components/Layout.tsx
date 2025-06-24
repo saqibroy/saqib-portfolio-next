@@ -1,8 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import Link from 'next/link'; // Keep Link for Next.js environment
+import { usePathname } from 'next/navigation'; // Keep usePathname for Next.js environment
+import { Menu, X, Github, Linkedin, Mail, Home as HomeIcon, Check } from 'lucide-react'; // Import icons
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,11 +13,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isWaitingPeriod, setIsWaitingPeriod] = useState<boolean>(true);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false); // State for mobile menu
   const shouldReduceMotion = useReducedMotion();
-  const pathname = usePathname();
+  const pathname = usePathname(); // Get current pathname
   const isHomePage = pathname === '/';
   const isCVPage = pathname === '/cv';
-  const isBlogPage = pathname === '/blog';
+  
   const email = 'saqib@ssohail.com'; // TODO: Update this email to your real contact email
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
 
@@ -28,8 +30,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Close mobile menu when navigating
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(email);
+    // navigator.clipboard.writeText(email);
+    // document.execCommand('copy') is used as navigator.clipboard.writeText() may not work due to iFrame restrictions.
+    const tempInput = document.createElement('textarea');
+    tempInput.value = email;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
@@ -41,8 +56,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className={`${isHomePage ? 'h-screen overflow-hidden' : 'min-h-screen'} flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white`}>
       {/* Navigation */}
-      <header className="absolute top-0 left-0 w-full p-4 z-20">
-        <nav className="container mx-auto flex justify-between items-center">
+      <header className="absolute top-0 left-0 w-full p-4 z-50"> {/* Increased z-index */}
+        <nav className="container mx-auto flex justify-between items-center relative">
           <Link href="/" className="group" aria-label="Home">
             <motion.div 
               className="text-xl font-bold flex items-center space-x-2"
@@ -50,19 +65,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
             >
               {!isHomePage && (
-                <svg 
+                <HomeIcon // Replaced SVG with Lucide icon
                   className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" 
-                  />
-                </svg>
+                />
               )}
               <motion.span 
                 className={`bg-gradient-to-r from-blue-300 to-green-300 bg-clip-text text-transparent ${
@@ -75,7 +80,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </motion.span>
             </motion.div>
           </Link>
-          <div className="flex space-x-6 items-center">
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-6 items-center">
             {!isCVPage && (
               <Link href="/cv" className="group">
                 <motion.div
@@ -120,8 +127,71 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               Contact
             </motion.button>
           </div>
+
+          {/* Mobile Menu Button (Hamburger) */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              aria-label="Toggle navigation"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </nav>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed inset-0 bg-gray-900 bg-opacity-95 backdrop-blur-lg z-40 flex flex-col p-8 md:hidden"
+          >
+            <div className="flex justify-end mb-8">
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                aria-label="Close navigation"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <nav className="flex flex-col items-center space-y-6 text-xl">
+              {!isCVPage && (
+                <Link href="/cv" className="text-gray-300 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                  CV
+                </Link>
+              )}
+              <Link href="/blog" className="text-gray-300 hover:text-white transition-colors flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
+                Blog
+                <div className="ml-2 relative">
+                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-600/80 to-blue-600/80 text-white text-xs font-bold shadow-lg backdrop-blur-sm border border-purple-400/30">
+                    <svg
+                      className="w-2.5 h-2.5 animate-pulse"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 1-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 1 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 1 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 1-3.09 3.09ZM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 0 0 1.423 1.423L19.5 18.75l-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/>
+                    </svg>
+                    <span>AI</span>
+                  </div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600/20 to-blue-600/20 animate-ping"></div>
+                </div>
+              </Link>
+              <button
+                onClick={() => { setIsContactOpen(true); setIsMobileMenuOpen(false); }}
+                className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white text-lg font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300"
+              >
+                Contact
+              </button>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main Content */}
       <main className={`flex-1 flex flex-col ${isHomePage ? 'overflow-hidden' : ''}`}>
@@ -129,7 +199,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full p-4 text-center text-gray-400">
+      <footer className="w-full p-4 text-center text-gray-400 z-10">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -138,34 +208,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             className="flex flex-col items-center space-y-2"
           >
             <div className="flex flex-col items-center space-y-3">
-              <div className="flex justify-center space-x-3">
+              <div className="flex justify-center space-x-3 flex-wrap">
                 {[
-                  { 
-                    name: 'GitHub', 
+                  {
+                    name: 'GitHub',
                     url: 'https://github.com/saqibroy',
-                    icon: (
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                      </svg>
-                    )
+                    icon: (<Github className="w-5 h-5" />)
                   },
-                  { 
-                    name: 'LinkedIn', 
+                  {
+                    name: 'LinkedIn',
                     url: 'https://linkedin.com/in/saqibroy',
-                    icon: (
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                      </svg>
-                    )
+                    icon: (<Linkedin className="w-5 h-5" />)
                   },
-                  { 
-                    name: 'Email', 
+                  {
+                    name: 'Email',
                     url: `mailto:${email}`,
-                    icon: (
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    )
+                    icon: (<Mail className="w-5 h-5" />)
                   }
                 ].map((social) => (
                   <motion.a
@@ -199,15 +257,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Contact Modal */}
       {isContactOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={handleCloseContact}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4"
+            className="bg-gray-800 p-6 rounded-lg max-w-md w-full mx-auto sm:mx-4"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
@@ -218,37 +276,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 onClick={handleCloseContact}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-6 h-6" />
               </button>
             </div>
             <div className="space-y-6">
               {/* Email Section */}
               <div className="text-center">
-                <p className="text-gray-300 mb-4">Feel free to reach out to me via email:</p>
-                <div className="flex items-center justify-center space-x-3">
-                  <a 
+                <p className="text-gray-300 mb-4 text-sm sm:text-base">Feel free to reach out to me via email:</p>
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-3">
+                  <a
                     href={`mailto:${email}`}
-                    className="text-blue-400 hover:text-blue-300 text-lg font-medium"
+                    className="text-blue-400 hover:text-blue-300 text-lg font-medium break-all"
                   >
                     {email}
                   </a>
                   <motion.button
                     onClick={handleCopyEmail}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-md"
                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
                     whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
                     title="Copy email address"
                   >
                     {isCopied ? (
-                      <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                      <Check className="w-5 h-5 text-green-500" />
                     ) : (
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                      </svg>
+                      <Mail className="w-5 h-5" />
                     )}
                   </motion.button>
                 </div>
@@ -256,26 +308,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
               {/* LinkedIn Section */}
               <div className="text-center">
-                <p className="text-gray-300 mb-4">Or connect with me on LinkedIn:</p>
+                <p className="text-gray-300 mb-4 text-sm sm:text-base">Or connect with me on LinkedIn:</p>
                 <motion.a
                   href={linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 px-4 py-2 rounded-md bg-[#0A66C2] text-white font-medium hover:bg-[#004182] transition-all duration-300"
+                  className="inline-flex items-center space-x-2 px-4 py-2 rounded-md bg-[#0A66C2] text-white font-medium hover:bg-[#004182] transition-all duration-300 text-sm sm:text-base"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                  </svg>
+                  <Linkedin className="w-5 h-5" />
                   <span>Connect on LinkedIn</span>
                 </motion.a>
               </div>
 
-              <div className="flex justify-center space-x-4">
+              <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
                 <motion.a
                   href={`mailto:${email}`}
-                  className="px-4 py-2 rounded-md bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300"
+                  className="px-4 py-2 rounded-md bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >
@@ -283,7 +333,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </motion.a>
                 <motion.button
                   onClick={handleCopyEmail}
-                  className="px-4 py-2 rounded-md bg-gray-700 text-white font-medium hover:bg-gray-600 transition-all duration-300"
+                  className="px-4 py-2 rounded-md bg-gray-700 text-white font-medium hover:bg-gray-600 transition-all duration-300 text-sm sm:text-base"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >

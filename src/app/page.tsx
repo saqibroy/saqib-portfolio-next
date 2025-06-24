@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import Layout from '@/components/Layout';
+import Layout from '@/components/Layout'; // Keep Layout import
+import Link from 'next/link'; // Keep Link for Next.js environment
 
 // Define an interface for background elements
 interface BackgroundElement {
@@ -114,7 +115,7 @@ const Home: React.FC = () => {
         <div className="flex-grow flex items-center justify-center relative z-10 px-4">
           <div className="w-full max-w-6xl mx-auto">
             <motion.div 
-              className="text-center mb-16"
+              className="text-center mb-12 sm:mb-16" // Adjusted margin for mobile
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: shouldReduceMotion ? 0.5 : 1 }}
@@ -123,7 +124,7 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-300 to-green-300 bg-clip-text text-transparent leading-tight"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 to-green-300 bg-clip-text text-transparent leading-tight px-2 sm:px-0" // Adjusted margin and added horizontal padding
               >
                 Full-Stack Developer & Software Engineer
               </motion.h1>
@@ -131,7 +132,7 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.2 }}
-                className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto"
+                className="text-lg md:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto px-2 sm:px-0" // Adjusted font size, margin, and added horizontal padding
               >
                 Building performant, accessible, and scalable web applications using modern technologies like React, Next.js, Node.js, and TypeScript.
               </motion.p>
@@ -141,26 +142,33 @@ const Home: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center px-2 sm:px-0" // Adjusted gap and added horizontal padding
             >
-              <motion.a
+              <Link // Using Link for Next.js environment
                 href="/cv"
-                className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                className="inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2" // Adjusted padding and font size
+                // Removed whileHover, whileTap as Link doesn't directly support these for its children
               >
-                Explore My Work
-              </motion.a>
+                <motion.span // Wrap content in motion.span for animation
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                >
+                  Explore My Work
+                </motion.span>
+              </Link>
               
-              <motion.a
+              <Link // Using Link for Next.js environment
                 href="/blog"
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white font-medium hover:from-cyan-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 relative overflow-hidden border border-cyan-400/20"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                className="inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white font-medium hover:from-cyan-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 relative overflow-hidden border border-cyan-400/20" // Adjusted padding and font size
+                // Removed whileHover, whileTap as Link doesn't directly support these for its children
               >
-                <div className="relative">
+                <motion.div // Wrap content in motion.div for animation
+                  className="relative flex items-center gap-3"
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                >
                   <svg 
-                    className="w-6 h-6" 
+                    className="w-5 h-5 sm:w-6 sm:h-6" // Adjusted icon size
                     fill="currentColor" 
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -172,13 +180,13 @@ const Home: React.FC = () => {
                     <path d="M8 15c0-2.21 1.79-4 4-4s4 1.79 4 4"/>
                   </svg>
                   <motion.div 
-                    className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full"
+                    className="absolute -top-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-cyan-400 rounded-full" // Adjusted size
                     animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
-                </div>
+                </motion.div>
                 <div className="flex flex-col items-start">
-                  <span className="text-sm opacity-90 leading-none">AI-Powered</span>
+                  <span className="text-xs opacity-90 leading-none">AI-Powered</span> {/* Adjusted font size */}
                   <span className="leading-none">Blog</span>
                 </div>
                 <motion.div
@@ -186,7 +194,7 @@ const Home: React.FC = () => {
                   whileHover={shouldReduceMotion ? {} : { opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 />
-              </motion.a>
+              </Link>
             </motion.div>
           </div>
         </div>
