@@ -7,7 +7,7 @@ import MDXContent from '@/components/MDXContent';
 import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AudioSummaryPlayer from "./AudioSummaryPlayer";
-import { GiscusComments, SocialShareButtons, StickySocialActions, AIFeaturesBanner  } from './ClientComponents';
+import { GiscusComments, SocialShareButtons, StickySocialActions, AIFeaturesBanner } from './ClientComponents';
 
 export async function generateStaticParams() {
   return allPosts.map((post: Post) => ({ slug: post.slug }));
@@ -104,7 +104,7 @@ export default function PostPage({
 
   return (
     <Layout>
-      {/* Sticky Social Actions */}
+      {/* Sticky Social Actions (Desktop only, mobile uses floating button) */}
       <StickySocialActions 
         postSlug={post.slug}
         currentUrl={currentUrl}
@@ -113,14 +113,14 @@ export default function PostPage({
       />
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16">
+      <section className="relative pt-24 pb-12 sm:pb-16"> {/* Adjusted padding for mobile */}
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.1),transparent)] pointer-events-none" />
         
         <div className="container mx-auto px-4 max-w-6xl relative">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 mb-8 text-sm">
+          <nav className="flex items-center gap-2 mb-6 sm:mb-8 text-sm"> {/* Adjusted margin */}
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
               Home
             </Link>
@@ -136,25 +136,25 @@ export default function PostPage({
           <AIFeaturesBanner />
 
           {/* Hero Content */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+          <div className="text-center mb-8 sm:mb-12"> {/* Adjusted margin */}
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 leading-tight"> {/* Adjusted font sizes for mobile */}
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-green-400 bg-clip-text text-transparent">
                 {post.title}
               </span>
             </h1>
             {post.description && (
-              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"> {/* Added horizontal padding */}
                 {post.description}
               </p>
             )}
           </div>
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-12 text-gray-400">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-8 sm:mb-12 text-gray-400 text-sm"> {/* Adjusted gap and font size */}
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <time dateTime={post.date}>
-                {format(new Date(post.date), 'MMMM d, yyyy')}
+                {format(new Date(post.date), 'MMMM d,yyyy')}
               </time>
             </div>
             <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ export default function PostPage({
           </div>
 
           {/* Hero Image */}
-          <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-2xl mb-12">
+          <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-8 sm:mb-12"> {/* Adjusted rounded and margin */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
             <Image
               src={post.image || `https://placehold.co/1200x500/1a1a1a/ffffff?text=${encodeURIComponent(post.title)}`}
@@ -184,13 +184,13 @@ export default function PostPage({
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-3 mb-16">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 sm:mb-16 px-4"> {/* Adjusted gap and added horizontal padding */}
               {post.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="group inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium bg-gray-900/50 text-gray-300 ring-1 ring-gray-700 hover:ring-blue-500 hover:bg-blue-900/20 transition-all duration-300 backdrop-blur-sm"
+                  className="group inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium bg-gray-900/50 text-gray-300 ring-1 ring-gray-700 hover:ring-blue-500 hover:bg-blue-900/20 transition-all duration-300 backdrop-blur-sm" // Adjusted padding and font size
                 >
-                  <Tag className="w-3 h-3" />
+                  <Tag className="w-3 h-3 sm:w-4 sm:h-4" /> {/* Adjusted icon size */}
                   {tag}
                 </span>
               ))}
@@ -198,7 +198,7 @@ export default function PostPage({
           )}
 
           {/* Audio Summary Section */}
-          <div id="audio-summary" className="my-16">
+          <div id="audio-summary" className="my-8 sm:my-16"> {/* Adjusted margin */}
             <AudioSummaryPlayer postContent={post.body.raw} postTitle={post.title} />
           </div>
         </div>
@@ -212,17 +212,6 @@ export default function PostPage({
             <MDXContent code={post.body.code} />
           </div>
 
-          {/* Mobile Social Actions (visible on smaller screens) */}
-          <div className="xl:hidden mt-16 mb-12 p-6 rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              <SocialShareButtons 
-                url={currentUrl} 
-                title={post.title} 
-                description={post.description} 
-              />
-            </div>
-          </div>
-
           {/* Giscus Comments Section */}
           <div id="comments">
             <GiscusComments postSlug={post.slug} postTitle={post.title} />
@@ -230,25 +219,25 @@ export default function PostPage({
 
           {/* Author Bio */}
           {post.author && (
-            <div className="mt-20 mb-16 p-8 rounded-2xl bg-gradient-to-br from-blue-900/20 to-green-900/20 ring-1 ring-gray-700/50 backdrop-blur-sm">
-              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center text-white font-bold text-xl">
+            <div className="mt-12 sm:mt-20 mb-8 sm:mb-16 p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-900/20 to-green-900/20 ring-1 ring-gray-700/50 backdrop-blur-sm"> {/* Adjusted padding and rounded */}
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"> {/* Adjusted for mobile stacking */}
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
                   {getAuthorInitials(post.author)}
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 text-center sm:text-left"> {/* Centered text on mobile */}
                   <h3 className="text-xl font-bold text-white mb-2">{post.author}</h3>
-                  <p className="text-blue-300 font-medium mb-3">Software Engineer | Full-Stack Developer | SEO Specialist</p>
-                  <p className="text-gray-300 leading-relaxed mb-4">
+                  <p className="text-blue-300 font-medium mb-3 text-sm">Software Engineer | Full-Stack Developer | SEO Specialist</p> {/* Adjusted font size */}
+                  <p className="text-gray-300 leading-relaxed mb-4 text-sm"> {/* Adjusted font size */}
                     With over 6 years of experience in software development and digital marketing, I specialize in creating 
                     high-performance web applications and implementing effective SEO strategies. Currently based in Berlin, 
                     I help businesses optimize their online presence through technical expertise and data-driven approaches.
                   </p>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-3"> {/* Adjusted for mobile button wrapping */}
                     <a 
                       href="https://ssohail.com" 
                       target="_blank" 
                       rel="noopener"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm" // Adjusted padding and font size
                     >
                       Visit Website
                     </a>
@@ -256,7 +245,7 @@ export default function PostPage({
                       href="https://github.com/saqibroy" 
                       target="_blank" 
                       rel="noopener"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium ring-1 ring-gray-600"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium ring-1 ring-gray-600 text-sm" // Adjusted padding and font size
                     >
                       GitHub
                     </a>
@@ -267,19 +256,19 @@ export default function PostPage({
           )}
 
           {/* Call to Action */}
-          <div className="mt-16 mb-20 text-center p-8 rounded-2xl bg-gradient-to-br from-purple-900/20 to-pink-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
-            <h3 className="text-2xl font-bold text-white mb-4">Found this article helpful?</h3>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+          <div className="mt-12 sm:mt-16 mb-12 sm:mb-20 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-pink-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm"> {/* Adjusted padding and rounded */}
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Found this article helpful?</h3> {/* Adjusted font size and margin */}
+            <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto text-sm sm:text-base"> {/* Adjusted font size and margin */}
               Get more insights and tips delivered to your inbox. Subscribe to stay updated with the latest trends and strategies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"> {/* Adjusted gap and stacking */}
               <a 
                 href="mailto:saqib@ssohail.com" 
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
+                className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base" // Adjusted padding and font size
               >
                 Get in Touch
               </a>
-              <Link href="/blog" className="px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600">
+              <Link href="/blog" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base"> {/* Adjusted padding and font size */}
                 Read More Articles
               </Link>
             </div>

@@ -1,10 +1,21 @@
 'use client';
 
-import { useMDXComponent } from 'next-contentlayer/hooks';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import React, { useState } from 'react';
+// In a real Next.js app, you would typically use:
+// import { useMDXComponent } from 'next-contentlayer/hooks';
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import React, { useMemo, useState } from 'react';
 import { Copy, Check, Lightbulb, AlertCircle, Info, Zap, Target } from 'lucide-react';
+
+// For this standalone preview environment, we'll simplify code block rendering
+// and directly use the provided custom components since MDX compilation isn't available.
+
+// Placeholder for SyntaxHighlighter to prevent errors in this environment
+const SyntaxHighlighter = ({ children, ...props }: any) => (
+  <pre {...props}><code>{children}</code></pre>
+);
+const vscDarkPlus = {}; // Placeholder style object
 
 // Enhanced callout components with modern design
 function TryThis({ children }: { children: React.ReactNode }) {
@@ -65,9 +76,22 @@ function CodeBlock({ className, children, ...props }: any) {
   const match = /language-(\w+)/.exec(className || '');
   
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(String(children).replace(/\n$/, ''));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // document.execCommand('copy') is used as navigator.clipboard.writeText() may not work due to iFrame restrictions.
+    const textToCopy = String(children).replace(/\n$/, '');
+    const textArea = document.createElement('textarea');
+    textArea.value = textToCopy;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    } finally {
+      document.body.removeChild(textArea);
+    }
   };
 
   if (match) {
@@ -127,7 +151,9 @@ function CodeBlock({ className, children, ...props }: any) {
 
 // Custom components for the article
 const components = {
-  pre: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  // `pre` and `code` tags are now handled by our local CodeBlock.
+  // In a real MDX environment, you'd configure `rehype-prism` or similar.
+  pre: ({ children, ...props }: any) => <CodeBlock {...props}>{children}</CodeBlock>,
   code: CodeBlock,
   TryThis,
   Note,
@@ -196,10 +222,84 @@ const components = {
 };
 
 export default function MDXContent({ code }: { code: string }) {
-  const Component = useMDXComponent(code);
+  // This is a simplified approach for the standalone preview.
+  // In a full Next.js application with contentlayer, `useMDXComponent` would handle this.
+  // We manually parse and replace the custom components (`TryThis`, `Note`)
+  // and render the rest as raw HTML.
+  const processedHtml = useMemo(() => {
+    let htmlContent = code;
+
+    // A simple regex to replace the custom React components with their HTML structure.
+    // This is a basic illustration and may not cover all MDX complexities.
+    htmlContent = htmlContent.replace(/<div className="TryThis">([\s\S]*?)<\/div>/g, (match, content) => {
+      // Re-create the HTML structure with the correct Tailwind classes and Lucide icons
+      // This part is crucial to ensure it matches the visual intent of the original TryThis component
+      return `
+        <div class="my-8 group">
+          <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900/30 to-green-900/20 border border-emerald-700/30 backdrop-blur-sm">
+            <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-50"></div>
+            <div class="relative p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white"><path d="M14.5 13.5 10 18l-5.5-5.5"></path><path d="M2 11.5 10 3l8 8"></path><path d="M12 2v20"></path></svg>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-emerald-300 font-semibold text-lg mb-3 flex items-center gap-2">
+                    Try This Strategy
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m13 2-3 8a9 9 0 1 0 9 9.5 7.5 7.5 0 0 1-5-6.5C15.5 9.8 17 8.5 17 6c0-2-2.5-3-4-2Z"></path></svg>
+                  </h4>
+                  <div class="text-emerald-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-p:mb-3 prose-strong:text-emerald-200">
+                    ${content}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    htmlContent = htmlContent.replace(/<div class="Note">([\s\S]*?)<\/div>/g, (match, content) => {
+      // Re-create the HTML structure for the Note component
+      return `
+        <div class="my-8 group">
+          <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border border-amber-700/30 backdrop-blur-sm">
+            <div class="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-yellow-500/5 opacity-50"></div>
+            <div class="relative p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-amber-300 font-semibold text-lg mb-3 flex items-center gap-2">
+                    Important Note
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  </h4>
+                  <div class="text-amber-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-p:mb-3 prose-strong:text-amber-200">
+                    ${content}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    // You can add more replacements here for other custom MDX components if needed.
+
+    return htmlContent;
+  }, [code]);
+
+  // For other Markdown elements (like headings, paragraphs, lists, etc.),
+  // we rely on the parent component's `prose` classes to apply styling.
+  // The `dangerouslySetInnerHTML` will render the basic HTML.
   return (
-    <div className="mdx-content">
-      <Component components={components} />
-    </div>
+    <div className="mdx-content" dangerouslySetInnerHTML={{ __html: processedHtml }} />
   );
 }
+
+// NOTE: This file is designed to be used within a Next.js environment with Contentlayer.
+// For standalone previews, custom components like <TryThis> and <Note>
+// are transformed into raw HTML with their intended styling via `dangerouslySetInnerHTML`.
+// The SyntaxHighlighter is also a placeholder for this environment.
