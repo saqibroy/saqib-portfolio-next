@@ -14,7 +14,7 @@ export const metadata = {
 // AI Features Banner Component
 function AIFeaturesBanner() {
   return (
-    <div className="relative mb-8 sm:mb-12 p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-green-900/30 border border-purple-500/30 backdrop-blur-sm overflow-hidden"> {/* Adjusted padding and rounded */}
+    <div className="relative mb-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-green-900/30 border border-purple-500/30 backdrop-blur-sm overflow-hidden"> {/* Adjusted padding and rounded */}
       {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-blue-600/10 to-green-600/10 animate-pulse" />
       
@@ -134,8 +134,9 @@ export default function BlogPage() {
                   
                   {/* Meta Information */}
                   <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4"> {/* Adjusted font size and margin */}
+                    {/* Changed YYYY to yyyy */}
                     <time dateTime={post.date} className="flex items-center gap-1">
-                      {format(new Date(post.date), 'MMM d,YYYY')}
+                      {format(new Date(post.date), 'MMM d,yyyy')} 
                     </time>
                     <span className="flex items-center gap-1">
                       {estimateReadingTime(post.body?.raw || '')}
@@ -219,3 +220,4 @@ export default function BlogPage() {
     </Layout>
   );
 }
+
