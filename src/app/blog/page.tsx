@@ -134,7 +134,7 @@ export default function BlogPage() {
                   
                   {/* Meta Information */}
                   <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4"> {/* Adjusted font size and margin */}
-                    {/* Changed YYYY to yyyy */}
+                    {/* Changed YYYY to yyyy for date-fns compatibility */}
                     <time dateTime={post.date} className="flex items-center gap-1">
                       {format(new Date(post.date), 'MMM d,yyyy')} 
                     </time>
