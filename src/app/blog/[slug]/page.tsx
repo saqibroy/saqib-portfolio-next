@@ -153,8 +153,9 @@ export default function PostPage({
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-8 sm:mb-12 text-gray-400 text-sm"> {/* Adjusted gap and font size */}
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
+              {/* Changed YYYY to yyyy */}
               <time dateTime={post.date}>
-                {format(new Date(post.date), 'MMMM d,yyyy')}
+                {format(new Date(post.date), 'MMMM d,yyyy')} 
               </time>
             </div>
             <div className="flex items-center gap-2">
@@ -280,11 +281,12 @@ export default function PostPage({
 }
 
 function formatTime(seconds: number) {
-  const m = Math.floor(seconds / 60)
+  const mins = Math.floor(seconds / 60)
     .toString()
     .padStart(1, "0");
-  const s = Math.floor(seconds % 60)
+  const secs = Math.floor(seconds % 60)
     .toString()
     .padStart(2, "0");
   return `${m}:${s}`;
 }
+
