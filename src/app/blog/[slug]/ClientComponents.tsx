@@ -1,27 +1,209 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Heart, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { Heart, Share2, Facebook, Twitter, Linkedin, MessageCircle, Headphones, Sparkles } from 'lucide-react';
 
-// Simplified Giscus Comments Component - avoid DOM manipulation conflicts
+export function StickySocialActions({ postSlug, currentUrl, postTitle, postDescription }: {
+  postSlug: string;
+  currentUrl: string;
+  postTitle: string;
+  postDescription?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const shareLinks = {
+    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(postTitle)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`,
+  };
+
+  const copyToClipboard = async () => {
+    if (!mounted) return;
+    
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = currentUrl;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed: ', fallbackErr);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  const handleShare = useCallback((shareUrl: string) => {
+    if (!mounted) return;
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+  }, [mounted]);
+
+  const scrollToComments = () => {
+    const commentsElement = document.getElementById('comments');
+    if (commentsElement) {
+      commentsElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <div className="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden xl:block">
+      <div className="flex flex-col gap-3 p-4 bg-gray-900/80 backdrop-blur-md rounded-2xl border border-gray-700/50 shadow-2xl">
+        {/* Share Label */}
+        <div className="text-center mb-2">
+          <span className="text-xs font-medium text-gray-400 block">Share</span>
+        </div>
+        
+        {/* Twitter Share */}
+        <button
+          onClick={() => handleShare(shareLinks.twitter)}
+          className="group p-3 rounded-xl bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-400 transition-all duration-300 hover:scale-110 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500"
+          title="Share on Twitter"
+          aria-label="Share on Twitter"
+        >
+          <Twitter className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+        </button>
+
+        {/* Facebook Share */}
+        <button
+          onClick={() => handleShare(shareLinks.facebook)}
+          className="group p-3 rounded-xl bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-600 transition-all duration-300 hover:scale-110 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500"
+          title="Share on Facebook"
+          aria-label="Share on Facebook"
+        >
+          <Facebook className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+        </button>
+
+        {/* LinkedIn Share */}
+        <button
+          onClick={() => handleShare(shareLinks.linkedin)}
+          className="group p-3 rounded-xl bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-600 transition-all duration-300 hover:scale-110 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500"
+          title="Share on LinkedIn"
+          aria-label="Share on LinkedIn"
+        >
+          <Linkedin className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+        </button>
+
+        {/* Copy Link */}
+        <button
+          onClick={copyToClipboard}
+          className="group p-3 rounded-xl bg-gray-800/50 hover:bg-green-600/20 text-gray-400 hover:text-green-400 transition-all duration-300 hover:scale-110 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-green-500"
+          title="Copy link"
+          aria-label="Copy link"
+        >
+          {copied ? (
+            <div className="w-5 h-5 flex items-center justify-center">
+              <span className="text-[10px] font-bold text-green-400">✓</span>
+            </div>
+          ) : (
+            <Share2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+          )}
+        </button>
+
+        {/* Divider */}
+        <div className="w-full h-px bg-gray-700/50 my-2"></div>
+        
+        {/* Comments Scroll Button */}
+        <button 
+          onClick={scrollToComments}
+          className="group p-3 rounded-xl bg-gray-800/50 hover:bg-purple-600/20 text-gray-400 hover:text-purple-400 transition-all duration-300 hover:scale-110"
+          title="Jump to comments"
+        >
+          <MessageCircle className="w-5 h-5 group-hover:bounce transition-transform" />
+        </button>
+      </div>
+    </div>
+  );
+}
+// AI Features Banner Component
+export function AIFeaturesBanner() {
+  const scrollToAudioSummary = () => {
+    const audioElement = document.getElementById('audio-summary');
+    if (audioElement) {
+      audioElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="relative mb-8 p-6 rounded-2xl bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-green-900/30 border border-purple-500/30 backdrop-blur-sm overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-blue-600/10 to-green-600/10 animate-pulse" />
+      
+      <div className="relative flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg">
+            <Sparkles className="w-6 h-6 text-white animate-pulse" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              AI-Powered Features Available
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                NEW
+              </span>
+            </h3>
+            <p className="text-gray-300 text-sm">
+              Get an AI-generated audio summary and enhanced reading experience
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={scrollToAudioSummary}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg"
+          >
+            <Headphones className="w-4 h-4" />
+            Try Audio Summary
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Fixed Giscus Comments Component
 export const GiscusComments = ({ postSlug, postTitle }: { postSlug: string; postTitle: string }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [key, setKey] = useState(0); // Force re-render when needed
   const containerRef = useRef<HTMLDivElement>(null);
-  const mountedRef = useRef(false);
+  const scriptRef = useRef<HTMLScriptElement | null>(null);
 
-  // Load Giscus - simplified approach
   const loadGiscus = useCallback(() => {
-    if (!containerRef.current || !mountedRef.current) return;
+    if (!containerRef.current) return;
+
+    // Clear any existing script
+    if (scriptRef.current) {
+      scriptRef.current.remove();
+      scriptRef.current = null;
+    }
+
+    // Clear container
+    containerRef.current.innerHTML = '';
 
     setIsLoading(true);
     setError(null);
+    setIsLoaded(false);
 
-    const container = containerRef.current;
-
-    // Create script element
+    // Create new script
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.setAttribute('data-repo', 'saqibroy/saqib-portfolio-next');
@@ -40,67 +222,49 @@ export const GiscusComments = ({ postSlug, postTitle }: { postSlug: string; post
     script.crossOrigin = 'anonymous';
     script.async = true;
 
-    // Handle script events
     script.onload = () => {
-      if (mountedRef.current) {
-        setIsLoaded(true);
-        setIsLoading(false);
-      }
+      setIsLoaded(true);
+      setIsLoading(false);
     };
 
     script.onerror = () => {
-      if (mountedRef.current) {
-        setError('Failed to load comments');
-        setIsLoading(false);
-      }
+      setError('Failed to load comments');
+      setIsLoading(false);
     };
 
-    // Append script
-    container.appendChild(script);
+    // Store reference and append
+    scriptRef.current = script;
+    containerRef.current.appendChild(script);
 
-    // Set timeout to handle cases where onload doesn't fire
-    const timeout = setTimeout(() => {
-      if (mountedRef.current && isLoading) {
+    // Timeout fallback
+    setTimeout(() => {
+      if (!isLoaded && isLoading) {
         setIsLoaded(true);
         setIsLoading(false);
       }
     }, 5000);
+  }, [postSlug, isLoaded, isLoading]);
 
-    return () => clearTimeout(timeout);
-  }, [postSlug, isLoading]);
-
-  // Mount effect
   useEffect(() => {
-    mountedRef.current = true;
-    
     const timer = setTimeout(() => {
-      if (mountedRef.current) {
-        loadGiscus();
-      }
-    }, 300);
+      loadGiscus();
+    }, 500);
 
     return () => {
       clearTimeout(timer);
-      mountedRef.current = false;
+      if (scriptRef.current) {
+        scriptRef.current.remove();
+        scriptRef.current = null;
+      }
     };
-  }, [loadGiscus]);
-
-  // Handle slug changes by forcing re-render
-  useEffect(() => {
-    setKey(prev => prev + 1);
-    setIsLoaded(false);
-    setIsLoading(false);
-    setError(null);
-  }, [postSlug]);
+  }, [postSlug]); // Reload when postSlug changes
 
   const handleRetry = () => {
-    setError(null);
-    setKey(prev => prev + 1); // Force re-render
-    setTimeout(() => loadGiscus(), 100);
+    loadGiscus();
   };
 
   return (
-    <section className="mt-20 mb-16">
+    <section className="mt-20 mb-16" id="comments">
       <div className="bg-gradient-to-br from-gray-900/50 to-gray-800/30 rounded-2xl p-8 backdrop-blur-sm ring-1 ring-gray-700/50">
         <div className="flex items-center gap-3 mb-8">
           <svg className="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
@@ -126,14 +290,12 @@ export const GiscusComments = ({ postSlug, postTitle }: { postSlug: string; post
           </p>
         </div>
 
-        {/* Giscus Container - key forces complete re-render */}
-        <div 
-          key={`${postSlug}-${key}`}
-          ref={containerRef}
-          className="giscus-container min-h-[200px] relative"
-        >
-          {/* Loading state */}
-          {isLoading && !isLoaded && (
+        {/* Giscus Container */}
+        <div className="relative min-h-[200px]">
+          <div ref={containerRef} className="giscus-container" />
+          
+          {/* Loading overlay */}
+          {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-800/20 rounded-lg backdrop-blur-sm">
               <div className="flex items-center gap-3">
                 <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-400 border-t-transparent"></div>
@@ -142,7 +304,7 @@ export const GiscusComments = ({ postSlug, postTitle }: { postSlug: string; post
             </div>
           )}
 
-          {/* Error state */}
+          {/* Error overlay */}
           {error && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-800/20 rounded-lg backdrop-blur-sm">
               <div className="text-center">
@@ -156,20 +318,13 @@ export const GiscusComments = ({ postSlug, postTitle }: { postSlug: string; post
               </div>
             </div>
           )}
-
-          {/* Placeholder when not loaded */}
-          {!isLoading && !isLoaded && !error && (
-            <div className="flex items-center justify-center py-12 text-gray-500">
-              <span className="text-sm">Initializing comments...</span>
-            </div>
-          )}
         </div>
       </div>
     </section>
   );
 };
 
-// Memoized Social Share Component
+// Fixed Social Share Component
 export const SocialShareButtons = ({ url, title, description }: { url: string; title: string; description?: string }) => {
   const [copied, setCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -229,43 +384,43 @@ export const SocialShareButtons = ({ url, title, description }: { url: string; t
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm font-medium text-gray-400">Share:</span>
+    <div className="flex items-center justify-center gap-3">
+      <span className="text-sm font-medium text-gray-400">Share this article:</span>
       <div className="flex items-center gap-2">
         <button
           onClick={() => handleShare(shareLinks.twitter)}
-          className="group p-2 rounded-full bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-400 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500"
+          className="group p-3 rounded-full bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-400 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500 hover:scale-110"
           title="Share on Twitter"
           aria-label="Share on Twitter"
         >
-          <Twitter className="w-4 h-4" />
+          <Twitter className="w-5 h-5" />
         </button>
         <button
           onClick={() => handleShare(shareLinks.facebook)}
-          className="group p-2 rounded-full bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-600 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500"
+          className="group p-3 rounded-full bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-600 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500 hover:scale-110"
           title="Share on Facebook"
           aria-label="Share on Facebook"
         >
-          <Facebook className="w-4 h-4" />
+          <Facebook className="w-5 h-5" />
         </button>
         <button
           onClick={() => handleShare(shareLinks.linkedin)}
-          className="group p-2 rounded-full bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-600 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500"
+          className="group p-3 rounded-full bg-gray-800/50 hover:bg-blue-600/20 text-gray-400 hover:text-blue-600 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-blue-500 hover:scale-110"
           title="Share on LinkedIn"
           aria-label="Share on LinkedIn"
         >
-          <Linkedin className="w-4 h-4" />
+          <Linkedin className="w-5 h-5" />
         </button>
         <button
           onClick={copyToClipboard}
-          className="group p-2 rounded-full bg-gray-800/50 hover:bg-green-600/20 text-gray-400 hover:text-green-400 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-green-500"
+          className="group p-3 rounded-full bg-gray-800/50 hover:bg-green-600/20 text-gray-400 hover:text-green-400 transition-all duration-300 backdrop-blur-sm ring-1 ring-gray-700 hover:ring-green-500 hover:scale-110"
           title="Copy link"
           aria-label="Copy link"
         >
           {copied ? (
-            <span className="text-xs font-medium px-2">Copied!</span>
+            <span className="text-xs font-medium px-1 text-green-400">✓</span>
           ) : (
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-5 h-5" />
           )}
         </button>
       </div>
@@ -273,22 +428,17 @@ export const SocialShareButtons = ({ url, title, description }: { url: string; t
   );
 };
 
-// Optimized Like Button Component
+// Fixed Like Button Component
 export const LikeButton = ({ postSlug }: { postSlug: string }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setMounted(true);
-    
-    return () => {
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
-      }
-    };
+    // In a real app, you'd load the actual like status and count from your backend
+    // For now, we'll use local state
   }, []);
 
   const handleLike = useCallback(() => {
@@ -301,15 +451,14 @@ export const LikeButton = ({ postSlug }: { postSlug: string }) => {
     setLikeCount(newCount);
     setIsAnimating(true);
     
-    // Clear existing timeout
-    if (animationTimeoutRef.current) {
-      clearTimeout(animationTimeoutRef.current);
-    }
-    
-    animationTimeoutRef.current = setTimeout(() => {
+    // Reset animation after 600ms
+    setTimeout(() => {
       setIsAnimating(false);
     }, 600);
-  }, [mounted, isLiked, likeCount]);
+
+    // In a real app, you'd send this to your backend
+    console.log('Like status changed:', { postSlug, isLiked: newLikedState, count: newCount });
+  }, [mounted, isLiked, likeCount, postSlug]);
 
   if (!mounted) {
     return (

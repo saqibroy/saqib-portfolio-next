@@ -60,7 +60,7 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
   const TTS_SERVICE_URL = process.env.NEXT_PUBLIC_TTS_SERVICE_URL || 'https://ai-tts-service.onrender.com';
 
   // Cache configuration
-  const CACHE_EXPIRY_HOURS = 24; // 24 hours
+  const CACHE_EXPIRY_HOURS = 240; // 24 hours
   const MAX_CACHE_SIZE_MB = 50; // 50MB limit
 
   // Generate hash for content

@@ -18,6 +18,7 @@ A modern, performant personal portfolio website showcasing my web development sk
 - 🌈 Animated background with random code-like elements
 - 📱 Mobile-friendly interface
 - 🚀 Performance-optimized
+- 🤖 **AI-powered Blog** with modern UI, featuring an 'AI ✨' badge in the navigation to highlight AI-driven content and features
 
 ## 🖼️ Screenshots
 
@@ -29,6 +30,8 @@ A modern, performant personal portfolio website showcasing my web development sk
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
+- **Content**: Contentlayer, MDX, date-fns
+- **AI/UX**: Custom badge and blog UI enhancements
 - **Deployment**: Vercel (recommended)
 
 ## 🚀 Getting Started
@@ -102,9 +105,18 @@ Saqib Sohail
 
 Give a ⭐️ if this project helped you!
 
-## Blog Setup
+## Blog & AI Features
 
-After making changes for the blog feature, run:
+The Blog section is now AI-powered, featuring:
+
+- Modern, accessible UI/UX for reading and exploring articles
+- An 'AI ✨' badge in the navigation to highlight AI-driven content and features
+- MDX-based posts with interactive and dynamic elements
+- Enhanced performance and accessibility
+
+### Setup for Blog & AI Features
+
+After pulling the latest changes, run:
 
 ```
 npm install
