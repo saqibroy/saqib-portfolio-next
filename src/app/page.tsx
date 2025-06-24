@@ -141,15 +141,51 @@ const Home: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.4 }}
-              className="text-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center"
             >
               <motion.a
                 href="/cv"
-                className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-lg"
+                className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                 whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
               >
                 Explore My Work
+              </motion.a>
+              
+              <motion.a
+                href="/blog"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white font-medium hover:from-cyan-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 relative overflow-hidden border border-cyan-400/20"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+              >
+                <div className="relative">
+                  <svg 
+                    className="w-6 h-6" 
+                    fill="currentColor" 
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                    <path d="M12 7a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    <circle cx="9" cy="9" r="1"/>
+                    <circle cx="15" cy="9" r="1"/>
+                    <path d="M8 15c0-2.21 1.79-4 4-4s4 1.79 4 4"/>
+                  </svg>
+                  <motion.div 
+                    className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full"
+                    animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-sm opacity-90 leading-none">AI-Powered</span>
+                  <span className="leading-none">Blog</span>
+                </div>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20 opacity-0"
+                  whileHover={shouldReduceMotion ? {} : { opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
               </motion.a>
             </motion.div>
           </div>
