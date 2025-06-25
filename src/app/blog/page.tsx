@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Layout from '@/components/Layout';
 import Image from 'next/image';
 import { Sparkles, Headphones, FileText, Zap, Brain } from 'lucide-react';
+// Import the new utility function
+import { getOptimizedImageProps } from '@/utils/imageOptimization'; // Adjust path if different
 
 export const metadata = {
   title: 'Blog',
@@ -14,44 +16,43 @@ export const metadata = {
 // AI Features Banner Component
 function AIFeaturesBanner() {
   return (
-    <div className="relative mb-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-green-900/30 border border-purple-500/30 backdrop-blur-sm overflow-hidden"> {/* Adjusted padding and rounded */}
-      {/* Animated background */}
+    <div className="relative mb-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-green-900/30 border border-purple-500/30 backdrop-blur-sm overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-blue-600/10 to-green-600/10 animate-pulse" />
-      
+
       <div className="relative text-center">
-        <div className="flex items-center justify-center gap-3 mb-3 sm:mb-4"> {/* Adjusted margin */}
-          <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg"> {/* Adjusted padding and rounded */}
-            <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" /> {/* Adjusted icon size */}
+        <div className="flex items-center justify-center gap-3 mb-3 sm:mb-4">
+          <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg">
+            <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" />
           </div>
-          <h2 className="text-xl md:text-3xl font-bold text-white"> {/* Adjusted font size */}
+          <h2 className="text-xl md:text-3xl font-bold text-white">
             AI-Enhanced Reading Experience
           </h2>
-          <div className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg animate-bounce"> {/* Adjusted padding and font size */}
+          <div className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg animate-bounce">
             NEW
           </div>
         </div>
-        
-        <p className="text-base sm:text-lg mb-4 sm:mb-6 max-w-3xl mx-auto px-2 sm:px-0 text-gray-300"> {/* Adjusted font size and added horizontal padding */}
+
+        <p className="text-base sm:text-lg mb-4 sm:mb-6 max-w-3xl mx-auto px-2 sm:px-0 text-gray-300">
           Every blog post now comes with AI-powered features to enhance your reading experience
         </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto px-2 sm:px-0"> {/* Adjusted gap and added horizontal padding */}
-          <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-blue-500/30"> {/* Adjusted padding and gap */}
-            <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg bg-blue-500/20"> {/* Adjusted padding and rounded */}
-              <Headphones className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" /> {/* Adjusted icon size */}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto px-2 sm:px-0">
+          <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-blue-500/30">
+            <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg bg-blue-500/20">
+              <Headphones className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-white text-base sm:text-lg">AI Audio Summaries</h3> {/* Adjusted font size */}
+              <h3 className="font-semibold text-white text-base sm:text-lg">AI Audio Summaries</h3>
               <p className="text-sm text-gray-300">Listen to AI-generated summaries of each article</p>
             </div>
           </div>
-          
-          <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-green-900/40 to-blue-900/40 border border-green-500/30"> {/* Adjusted padding and rounded */}
-            <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg bg-green-500/20"> {/* Adjusted padding and rounded */}
-              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" /> {/* Adjusted icon size */}
+
+          <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-green-900/40 to-blue-900/40 border border-green-500/30">
+            <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg bg-green-500/20">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-white text-base sm:text-lg">Smart Reading Features</h3> {/* Adjusted font size */}
+              <h3 className="font-semibold text-white text-base sm:text-lg">Smart Reading Features</h3>
               <p className="text-sm text-gray-300">Enhanced content structure and reading time</p>
             </div>
           </div>
@@ -65,7 +66,7 @@ function AIFeaturesBanner() {
 function AIBadge() {
   return (
     <div className="absolute top-3 right-3 z-10">
-      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold shadow-lg backdrop-blur-sm border border-purple-400/30"> {/* Adjusted padding and font size */}
+      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold shadow-lg backdrop-blur-sm border border-purple-400/30">
         <Sparkles className="w-3 h-3 animate-pulse" />
         <span>AI Enhanced</span>
       </div>
@@ -86,15 +87,15 @@ export default function BlogPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8 sm:py-12 mt-16"> {/* Adjusted padding and margin */}
+      <div className="container mx-auto px-4 py-8 sm:py-12 mt-16">
         {/* Page Header */}
-        <div className="text-center mb-8 sm:mb-12"> {/* Adjusted margin */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3 sm:mb-4"> {/* Adjusted margin */}
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3 sm:mb-4">
             <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-green-400 bg-clip-text text-transparent">
               Blog
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto px-2 sm:px-0"> {/* Adjusted font size and added horizontal padding */}
+          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto px-2 sm:px-0">
             Discover insights, tutorials, and thoughts on technology, development, and digital innovation
           </p>
         </div>
@@ -103,115 +104,119 @@ export default function BlogPage() {
         <AIFeaturesBanner />
 
         {/* Blog Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"> {/* Adjusted gap */}
-          {posts.map((post: Post) => (
-            <Link key={post.slug} href={post.url} className="group">
-              <article className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-b from-gray-800/50 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/80 transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-2xl hover:shadow-black/40 hover:scale-[1.02] transform"> {/* Adjusted rounded */}
-                
-                {/* AI Badge */}
-                <AIBadge />
-                
-                {/* Post Image */}
-                {post.image && (
-                  <div className="relative aspect-[16/9] w-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                    <Image 
-                      src={post.image} 
-                      alt={post.title} 
-                      fill 
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500" 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  </div>
-                )}
-                
-                {/* Post Content */}
-                <div className="p-4 sm:p-6"> {/* Adjusted padding */}
-                  {/* Title */}
-                  <h2 className="text-lg sm:text-xl font-bold text-white group-hover:text-blue-300 transition-colors mb-2 sm:mb-3 line-clamp-2 leading-tight"> {/* Adjusted font size and margin */}
-                    {post.title}
-                  </h2>
-                  
-                  {/* Meta Information */}
-                  <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4"> {/* Adjusted font size and margin */}
-                    {/* Changed YYYY to yyyy for date-fns compatibility */}
-                    <time dateTime={post.date} className="flex items-center gap-1">
-                      {format(new Date(post.date), 'MMM d,yyyy')} 
-                    </time>
-                    <span className="flex items-center gap-1">
-                      {estimateReadingTime(post.body?.raw || '')}
-                    </span>
-                  </div>
-                  
-                  {/* Description */}
-                  <p className="text-gray-300 mb-3 sm:mb-4 line-clamp-3 leading-relaxed text-sm"> {/* Adjusted font size and margin */}
-                    {post.description}
-                  </p>
-                  
-                  {/* AI Features Preview */}
-                  <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-700/50"> {/* Adjusted gap and padding */}
-                    <div className="flex items-center gap-2 text-xs text-purple-400">
-                      <Headphones className="w-3.5 h-3.5" /> {/* Adjusted icon size */}
-                      <span>Audio Summary</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-blue-400">
-                      <Zap className="w-3.5 h-3.5" /> {/* Adjusted icon size */}
-                      <span>AI Enhanced</span>
-                    </div>
-                  </div>
-                  
-                  {/* Tags Preview (if available) */}
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3 sm:mt-4"> {/* Adjusted gap and margin */}
-                      {post.tags.slice(0, 2).map((tag: string) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 text-xs font-medium bg-blue-900/30 text-blue-300 rounded-full border border-blue-700/50"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {post.tags.length > 2 && (
-                        <span className="px-2 py-0.5 text-xs font-medium bg-gray-700/30 text-gray-400 rounded-full">
-                          +{post.tags.length - 2} more
-                        </span>
-                      )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {posts.map((post: Post) => {
+            // Get optimized image props using the utility function
+            const imageProps = post.image ? getOptimizedImageProps({
+              src: post.image,
+              alt: post.title,
+              width: 1200, // Assuming original or largest intended width
+              height: 675, // Assuming original or largest intended height (16:9 aspect ratio)
+              sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw", // Adjust based on your layout breakpoints
+              loading: "lazy", // Lazy load images in the grid
+              className: "object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            }) : null;
+
+            return (
+              <Link key={post.slug} href={post.url} className="group">
+                <article className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-b from-gray-800/50 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/80 transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-2xl hover:shadow-black/40 hover:scale-[1.02] transform">
+
+                  {/* AI Badge */}
+                  <AIBadge />
+
+                  {/* Post Image */}
+                  {imageProps && (
+                    <div className="relative aspect-[16/9] w-full overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                      <Image {...imageProps} /> {/* Spread the generated props directly */}
                     </div>
                   )}
-                </div>
-                
-                {/* Hover Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 via-transparent to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              </article>
-            </Link>
-          ))}
+                  {/* Fallback for cases where post.image is not present or optimization issues */}
+                  {!imageProps && (
+                      <div className="relative aspect-[16/9] w-full bg-gray-700 flex items-center justify-center text-gray-400 text-sm">
+                          No Image Available
+                      </div>
+                  )}
+
+                  {/* Post Content */}
+                  <div className="p-4 sm:p-6">
+                    <h2 className="text-lg sm:text-xl font-bold text-white group-hover:text-blue-300 transition-colors mb-2 sm:mb-3 line-clamp-2 leading-tight">
+                      {post.title}
+                    </h2>
+
+                    <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">
+                      <time dateTime={post.date} className="flex items-center gap-1">
+                        {format(new Date(post.date), 'MMM d,yyyy')}
+                      </time>
+                      <span className="flex items-center gap-1">
+                        {estimateReadingTime(post.body?.raw || '')}
+                      </span>
+                    </div>
+
+                    <p className="text-gray-300 mb-3 sm:mb-4 line-clamp-3 leading-relaxed text-sm">
+                      {post.description}
+                    </p>
+
+                    <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-700/50">
+                      <div className="flex items-center gap-2 text-xs text-purple-400">
+                        <Headphones className="w-3.5 h-3.5" />
+                        <span>Audio Summary</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-blue-400">
+                        <Zap className="w-3.5 h-3.5" />
+                        <span>AI Enhanced</span>
+                      </div>
+                    </div>
+
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3 sm:mt-4">
+                        {post.tags.slice(0, 2).map((tag: string) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-0.5 text-xs font-medium bg-blue-900/30 text-blue-300 rounded-full border border-blue-700/50"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {post.tags.length > 2 && (
+                          <span className="px-2 py-0.5 text-xs font-medium bg-gray-700/30 text-gray-400 rounded-full">
+                            +{post.tags.length - 2} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 via-transparent to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                </article>
+              </Link>
+            );
+          })}
         </div>
 
-        {/* Empty State */}
         {posts.length === 0 && (
-          <div className="text-center py-8 sm:py-16"> {/* Adjusted padding */}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center"> {/* Adjusted size and margin */}
-              <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" /> {/* Adjusted icon size */}
+          <div className="text-center py-8 sm:py-16">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center">
+              <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No posts yet</h3> {/* Adjusted font size */}
-            <p className="text-gray-400 text-sm">Check back soon for new content!</p> {/* Adjusted font size */}
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No posts yet</h3>
+            <p className="text-gray-400 text-sm">Check back soon for new content!</p>
           </div>
         )}
 
-        {/* Call to Action */}
-        <div className="mt-12 sm:mt-16 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm"> {/* Adjusted padding and rounded */}
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Stay Updated</h3> {/* Adjusted font size and margin */}
-          <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto px-2 sm:px-0 text-sm sm:text-base"> {/* Adjusted font size and padding */}
+        <div className="mt-12 sm:mt-16 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
+          <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Stay Updated</h3>
+          <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto px-2 sm:px-0 text-sm sm:text-base">
             Get notified when new AI-enhanced articles are published. Join the community of developers and tech enthusiasts.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"> {/* Adjusted gap and stacking */}
-            <a 
-              href="mailto:saqib@ssohail.com" 
-              className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base" // Adjusted padding and font size
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <a
+              href="mailto:saqib@ssohail.com"
+              className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
             >
               Get in Touch
             </a>
-            <Link href="/rss.xml" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base"> {/* Adjusted padding and font size */}
+            <Link href="/rss.xml" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base">
               Subscribe to RSS
             </Link>
           </div>
@@ -220,4 +225,3 @@ export default function BlogPage() {
     </Layout>
   );
 }
-

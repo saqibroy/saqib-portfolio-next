@@ -8,6 +8,8 @@ import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AudioSummaryPlayer from "./AudioSummaryPlayer";
 import { GiscusComments, SocialShareButtons, StickySocialActions, AIFeaturesBanner } from './ClientComponents';
+// Import the new utility function
+import { getOptimizedImageProps } from '@/utils/imageOptimization'; // Adjust path if different
 
 export async function generateStaticParams() {
   return allPosts.map((post: Post) => ({ slug: post.slug }));
@@ -15,14 +17,17 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const post = allPosts.find((post: Post) => post.slug === params.slug);
-  if (!post) return { 
-    title: 'Post Not Found', 
-    description: 'The requested blog post could not be found.' 
+  if (!post) return {
+    title: 'Post Not Found',
+    description: 'The requested blog post could not be found.'
   };
 
   const title = `${post.title} | Saqib Sohail`;
   const description = post.description || 'Read this article on ssohail.com';
   const url = `https://ssohail.com/blog/${post.slug}`;
+  // Ensure imageUrl here also uses the optimized image path for OpenGraph,
+  // though Contentlayer might need the original path for generation.
+  // For static OG images, you might pre-generate them or handle differently.
   const imageUrl = post.image || `https://ssohail.com/og-image.png`;
 
   return {
@@ -35,7 +40,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       siteName: 'Saqib Sohail',
       images: [
         {
-          url: imageUrl,
+          url: imageUrl, // Use original path for metadata if it's external, or pre-generated OG image
           width: 1200,
           height: 630,
           alt: post.title,
@@ -102,10 +107,23 @@ export default function PostPage({
 
   const currentUrl = `https://ssohail.com/blog/${post.slug}`;
 
+  // Get optimized image props for the hero image
+  const heroImageProps = post.image ? getOptimizedImageProps({
+    src: post.image,
+    alt: post.title,
+    width: 1200, // Assuming original or largest intended width
+    height: 675, // Assuming original or largest intended height (16:9 aspect ratio)
+    // Adjust sizes for hero image based on its typical display size on post pages
+    sizes: "(max-width: 768px) 100vw, 80vw", // Example: 100vw on mobile, 80vw on larger screens
+    priority: true, // This is a hero image, likely LCP, so prioritize it
+    className: "object-cover object-center"
+  }) : null;
+
+
   return (
     <Layout>
       {/* Sticky Social Actions (Desktop only, mobile uses floating button) */}
-      <StickySocialActions 
+      <StickySocialActions
         postSlug={post.slug}
         currentUrl={currentUrl}
         postTitle={post.title}
@@ -113,14 +131,14 @@ export default function PostPage({
       />
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-12 sm:pb-16"> {/* Adjusted padding for mobile */}
+      <section className="relative pt-24 pb-12 sm:pb-16">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.1),transparent)] pointer-events-none" />
-        
+
         <div className="container mx-auto px-4 max-w-6xl relative">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 mb-6 sm:mb-8 text-sm"> {/* Adjusted margin */}
+          <nav className="flex items-center gap-2 mb-6 sm:mb-8 text-sm">
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
               Home
             </Link>
@@ -136,26 +154,25 @@ export default function PostPage({
           <AIFeaturesBanner />
 
           {/* Hero Content */}
-          <div className="text-center mb-8 sm:mb-12"> {/* Adjusted margin */}
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 leading-tight"> {/* Adjusted font sizes for mobile */}
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 leading-tight">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-green-400 bg-clip-text text-transparent">
                 {post.title}
               </span>
             </h1>
             {post.description && (
-              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"> {/* Added horizontal padding */}
+              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0">
                 {post.description}
               </p>
             )}
           </div>
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-8 sm:mb-12 text-gray-400 text-sm"> {/* Adjusted gap and font size */}
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-8 sm:mb-12 text-gray-400 text-sm">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              {/* Changed YYYY to yyyy for date-fns compatibility */}
               <time dateTime={post.date}>
-                {format(new Date(post.date), 'MMMM d,yyyy')} 
+                {format(new Date(post.date), 'MMMM d,yyyy')}
               </time>
             </div>
             <div className="flex items-center gap-2">
@@ -171,27 +188,28 @@ export default function PostPage({
           </div>
 
           {/* Hero Image */}
-          <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-8 sm:mb-12"> {/* Adjusted rounded and margin */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
-            <Image
-              src={post.image || `https://placehold.co/1200x500/1a1a1a/ffffff?text=${encodeURIComponent(post.title)}`}
-              alt={post.title}
-              fill
-              className="object-cover object-center"
-              priority
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-            />
-          </div>
+          {heroImageProps && ( // Check if imageProps exist
+            <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-8 sm:mb-12">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
+              <Image {...heroImageProps} fill /> {/* Spread the generated props directly */}
+            </div>
+          )}
+          {/* Fallback for cases where post.image is not present or optimization issues */}
+          {!heroImageProps && (
+              <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-8 sm:mb-12 bg-gray-700 flex items-center justify-center text-gray-400 text-lg">
+                  No Image Available
+              </div>
+          )}
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 sm:mb-16 px-4"> {/* Adjusted gap and added horizontal padding */}
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 sm:mb-16 px-4">
               {post.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="group inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium bg-gray-900/50 text-gray-300 ring-1 ring-gray-700 hover:ring-blue-500 hover:bg-blue-900/20 transition-all duration-300 backdrop-blur-sm" // Adjusted padding and font size
+                  className="group inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium bg-gray-900/50 text-gray-300 ring-1 ring-gray-700 hover:ring-blue-500 hover:bg-blue-900/20 transition-all duration-300 backdrop-blur-sm"
                 >
-                  <Tag className="w-3 h-3 sm:w-4 sm:h-4" /> {/* Adjusted icon size */}
+                  <Tag className="w-3 h-3 sm:w-4 sm:h-4" />
                   {tag}
                 </span>
               ))}
@@ -199,7 +217,7 @@ export default function PostPage({
           )}
 
           {/* Audio Summary Section */}
-          <div id="audio-summary" className="my-8 sm:my-16"> {/* Adjusted margin */}
+          <div id="audio-summary" className="my-8 sm:my-16">
             <AudioSummaryPlayer postContent={post.body.raw} postTitle={post.title} />
           </div>
         </div>
@@ -208,7 +226,7 @@ export default function PostPage({
       {/* Article Content */}
       <article className="relative">
         <div className="container mx-auto px-4 max-w-4xl xl:max-w-5xl">
-          {/* Article Body - Adjusted max-width for better sidebar space */}
+          {/* Article Body */}
           <div className="prose prose-invert prose-xl max-w-none xl:max-w-4xl xl:mx-auto prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:mt-12 prose-h3:mb-6 prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:transition-all prose-strong:text-white prose-strong:font-semibold prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-900/10 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-lg prose-ul:my-8 prose-li:text-gray-300 prose-li:mb-2">
             <MDXContent code={post.body.code} />
           </div>
@@ -220,33 +238,33 @@ export default function PostPage({
 
           {/* Author Bio */}
           {post.author && (
-            <div className="mt-12 sm:mt-20 mb-8 sm:mb-16 p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-900/20 to-green-900/20 ring-1 ring-gray-700/50 backdrop-blur-sm"> {/* Adjusted padding and rounded */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"> {/* Adjusted for mobile stacking */}
+            <div className="mt-12 sm:mt-20 mb-8 sm:mb-16 p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-900/20 to-green-900/20 ring-1 ring-gray-700/50 backdrop-blur-sm">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
                   {getAuthorInitials(post.author)}
                 </div>
-                <div className="flex-1 text-center sm:text-left"> {/* Centered text on mobile */}
+                <div className="flex-1 text-center sm:text-left">
                   <h3 className="text-xl font-bold text-white mb-2">{post.author}</h3>
-                  <p className="text-blue-300 font-medium mb-3 text-sm">Software Engineer | Full-Stack Developer | SEO Specialist</p> {/* Adjusted font size */}
-                  <p className="text-gray-300 leading-relaxed mb-4 text-sm"> {/* Adjusted font size */}
-                    With over 6 years of experience in software development and digital marketing, I specialize in creating 
-                    high-performance web applications and implementing effective SEO strategies. Currently based in Berlin, 
+                  <p className="text-blue-300 font-medium mb-3 text-sm">Software Engineer | Full-Stack Developer | SEO Specialist</p>
+                  <p className="text-gray-300 leading-relaxed mb-4 text-sm">
+                    With over 6 years of experience in software development and digital marketing, I specialize in creating
+                    high-performance web applications and implementing effective SEO strategies. Currently based in Berlin,
                     I help businesses optimize their online presence through technical expertise and data-driven approaches.
                   </p>
-                  <div className="flex flex-wrap justify-center sm:justify-start gap-3"> {/* Adjusted for mobile button wrapping */}
-                    <a 
-                      href="https://ssohail.com" 
-                      target="_blank" 
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                    <a
+                      href="https://ssohail.com"
+                      target="_blank"
                       rel="noopener"
-                      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm" // Adjusted padding and font size
+                      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm"
                     >
                       Visit Website
                     </a>
-                    <a 
-                      href="https://github.com/saqibroy" 
-                      target="_blank" 
+                    <a
+                      href="https://github.com/saqibroy"
+                      target="_blank"
                       rel="noopener"
-                      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium ring-1 ring-gray-600 text-sm" // Adjusted padding and font size
+                      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium ring-1 ring-gray-600 text-sm"
                     >
                       GitHub
                     </a>
@@ -257,19 +275,19 @@ export default function PostPage({
           )}
 
           {/* Call to Action */}
-          <div className="mt-12 sm:mt-16 mb-12 sm:mb-20 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-pink-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm"> {/* Adjusted padding and rounded */}
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Found this article helpful?</h3> {/* Adjusted font size and margin */}
-            <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto text-sm sm:text-base"> {/* Adjusted font size and margin */}
+          <div className="mt-12 sm:mt-16 mb-12 sm:mb-20 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-pink-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Found this article helpful?</h3>
+            <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto text-sm sm:text-base">
               Get more insights and tips delivered to your inbox. Subscribe to stay updated with the latest trends and strategies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"> {/* Adjusted gap and stacking */}
-              <a 
-                href="mailto:saqib@ssohail.com" 
-                className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base" // Adjusted padding and font size
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <a
+                href="mailto:saqib@ssohail.com"
+                className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
               >
                 Get in Touch
               </a>
-              <Link href="/blog" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base"> {/* Adjusted padding and font size */}
+              <Link href="/blog" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base">
                 Read More Articles
               </Link>
             </div>
@@ -282,11 +300,10 @@ export default function PostPage({
 
 function formatTime(seconds: number) {
   const minutes = Math.floor(seconds / 60);
-  const m = minutes.toString().padStart(1, "0"); // Explicitly assign to 'm'
+  const m = minutes.toString().padStart(1, "0");
 
   const remainingSeconds = Math.floor(seconds % 60);
-  const s = remainingSeconds.toString().padStart(2, "0"); // Explicitly assign to 's'
+  const s = remainingSeconds.toString().padStart(2, "0");
 
   return `${m}:${s}`;
 }
-
