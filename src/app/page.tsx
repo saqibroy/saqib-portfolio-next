@@ -3,8 +3,9 @@ import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Layout from '@/components/Layout'; // Keep Layout import
 import Link from 'next/link'; // Keep Link for Next.js environment
+import { Sparkles, Brain, Zap, Code, Rocket, Globe, ArrowRight, Star } from 'lucide-react';
 
-// Define an interface for background elements
+// Enhanced Background Elements Component
 interface BackgroundElement {
   id: number;
   x: number;
@@ -13,30 +14,38 @@ interface BackgroundElement {
   delay: number;
   duration: number;
   color: string;
+  size: number; // Added size to interface
 }
 
-// Memoized background elements to prevent unnecessary re-renders
 const BackgroundElements: React.FC<{ elements: BackgroundElement[] }> = React.memo(({ elements }) => {
   const shouldReduceMotion = useReducedMotion();
   
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Gradient orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }} />
+      
+      {/* Code elements */}
       {elements.map((element) => (
         <motion.div
           key={element.id}
-          className="absolute font-mono text-xs"
+          className="absolute font-mono font-bold"
           style={{
             left: `${element.x}%`,
             top: `${element.y}%`,
-            color: element.color
+            color: element.color,
+            fontSize: `${element.size}px`
           }}
-          initial={{ opacity: 0, y: -50 }}
+          initial={{ opacity: 0, y: -50, rotate: -10 }}
           animate={{ 
-            opacity: shouldReduceMotion ? [0, 0.3, 0] : [0, 0.7, 0],
-            y: shouldReduceMotion ? [0, 25, 50] : [0, 50, 100]
+            opacity: shouldReduceMotion ? [0, 0.4, 0] : [0, 0.8, 0],
+            y: shouldReduceMotion ? [0, 30, 60] : [0, 60, 120],
+            rotate: shouldReduceMotion ? [-10, 0, 10] : [-10, 5, 20]
           }}
           transition={{
-            duration: shouldReduceMotion ? element.duration * 0.5 : element.duration,
+            duration: shouldReduceMotion ? element.duration * 0.8 : element.duration, // Slower duration
             delay: element.delay,
             repeat: Infinity,
             repeatType: 'loop',
@@ -53,9 +62,74 @@ const BackgroundElements: React.FC<{ elements: BackgroundElement[] }> = React.me
 
 BackgroundElements.displayName = 'BackgroundElements';
 
+// Enhanced AI Badge for CTA buttons - Now directly on the button without a separate icon
+const EnhancedAIBadge = () => {
+  const shouldReduceMotion = useReducedMotion();
+  
+  return (
+    <motion.div 
+      className="absolute -top-2 -right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-xs font-bold shadow-lg border border-violet-400/40"
+      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+      animate={shouldReduceMotion ? {} : { 
+        boxShadow: [
+          '0 4px 15px rgba(139, 92, 246, 0.3)',
+          '0 4px 25px rgba(139, 92, 246, 0.5)',
+          '0 4px 15px rgba(139, 92, 246, 0.3)'
+        ]
+      }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      <motion.div
+        animate={shouldReduceMotion ? {} : { rotate: [0, 360] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      >
+        <Sparkles className="w-3 h-3" />
+      </motion.div>
+      <span>AI</span>
+    </motion.div>
+  );
+};
+
+// Skill badges component
+const SkillBadges = () => {
+  const skills = [
+    { name: 'React', color: 'from-blue-500 to-cyan-500', icon: <Code className="w-4 h-4" /> },
+    { name: 'Next.js', color: 'from-gray-700 to-gray-900', icon: <Rocket className="w-4 h-4" /> },
+    { name: 'TypeScript', color: 'from-blue-600 to-blue-800', icon: <Zap className="w-4 h-4" /> },
+    { name: 'Node.js', color: 'from-green-500 to-green-700', icon: <Globe className="w-4 h-4" /> },
+  ];
+
+  return (
+    <motion.div 
+      className="flex flex-wrap justify-center gap-3 mt-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.8 }}
+    >
+      {skills.map((skill, index) => (
+        <motion.div
+          key={skill.name}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${skill.color} text-white text-sm font-medium shadow-lg backdrop-blur-sm border border-white/20`}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.9 + index * 0.1 }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {skill.icon}
+          <span>{skill.name}</span>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+};
+
 // Deterministic background elements generation
 const generateBackgroundElements = (count: number): BackgroundElement[] => {
-  const chars = ['0', '1', '>=', '<', '>', ',', '/', '{', '}', '()', '.', 'i'];
+  const chars = ['0', '1', '>=', '<', '>', ',', '/', '{', '}', '()', '.', 'i', 'AI']; 
+  const colors = ['hsl(180, 70%, 50%)', 'hsl(240, 70%, 60%)', 'hsl(300, 70%, 70%)']; 
+  const sizes = [12, 16, 20, 24]; 
+
   const elements: BackgroundElement[] = [];
   
   for (let i = 0; i < count; i++) {
@@ -64,9 +138,10 @@ const generateBackgroundElements = (count: number): BackgroundElement[] => {
     const y = ((seed * 16807) % 2147483647 % 100) / 100;
     const charIndex = ((seed * 16807) % 2147483647) % chars.length;
     const delay = (seed % 2000) / 1000;
-    const duration = 3 + (seed % 4000) / 1000;
-    const hue = 100 + (seed % 120);
-    
+    const duration = 5 + (seed % 6000) / 1000; // Increased base duration for slower movement
+    const colorIndex = ((seed * 16807 * 2) % 2147483647) % colors.length;
+    const sizeIndex = ((seed * 16807 * 3) % 2147483647) % sizes.length;
+
     elements.push({
       id: i,
       x: x * 100,
@@ -74,7 +149,8 @@ const generateBackgroundElements = (count: number): BackgroundElement[] => {
       char: chars[charIndex],
       delay,
       duration,
-      color: `hsl(${hue}, 70%, 50%)`
+      color: colors[colorIndex],
+      size: sizes[sizeIndex]
     });
   }
   
@@ -84,17 +160,13 @@ const generateBackgroundElements = (count: number): BackgroundElement[] => {
 const Home: React.FC = () => {
   const [stage, setStage] = useState<number>(0);
   const shouldReduceMotion = useReducedMotion();
-  const backgroundElements = useMemo(() => generateBackgroundElements(50), []);
+  const backgroundElements = useMemo(() => generateBackgroundElements(70), []); 
 
   useEffect(() => {
     const stages = [
       () => {
-        const typeInterval = setInterval(() => {
-          clearInterval(typeInterval);
-          setStage(1);
-        }, 25);
-
-        return () => clearInterval(typeInterval);
+        setStage(1);
+        return () => {};
       },
       () => {
         return () => {};
@@ -107,15 +179,15 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="relative min-h-screen flex flex-col">
+      <div className="relative min-h-screen flex flex-col bg-gray-950 text-white font-sans">
         <Suspense fallback={<div className="absolute inset-0 bg-gray-900" />}>
           <BackgroundElements elements={backgroundElements} />
         </Suspense>
 
-        <div className="flex-grow flex items-center justify-center relative z-10 px-4">
+        <div className="flex-grow flex items-center justify-center relative z-10 px-4 py-12 sm:py-24">
           <div className="w-full max-w-6xl mx-auto">
             <motion.div 
-              className="text-center mb-12 sm:mb-16" // Adjusted margin for mobile
+              className="text-center mb-12 sm:mb-16" 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: shouldReduceMotion ? 0.5 : 1 }}
@@ -124,17 +196,18 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 to-green-300 bg-clip-text text-transparent leading-tight px-2 sm:px-0" // Adjusted margin and added horizontal padding
+                className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 via-green-300 to-purple-400 bg-clip-text text-transparent leading-tight px-2 sm:px-0 drop-shadow-lg" 
               >
-                Full-Stack Developer & Software Engineer
+                Full-Stack Engineer & Tech Enthusiast
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.2 }}
-                className="text-lg md:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto px-2 sm:px-0" // Adjusted font size, margin, and added horizontal padding
+                className="text-lg md:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto px-2 sm:px-0 opacity-90" 
               >
                 Building performant, accessible, and scalable web applications using modern technologies like React, Next.js, Node.js, and TypeScript.
+                I also explore the exciting world of AI on my <a href="https://ssohail.com/blog" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">blog</a>.
               </motion.p>
             </motion.div>
 
@@ -142,57 +215,39 @@ const Home: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center px-2 sm:px-0" // Adjusted gap and added horizontal padding
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center px-2 sm:px-0" 
             >
-              <Link // Using Link for Next.js environment
+              <Link 
                 href="/cv"
-                className="inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2" // Adjusted padding and font size
-                // Removed whileHover, whileTap as Link doesn't directly support these for its children
+                className="inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 relative overflow-hidden group" 
               >
-                <motion.span // Wrap content in motion.span for animation
+                <motion.span 
+                  className="relative z-10 flex items-center gap-2"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >
                   Explore My Work
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
                 </motion.span>
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
               </Link>
               
-              <Link // Using Link for Next.js environment
+              <Link 
                 href="/blog"
-                className="inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white font-medium hover:from-cyan-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 relative overflow-hidden border border-cyan-400/20" // Adjusted padding and font size
-                // Removed whileHover, whileTap as Link doesn't directly support these for its children
+                className="inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 relative overflow-hidden border border-purple-400/20 group" 
               >
-                <motion.div // Wrap content in motion.div for animation
+                <motion.div 
                   className="relative flex items-center gap-3"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >
-                  <svg 
-                    className="w-5 h-5 sm:w-6 sm:h-6" // Adjusted icon size
-                    fill="currentColor" 
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                    <path d="M12 7a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                    <circle cx="9" cy="9" r="1"/>
-                    <circle cx="15" cy="9" r="1"/>
-                    <path d="M8 15c0-2.21 1.79-4 4-4s4 1.79 4 4"/>
-                  </svg>
-                  <motion.div 
-                    className="absolute -top-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-cyan-400 rounded-full" // Adjusted size
-                    animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
+                  
+                  <EnhancedAIBadge />
                 </motion.div>
-                <div className="flex flex-col items-start">
-                  <span className="text-xs opacity-90 leading-none">AI-Powered</span> {/* Adjusted font size */}
-                  <span className="leading-none">Blog</span>
-                </div>
+                {/* Changed the text content */}
+                <span className="leading-none">See my Blog</span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20 opacity-0"
-                  whileHover={shouldReduceMotion ? {} : { opacity: 1 }}
-                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-fuchsia-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 />
               </Link>
             </motion.div>
