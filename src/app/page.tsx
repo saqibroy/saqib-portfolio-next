@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Layout from '@/components/Layout'; // Keep Layout import
 import Link from 'next/link'; // Keep Link for Next.js environment
-import { Sparkles, Brain, Zap, Code, Rocket, Globe, ArrowRight, Star } from 'lucide-react';
+import { Sparkles, Zap, Code, Rocket, Globe, ArrowRight, Star } from 'lucide-react';
 
 // Enhanced Background Elements Component
 interface BackgroundElement {
@@ -68,7 +68,7 @@ const EnhancedAIBadge = () => {
   
   return (
     <motion.div 
-      className="absolute -top-2 -right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-xs font-bold shadow-lg border border-violet-400/40"
+      className="absolute -top-3 -right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-xs font-bold shadow-lg border border-violet-400/40"
       whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
       animate={shouldReduceMotion ? {} : { 
         boxShadow: [
@@ -85,7 +85,6 @@ const EnhancedAIBadge = () => {
       >
         <Sparkles className="w-3 h-3" />
       </motion.div>
-      <span>AI</span>
     </motion.div>
   );
 };
