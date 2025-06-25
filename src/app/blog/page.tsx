@@ -14,47 +14,36 @@ export const metadata = {
 };
 
 // AI Features Banner Component
+// Simplified AI Features Banner Component
 function AIFeaturesBanner() {
   return (
     <div className="relative mb-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-green-900/30 border border-purple-500/30 backdrop-blur-sm overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-blue-600/10 to-green-600/10 animate-pulse" />
 
       <div className="relative text-center">
-        <div className="flex items-center justify-center gap-3 mb-3 sm:mb-4">
-          <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg">
-            <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" />
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg">
+            <Brain className="w-6 h-6 text-white animate-pulse" />
           </div>
-          <h2 className="text-xl md:text-3xl font-bold text-white">
+          <h2 className="text-xl md:text-2xl font-bold text-white">
             AI-Enhanced Reading Experience
           </h2>
-          <div className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg animate-bounce">
+          <div className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg animate-bounce">
             NEW
           </div>
         </div>
 
-        <p className="text-base sm:text-lg mb-4 sm:mb-6 max-w-3xl mx-auto px-2 sm:px-0 text-gray-300">
-          Every blog post now comes with AI-powered features to enhance your reading experience
+        <p className="text-sm sm:text-base mb-4 max-w-2xl mx-auto text-gray-300">
+          Every blog post now comes with AI-generated audio summaries for enhanced learning
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto px-2 sm:px-0">
-          <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-blue-500/30">
-            <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg bg-blue-500/20">
-              <Headphones className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
-            </div>
-            <div className="text-left">
-              <h3 className="font-semibold text-white text-base sm:text-lg">AI Audio Summaries</h3>
-              <p className="text-sm text-gray-300">Listen to AI-generated summaries of each article</p>
-            </div>
+        <div className="flex items-center justify-center gap-3 sm:gap-4 p-3 rounded-xl bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-blue-500/30 max-w-md mx-auto">
+          <div className="p-1.5 rounded-lg bg-blue-500/20">
+            <Headphones className="w-5 h-5 text-blue-400" />
           </div>
-
-          <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-green-900/40 to-blue-900/40 border border-green-500/30">
-            <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg bg-green-500/20">
-              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
-            </div>
-            <div className="text-left">
-              <h3 className="font-semibold text-white text-base sm:text-lg">Smart Reading Features</h3>
-              <p className="text-sm text-gray-300">Enhanced content structure and reading time</p>
-            </div>
+          <div className="text-left">
+            <h3 className="font-semibold text-white text-sm sm:text-base">AI Audio Summaries</h3>
+            <p className="text-xs text-gray-300">Listen to AI-generated summaries of each article</p>
           </div>
         </div>
       </div>

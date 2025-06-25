@@ -42,22 +42,42 @@ async function generateGeminiSummary(content: string): Promise<string> {
     
     console.log('Model initialized, generating content...');
     
-    const prompt = `Please create a concise, engaging audio summary of the following blog post content. The summary should:
-    - Be 2-3 sentences long
-    - Capture the main points and key takeaways
-    - Be written in a conversational tone suitable for text-to-speech
-    - Avoid technical jargon when possible
-    - Sound natural when spoken aloud
-    
-    Content to summarize:
-    ${content.substring(0, 4000)}`; // Limit content length
+    const prompt = `Analyze the following blog post content and create a focused audio summary. Your response should:
+
+REQUIREMENTS:
+- Be exactly 3-4 sentences long
+- Start directly with the main topic (no greetings, no "hi there", no "this article discusses")
+- Focus solely on the key insights, main points, and actionable takeaways
+- Use clear, professional language suitable for audio playback
+- Avoid meta-commentary about the article itself
+- Present information as direct statements of fact or insight
+
+EXAMPLE FORMAT:
+"[Main concept/technology] enables [specific benefit/solution]. The key advantages include [benefit 1] and [benefit 2]. Implementation involves [key steps or considerations]. This approach results in [specific outcome or improvement]."
+
+AVOID:
+- Conversational greetings or introductions
+- Phrases like "this article explains", "the author discusses", "we learn that"
+- Filler words or casual expressions
+- Overly technical jargon without context
+
+Content to summarize:
+${content.substring(0, 5000)}`; // Increased content length for better context
     
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const summary = response.text();
     
     console.log('Summary generated successfully');
-    return summary.trim();
+    
+    // Clean up any remaining conversational elements
+    let cleanedSummary = summary.trim()
+      .replace(/^(Hi there,?|Hello,?|Greetings,?)\s*/i, '')
+      .replace(/^(This article|This blog post|This piece|The article|The post)\s+(discusses|explains|covers|explores)\s+/i, '')
+      .replace(/^(In this article|In this post),?\s+/i, '')
+      .replace(/^(Let me|I'll|We'll)\s+/i, '');
+    
+    return cleanedSummary;
   } catch (error) {
     console.error('Gemini API error:', error);
     throw error;
@@ -77,10 +97,10 @@ export async function POST(request: NextRequest) {
 
     const { content, model = 'gemini' } = body;
 
-    if (!content) {
-      console.log('No content provided');
+    if (!content || content.trim().length < 50) {
+      console.log('Insufficient content provided');
       return NextResponse.json(
-        { error: 'Content is required' },
+        { error: 'Sufficient content is required for summary generation' },
         { status: 400 }
       );
     }
@@ -102,6 +122,12 @@ export async function POST(request: NextRequest) {
             );
           }
           summary = await generateGeminiSummary(content);
+          
+          // Validate summary quality
+          if (summary.length < 50) {
+            throw new Error('Generated summary too short, falling back to extraction');
+          }
+          
           console.log('Gemini summary successful');
         } catch (error) {
           console.error('Gemini failed, falling back to simple extraction:', error);
@@ -117,13 +143,19 @@ export async function POST(request: NextRequest) {
         break;
     }
 
+    // Final cleanup and validation
+    if (!summary || summary.trim().length < 20) {
+      summary = 'This content covers important insights and practical information relevant to the topic discussed.';
+      warning = 'Unable to generate detailed summary from content.';
+    }
+
     console.log('Returning summary:', { 
       summaryLength: summary.length, 
       hasWarning: !!warning 
     });
 
     return NextResponse.json({ 
-      summary,
+      summary: summary.trim(),
       warning: warning || undefined,
       model: model 
     });
