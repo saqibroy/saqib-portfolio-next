@@ -4,7 +4,11 @@ import { useMDXComponent } from 'next-contentlayer/hooks';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import React, { useState } from 'react';
-import { Copy, Check, Lightbulb, AlertCircle, Info, Zap, Target } from 'lucide-react';
+import { 
+  Copy, Check, Lightbulb, AlertCircle, Info, Zap, Target, 
+  Clock, CheckCircle, Star, TrendingUp, BarChart3, AlertTriangle,
+  Rocket, Award, BookOpen, ArrowRight, Flame, Eye
+} from 'lucide-react';
 
 // Enhanced callout components with modern design
 function TryThis({ children }: { children: React.ReactNode }) {
@@ -59,14 +63,193 @@ function Note({ children }: { children: React.ReactNode }) {
   );
 }
 
+// NEW: Quick Win Component
+function QuickWin({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-6 group">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-900/40 to-cyan-900/30 border border-blue-600/40 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10" />
+        <div className="relative p-5">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+              <Rocket className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-blue-300 font-semibold text-base mb-2 flex items-center gap-2">
+                Quick Win
+                <Clock className="w-4 h-4" />
+              </h4>
+              <div className="text-blue-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-p:mb-2">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// NEW: Checklist Component
+function Checklist({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-8 group">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-900/30 to-indigo-900/20 border border-purple-600/30 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-indigo-500/5" />
+        <div className="relative p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <CheckCircle className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-purple-300 font-semibold text-lg mb-3 flex items-center gap-2">
+                Action Checklist
+                <Star className="w-4 h-4" />
+              </h4>
+              <div className="text-purple-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-ul:space-y-2">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// NEW: Stats Component
+function Stats({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-8 group">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-rose-900/30 to-pink-900/20 border border-rose-600/30 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-rose-500/5 to-pink-500/5" />
+        <div className="relative p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <BarChart3 className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-rose-300 font-semibold text-lg mb-3 flex items-center gap-2">
+                Key Statistics
+                <TrendingUp className="w-4 h-4" />
+              </h4>
+              <div className="text-rose-100 leading-relaxed prose prose-invert prose-sm max-w-none">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// NEW: Warning Component
+function Warning({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-8 group">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 border border-red-600/40 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10" />
+        <div className="relative p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <AlertTriangle className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-red-300 font-semibold text-lg mb-3 flex items-center gap-2">
+                Warning
+                <AlertCircle className="w-4 h-4" />
+              </h4>
+              <div className="text-red-100 leading-relaxed prose prose-invert prose-sm max-w-none">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// NEW: Intro Component
+function Intro({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-12 group">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800/60 to-slate-900/40 border border-slate-700/50 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5" />
+        <div className="relative p-8">
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
+              <Eye className="w-7 h-7 text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="text-xl text-gray-200 leading-relaxed font-medium">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// NEW: Action Plan Component
+function ActionPlan({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-12 group">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-900/40 to-emerald-900/30 border border-green-600/40 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10" />
+        <div className="relative p-8">
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <BookOpen className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-green-300 font-bold text-2xl mb-6 flex items-center gap-3">
+                Action Plan
+                <ArrowRight className="w-6 h-6" />
+              </h4>
+              <div className="text-green-100 leading-relaxed prose prose-invert max-w-none prose-strong:text-green-200">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// NEW: Highlight Component
+function Highlight({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-8 group">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-yellow-900/40 to-orange-900/30 border border-yellow-600/40 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10" />
+        <div className="relative p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <Flame className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="text-yellow-100 leading-relaxed text-lg font-medium">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Enhanced code block with better styling
 function CodeBlock({ className, children, ...props }: any) {
   const [copied, setCopied] = useState(false);
   const match = /language-(\w+)/.exec(className || '');
   
   const handleCopy = async () => {
-    // navigator.clipboard.writeText(String(children).replace(/\n$/, ''));
-    // document.execCommand('copy') is used as navigator.clipboard.writeText() may not work due to iFrame restrictions.
     const textToCopy = String(children).replace(/\n$/, '');
     const textArea = document.createElement('textarea');
     textArea.value = textToCopy;
@@ -141,11 +324,17 @@ function CodeBlock({ className, children, ...props }: any) {
 
 // Custom components for the article
 const components = {
-  // `pre` and `code` tags are now handled by our local CodeBlock.
-  pre: ({ children, ...props }: any) => <div {...props}>{children}</div>, // Removed CodeBlock from here, handled in `code` below
+  pre: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   code: CodeBlock,
   TryThis,
   Note,
+  QuickWin,
+  Checklist,
+  Stats,
+  Warning,
+  Intro,
+  ActionPlan,
+  Highlight,
   
   // Enhanced headings with better spacing and styling
   h1: ({ children, ...props }: any) => (
@@ -155,36 +344,36 @@ const components = {
   ),
   
   h2: ({ children, ...props }: any) => (
-    <h2 className="text-3xl font-bold text-white mb-6 mt-16 first:mt-8 relative group" {...props}>
+    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 mt-12 first:mt-8 relative group" {...props}>
       <span className="relative z-10">{children}</span>
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-transparent rounded-lg -ml-4 pl-4 opacity-0 group-hover:opacity-100 transition-opacity" />
     </h2>
   ),
   
   h3: ({ children, ...props }: any) => (
-    <h3 className="text-2xl font-semibold text-gray-100 mb-4 mt-12 flex items-center gap-3" {...props}>
-      <span className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full" />
+    <h3 className="text-xl font-semibold text-gray-100 mb-3 mt-8 flex items-center gap-3" {...props}>
+      <span className="w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full" />
       {children}
     </h3>
   ),
   
   // Enhanced paragraph styling
   p: ({ children, ...props }: any) => (
-    <p className="text-gray-300 leading-relaxed mb-6 text-lg" {...props}>
+    <p className="text-gray-300 leading-relaxed mb-4 text-base" {...props}>
       {children}
     </p>
   ),
   
   // Enhanced list styling
   ul: ({ children, ...props }: any) => (
-    <ul className="my-6 space-y-3" {...props}>
+    <ul className="my-4 space-y-2" {...props}>
       {children}
     </ul>
   ),
   
   li: ({ children, ...props }: any) => (
     <li className="text-gray-300 flex items-start gap-3" {...props}>
-      <span className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0" />
+      <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0" />
       <span>{children}</span>
     </li>
   ),
@@ -208,10 +397,21 @@ const components = {
       {children}
     </a>
   ),
+  
+  // Enhanced horizontal rule
+  hr: ({ ...props }: any) => (
+    <hr className="my-12 border-0 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent" {...props} />
+  ),
+  
+  // Enhanced strong/bold text
+  strong: ({ children, ...props }: any) => (
+    <strong className="font-bold text-white" {...props}>
+      {children}
+    </strong>
+  ),
 };
 
 export default function MDXContent({ code }: { code: string }) {
-  // `useMDXComponent` compiles the MDX code string into a React component.
   const Component = useMDXComponent(code);
   return (
     <div className="mdx-content">
@@ -219,4 +419,3 @@ export default function MDXContent({ code }: { code: string }) {
     </div>
   );
 }
-
