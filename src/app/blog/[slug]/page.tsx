@@ -136,7 +136,7 @@ export default function PostPage({
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.1),transparent)] pointer-events-none" />
 
-        <div className="container mx-auto px-4 max-w-6xl relative">
+        <div className="container mx-auto px-4 py-8">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 mb-6 sm:mb-8 text-sm">
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
@@ -273,25 +273,6 @@ export default function PostPage({
               </div>
             </div>
           )}
-
-          {/* Call to Action */}
-          <div className="mt-12 sm:mt-16 mb-12 sm:mb-20 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-pink-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Found this article helpful?</h3>
-            <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto text-sm sm:text-base">
-              Get more insights and tips delivered to your inbox. Subscribe to stay updated with the latest trends and strategies.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <a
-                href="mailto:saqib@ssohail.com"
-                className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-              >
-                Get in Touch
-              </a>
-              <Link href="/blog" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base">
-                Read More Articles
-              </Link>
-            </div>
-          </div>
         </div>
       </article>
     </Layout>

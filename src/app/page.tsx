@@ -21,7 +21,7 @@ const BackgroundElements: React.FC<{ elements: BackgroundElement[] }> = React.me
   const shouldReduceMotion = useReducedMotion();
   
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
       {/* Gradient orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
@@ -178,15 +178,15 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="relative min-h-screen flex flex-col bg-gray-950 text-white font-sans">
-        <Suspense fallback={<div className="absolute inset-0 bg-gray-900" />}>
+      <div className="relative bg-gray-950 text-white font-sans">
+        <Suspense fallback={<div className="fixed inset-0 bg-gray-900" />}>
           <BackgroundElements elements={backgroundElements} />
         </Suspense>
 
-        <div className="flex-grow flex items-center justify-center relative z-10 px-4 py-12 sm:py-24">
-          <div className="w-full max-w-6xl mx-auto">
+        <div className="relative z-10 px-4 py-8 sm:py-16 pt-28 sm:pt-32">
+          <div className="w-full max-w-6xl mx-auto min-h-[calc(100vh-200px)] flex flex-col justify-center">
             <motion.div 
-              className="text-center mb-12 sm:mb-16" 
+              className="text-center mb-8 sm:mb-12" 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: shouldReduceMotion ? 0.5 : 1 }}
@@ -195,7 +195,7 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5 }}
-                className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 via-green-300 to-purple-400 bg-clip-text text-transparent leading-tight px-2 sm:px-0 drop-shadow-lg" 
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 via-green-300 to-purple-400 bg-clip-text text-transparent leading-tight px-2 sm:px-0 drop-shadow-lg" 
               >
                 Full-Stack Engineer & Tech Enthusiast
               </motion.h1>
@@ -203,9 +203,9 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.2 }}
-                className="text-lg md:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto px-2 sm:px-0 opacity-90" 
+                className="text-base sm:text-lg md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto px-2 sm:px-0 opacity-90 leading-relaxed" 
               >
-                Building performant, accessible, and scalable web applications using modern technologies like React, Next.js, Node.js, and TypeScript.
+                Building performant, accessible, and scalable web applications using modern technologies.
                 I also explore the exciting world of AI on my <a href="https://ssohail.com/blog" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">blog</a>.
               </motion.p>
             </motion.div>
@@ -218,10 +218,10 @@ const Home: React.FC = () => {
             >
               <Link 
                 href="/cv"
-                className="inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 relative overflow-hidden group" 
+                className="w-full sm:w-auto inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 relative overflow-hidden group" 
               >
                 <motion.span 
-                  className="relative z-10 flex items-center gap-2"
+                  className="relative z-10 flex items-center justify-center gap-2"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >
@@ -233,14 +233,13 @@ const Home: React.FC = () => {
               
               <Link 
                 href="/blog"
-                className="inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 relative overflow-hidden border border-purple-400/20 group" 
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 relative overflow-hidden border border-purple-400/20 group" 
               >
                 <motion.div 
                   className="relative flex items-center gap-3"
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                   whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 >
-                  
                   <EnhancedAIBadge />
                 </motion.div>
                 {/* Changed the text content */}

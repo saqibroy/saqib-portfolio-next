@@ -104,7 +104,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 
   return (
-    <div className={`${isHomePage ? 'h-screen overflow-hidden' : 'min-h-screen'} flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative`}>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative">
       {/* Enhanced background pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-violet-900/20 via-transparent to-transparent" />
       <div
@@ -282,7 +282,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className={`flex-1 flex flex-col ${isHomePage ? 'overflow-hidden' : ''} relative z-10`}>
+      <main className="flex-1 flex flex-col relative z-10">
         {children}
       </main>
 

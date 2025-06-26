@@ -76,7 +76,7 @@ export default function BlogPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8 sm:py-12 mt-16">
+      <div className="container mx-auto px-4 py-8 sm:py-12 pt-32 sm:pt-28 md:pt-32">
         {/* Page Header */}
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3 sm:mb-4">
@@ -193,6 +193,7 @@ export default function BlogPage() {
           </div>
         )}
 
+        {/*
         <div className="mt-12 sm:mt-16 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
           <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Stay Updated</h3>
           <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto px-2 sm:px-0 text-sm sm:text-base">
@@ -210,6 +211,7 @@ export default function BlogPage() {
             </Link>
           </div>
         </div>
+        */}
       </div>
     </Layout>
   );
