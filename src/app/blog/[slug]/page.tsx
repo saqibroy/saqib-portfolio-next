@@ -3,33 +3,32 @@ import { allPosts, Post } from 'contentlayer/generated';
 import { format } from 'date-fns';
 import Layout from '@/components/Layout';
 import Image from 'next/image';
-import MDXContent from '@/components/MDXContent';
 import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AudioSummaryPlayer from "./AudioSummaryPlayer";
 import { GiscusComments, SocialShareButtons, StickySocialActions, AIFeaturesBanner } from './ClientComponents';
 // Import the new utility function
 import { getOptimizedImageProps } from '@/utils/imageOptimization'; // Adjust path if different
+import { getPostBySlug, getBlogPosts, PostPageData } from '@/lib/mdx';
+import dynamic from 'next/dynamic';
+const MDXContentClient = dynamic(() => import('@/components/MDXContentClient'), { ssr: false });
 
 export async function generateStaticParams() {
-  return allPosts.map((post: Post) => ({ slug: post.slug }));
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = allPosts.find((post: Post) => post.slug === params.slug);
+  const post = await getPostBySlug(params.slug);
+  console.log(`[PostPage] Post object for slug "${params.slug}":`, post ? 'Loaded' : 'NULL'); // Ensure this line is present
   if (!post) return {
     title: 'Post Not Found',
     description: 'The requested blog post could not be found.'
   };
-
   const title = `${post.title} | Saqib Sohail`;
   const description = post.description || 'Read this article on ssohail.com';
   const url = `https://ssohail.com/blog/${post.slug}`;
-  // Ensure imageUrl here also uses the optimized image path for OpenGraph,
-  // though Contentlayer might need the original path for generation.
-  // For static OG images, you might pre-generate them or handle differently.
   const imageUrl = post.image || `https://ssohail.com/og-image.png`;
-
   return {
     title,
     description,
@@ -40,7 +39,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       siteName: 'Saqib Sohail',
       images: [
         {
-          url: imageUrl, // Use original path for metadata if it's external, or pre-generated OG image
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -65,13 +64,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function PostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const post = allPosts.find((post: Post) => post.slug === params.slug);
-
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const post: PostPageData | null = await getPostBySlug(params.slug);
   if (!post) {
     return (
       <Layout>
@@ -111,8 +105,8 @@ export default function PostPage({
   const heroImageProps = post.image ? getOptimizedImageProps({
     src: post.image,
     alt: post.title,
-    width: 1200, // Assuming original or largest intended width
-    height: 675, // Assuming original or largest intended height (16:9 aspect ratio)
+    width: 1920, // Updated to utilize the largest optimized image
+    height: 1080, // Updated height for 16:9 aspect ratio
     // Adjust sizes for hero image based on its typical display size on post pages
     sizes: "(max-width: 768px) 100vw, 80vw", // Example: 100vw on mobile, 80vw on larger screens
     priority: true, // This is a hero image, likely LCP, so prioritize it
@@ -177,7 +171,7 @@ export default function PostPage({
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
-              <span>{estimateReadingTime(post.body.raw)}</span>
+              <span>{estimateReadingTime(post.rawContent)}</span>
             </div>
             {post.author && (
               <div className="flex items-center gap-2">
@@ -188,10 +182,18 @@ export default function PostPage({
           </div>
 
           {/* Hero Image */}
-          {heroImageProps && ( // Check if imageProps exist
+          {heroImageProps && (
             <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-8 sm:mb-12">
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
-              <Image {...heroImageProps} fill /> {/* Spread the generated props directly */}
+              <Image
+                src={heroImageProps.src}
+                alt={heroImageProps.alt}
+                sizes={heroImageProps.sizes}
+                priority={heroImageProps.priority}
+                loading={heroImageProps.loading}
+                className={heroImageProps.className}
+                fill
+              />
             </div>
           )}
           {/* Fallback for cases where post.image is not present or optimization issues */}
@@ -218,7 +220,7 @@ export default function PostPage({
 
           {/* Audio Summary Section */}
           <div id="audio-summary" className="my-8 sm:my-16">
-            <AudioSummaryPlayer postContent={post.body.raw} postTitle={post.title} />
+            <AudioSummaryPlayer postContent={post.rawContent} postTitle={post.title} />
           </div>
         </div>
       </section>
@@ -228,7 +230,8 @@ export default function PostPage({
         <div className="container mx-auto px-4 max-w-4xl xl:max-w-5xl">
           {/* Article Body */}
           <div className="prose prose-invert prose-xl max-w-none xl:max-w-4xl xl:mx-auto prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:mt-12 prose-h3:mb-6 prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:transition-all prose-strong:text-white prose-strong:font-semibold prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-900/10 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-lg prose-ul:my-8 prose-li:text-gray-300 prose-li:mb-2">
-            <MDXContent code={post.body.code} />
+            {/* Replace DynamicMdxRenderer with MDXRemote */}
+            <MDXContentClient mdxSource={post.mdxSource} />
           </div>
 
           {/* Giscus Comments Section */}

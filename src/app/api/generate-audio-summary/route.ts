@@ -1,5 +1,6 @@
 // src/app/api/generate-audio-summary/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Simple text extraction function (fallback)
 function extractKeyPoints(content: string): string {
@@ -26,7 +27,6 @@ async function generateGeminiSummary(content: string): Promise<string> {
     console.log('Attempting to import @google/generative-ai...');
     
     // Dynamic import to catch module errors
-    const { GoogleGenerativeAI } = await import('@google/generative-ai');
     
     console.log('GoogleGenerativeAI imported successfully');
     

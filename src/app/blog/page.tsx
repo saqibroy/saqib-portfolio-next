@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Sparkles, Headphones, FileText, Zap, Brain } from 'lucide-react';
 // Import the new utility function
 import { getOptimizedImageProps } from '@/utils/imageOptimization'; // Adjust path if different
+import { getBlogPosts, BlogPostMetaData } from '@/lib/mdx';
 
 export const metadata = {
   title: 'Blog',
@@ -71,8 +72,8 @@ function estimateReadingTime(content: string): string {
   return `${minutes} min read`;
 }
 
-export default function BlogPage() {
-  const posts = allPosts.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+export default async function BlogPage() {
+  const posts: BlogPostMetaData[] = await getBlogPosts();
 
   return (
     <Layout>
@@ -94,58 +95,48 @@ export default function BlogPage() {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {posts.map((post: Post) => {
+          {posts.map((post) => {
             // Get optimized image props using the utility function
             const imageProps = post.image ? getOptimizedImageProps({
               src: post.image,
               alt: post.title,
-              width: 1200, // Assuming original or largest intended width
-              height: 675, // Assuming original or largest intended height (16:9 aspect ratio)
-              sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw", // Adjust based on your layout breakpoints
-              loading: "lazy", // Lazy load images in the grid
+              width: 1920,
+              height: 1080,
+              sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw",
+              loading: "lazy",
               className: "object-cover object-center group-hover:scale-105 transition-transform duration-500"
             }) : null;
 
             return (
-              <Link key={post.slug} href={post.url} className="group">
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
                 <article className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-b from-gray-800/50 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/80 transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-2xl hover:shadow-black/40 hover:scale-[1.02] transform">
-
-                  {/* AI Badge */}
                   <AIBadge />
-
-                  {/* Post Image */}
                   {imageProps && (
                     <div className="relative aspect-[16/9] w-full overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                      <Image {...imageProps} /> {/* Spread the generated props directly */}
+                      <Image {...imageProps} />
                     </div>
                   )}
-                  {/* Fallback for cases where post.image is not present or optimization issues */}
                   {!imageProps && (
-                      <div className="relative aspect-[16/9] w-full bg-gray-700 flex items-center justify-center text-gray-400 text-sm">
-                          No Image Available
-                      </div>
+                    <div className="relative aspect-[16/9] w-full bg-gray-700 flex items-center justify-center text-gray-400 text-sm">
+                      No Image Available
+                    </div>
                   )}
-
-                  {/* Post Content */}
                   <div className="p-4 sm:p-6">
                     <h2 className="text-lg sm:text-xl font-bold text-white group-hover:text-blue-300 transition-colors mb-2 sm:mb-3 line-clamp-2 leading-tight">
                       {post.title}
                     </h2>
-
                     <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">
                       <time dateTime={post.date} className="flex items-center gap-1">
                         {format(new Date(post.date), 'MMM d,yyyy')}
                       </time>
                       <span className="flex items-center gap-1">
-                        {estimateReadingTime(post.body?.raw || '')}
+                        {estimateReadingTime(post.description || '')}
                       </span>
                     </div>
-
                     <p className="text-gray-300 mb-3 sm:mb-4 line-clamp-3 leading-relaxed text-sm">
                       {post.description}
                     </p>
-
                     <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-700/50">
                       <div className="flex items-center gap-2 text-xs text-purple-400">
                         <Headphones className="w-3.5 h-3.5" />
@@ -156,7 +147,6 @@ export default function BlogPage() {
                         <span>AI Enhanced</span>
                       </div>
                     </div>
-
                     {post.tags && post.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-3 sm:mt-4">
                         {post.tags.slice(0, 2).map((tag: string) => (
@@ -175,14 +165,12 @@ export default function BlogPage() {
                       </div>
                     )}
                   </div>
-
                   <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 via-transparent to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 </article>
               </Link>
             );
           })}
         </div>
-
         {posts.length === 0 && (
           <div className="text-center py-8 sm:py-16">
             <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center">
@@ -192,26 +180,6 @@ export default function BlogPage() {
             <p className="text-gray-400 text-sm">Check back soon for new content!</p>
           </div>
         )}
-
-        {/*
-        <div className="mt-12 sm:mt-16 text-center p-4 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 ring-1 ring-purple-700/50 backdrop-blur-sm">
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Stay Updated</h3>
-          <p className="text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto px-2 sm:px-0 text-sm sm:text-base">
-            Get notified when new AI-enhanced articles are published. Join the community of developers and tech enthusiasts.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <a
-              href="mailto:saqib@ssohail.com"
-              className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-            >
-              Get in Touch
-            </a>
-            <Link href="/rss.xml" className="px-6 py-2.5 sm:px-8 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors ring-1 ring-gray-600 text-sm sm:text-base">
-              Subscribe to RSS
-            </Link>
-          </div>
-        </div>
-        */}
       </div>
     </Layout>
   );

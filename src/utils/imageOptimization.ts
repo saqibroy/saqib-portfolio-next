@@ -4,7 +4,7 @@ import { parse } from 'path';
 
 // Define the target widths, these MUST match the TARGET_WIDTHS in your
 // scripts/optimize-images.ts file.
-const TARGET_OPTIMIZED_WIDTHS = [1200, 900, 600, 300]; // Ensure this array is identical
+const TARGET_OPTIMIZED_WIDTHS = [1920, 1200, 900, 600, 300]; // Ensure this array is identical
 
 interface ImageProps {
   src: string; // The original image path from Contentlayer (e.g., "/images/my-post-image.png")
@@ -27,6 +27,7 @@ interface ImageProps {
  * @param baseHeight The intended largest display height for the image.
  * @param sizes The CSS `sizes` attribute string for the image.
  * @param priority If true, image will be eager loaded (good for LCP images).
+ * @param loading The loading strategy for the image.
  * @returns An object containing props ready for the Next.js `<Image />` component.
  */
 export function getOptimizedImageProps({
@@ -36,7 +37,7 @@ export function getOptimizedImageProps({
   height: baseHeight,
   sizes,
   priority = false,
-  loading = 'lazy',
+  loading: userLoadingProp,
   className
 }: ImageProps) {
   if (!originalImagePath) {
@@ -47,7 +48,7 @@ export function getOptimizedImageProps({
       width: baseWidth,
       height: baseHeight,
       className: className,
-      loading: loading,
+      loading: userLoadingProp,
     };
   }
 
@@ -67,6 +68,9 @@ export function getOptimizedImageProps({
   // In a robust system, you might check if the file actually exists or default to original
   // For now, we assume your build script creates all relevant sizes up to baseWidth.
 
+  // Determine the final loading strategy
+  const finalLoadingStrategy = priority ? 'eager' : (userLoadingProp || 'lazy');
+
   return {
     src: primarySrc, // The main src for the Next.js Image component
     alt: altText,
@@ -75,7 +79,7 @@ export function getOptimizedImageProps({
     srcSet: srcSetString, // The generated srcset
     sizes: sizes, // The CSS sizes attribute
     priority: priority, // Whether to prioritize loading
-    loading: loading, // Lazy loading
+    loading: finalLoadingStrategy, // Use the determined loading strategy
     className: className, // Any additional class names
   };
 }

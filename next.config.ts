@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next';
-import { withContentlayer } from 'next-contentlayer';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -43,15 +42,8 @@ const nextConfig: NextConfig = {
 
   // Redirect and rewrite rules if needed
   async redirects() {
-    return [
-      // Example redirect
-      // {
-      //   source: '/old-path',
-      //   destination: '/new-path',
-      //   permanent: true,
-      // },
-    ];
+    return [];
   },
 };
 
-export default withContentlayer(nextConfig);
+export default nextConfig;
