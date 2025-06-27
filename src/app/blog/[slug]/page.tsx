@@ -111,12 +111,13 @@ export default function PostPage({
   const heroImageProps = post.image ? getOptimizedImageProps({
     src: post.image,
     alt: post.title,
-    width: 1200, // Assuming original or largest intended width
-    height: 675, // Assuming original or largest intended height (16:9 aspect ratio)
+    width: 1920, // Assuming original or largest intended width
+    height: 1080, // Assuming original or largest intended height (16:9 aspect ratio)
     // Adjust sizes for hero image based on its typical display size on post pages
     sizes: "(max-width: 768px) 100vw, 80vw", // Example: 100vw on mobile, 80vw on larger screens
     priority: true, // This is a hero image, likely LCP, so prioritize it
-    className: "object-cover object-center"
+    className: "object-cover object-center",
+    loading="lazy"
   }) : null;
 
 
