@@ -99,8 +99,8 @@ export default function BlogPage() {
             const imageProps = post.image ? getOptimizedImageProps({
               src: post.image,
               alt: post.title,
-              width: 1200, // Assuming original or largest intended width
-              height: 675, // Assuming original or largest intended height (16:9 aspect ratio)
+              width: 1920,
+              height: 1080, // Assuming original or largest intended height (16:9 aspect ratio)
               sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw", // Adjust based on your layout breakpoints
               loading: "lazy", // Lazy load images in the grid
               className: "object-cover object-center group-hover:scale-105 transition-transform duration-500"
