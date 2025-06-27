@@ -117,7 +117,7 @@ export default function PostPage({
     sizes: "(max-width: 768px) 100vw, 80vw", // Example: 100vw on mobile, 80vw on larger screens
     priority: true, // This is a hero image, likely LCP, so prioritize it
     className: "object-cover object-center",
-    loading="lazy"
+    loading: "lazy" // Changed from = to :
   }) : null;
 
 
