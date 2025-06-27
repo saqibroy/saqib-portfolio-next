@@ -109,12 +109,15 @@ function TryThis({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Target className="w-5 h-5 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-emerald-300 font-semibold text-lg mb-3 flex items-center gap-2">
+            {/* Added relative and z-10 to ensure it's above potential overflows if any, 
+                and explicitly set mb-2 for h4 */}
+            <div className="flex-1 relative z-10"> 
+              <h4 className="text-emerald-300 font-semibold text-lg mb-2 flex items-center gap-2"> {/* Changed mb-3 to mb-2 */}
                 Try This Strategy
                 <Zap className="w-4 h-4" />
               </h4>
-              <div className="text-emerald-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-p:mb-3 prose-strong:text-emerald-200">
+              {/* Added prose-content to isolate prose styling if needed, removed prose-p:mb-3 */}
+              <div className="text-emerald-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-content"> 
                 {children}
               </div>
             </div>
@@ -135,12 +138,12 @@ function Note({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Info className="w-5 h-5 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-amber-300 font-semibold text-lg mb-3 flex items-center gap-2">
+            <div className="flex-1 relative z-10">
+              <h4 className="text-amber-300 font-semibold text-lg mb-2 flex items-center gap-2"> {/* Changed mb-3 to mb-2 */}
                 Important Note
                 <AlertCircle className="w-4 h-4" />
               </h4>
-              <div className="text-amber-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-p:mb-3 prose-strong:text-amber-200">
+              <div className="text-amber-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-content">
                 {children}
               </div>
             </div>
@@ -161,12 +164,14 @@ function QuickWin({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
               <Rocket className="w-4 h-4 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-blue-300 font-semibold text-base mb-2 flex items-center gap-2">
+            <div className="flex-1 relative z-10">
+              {/* Kept mb-2 here as it was already mb-2 in your original QuickWin */}
+              <h4 className="text-blue-300 font-semibold text-base mb-2 flex items-center gap-2"> 
                 Quick Win
                 <Clock className="w-4 h-4" />
               </h4>
-              <div className="text-blue-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-p:mb-2">
+              {/* Removed prose-p:mb-2 from here as well */}
+              <div className="text-blue-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-content">
                 {children}
               </div>
             </div>
@@ -187,11 +192,12 @@ function Checklist({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <CheckCircle className="w-5 h-5 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-purple-300 font-semibold text-lg mb-3 flex items-center gap-2">
+            <div className="flex-1 relative z-10">
+              <h4 className="text-purple-300 font-semibold text-lg mb-2 flex items-center gap-2"> {/* Changed mb-3 to mb-2 */}
                 Action Checklist
                 <Star className="w-4 h-4" />
               </h4>
+              {/* Kept prose-ul:space-y-2 as lists have different spacing needs */}
               <div className="text-purple-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-ul:space-y-2">
                 {children}
               </div>
@@ -213,12 +219,12 @@ function Stats({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-rose-300 font-semibold text-lg mb-3 flex items-center gap-2">
+            <div className="flex-1 relative z-10">
+              <h4 className="text-rose-300 font-semibold text-lg mb-2 flex items-center gap-2"> {/* Changed mb-3 to mb-2 */}
                 Key Statistics
                 <TrendingUp className="w-4 h-4" />
               </h4>
-              <div className="text-rose-100 leading-relaxed prose prose-invert prose-sm max-w-none">
+              <div className="text-rose-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-content">
                 {children}
               </div>
             </div>
@@ -239,12 +245,12 @@ function Warning({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <AlertTriangle className="w-5 h-5 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-red-300 font-semibold text-lg mb-3 flex items-center gap-2">
+            <div className="flex-1 relative z-10">
+              <h4 className="text-red-300 font-semibold text-lg mb-2 flex items-center gap-2"> {/* Changed mb-3 to mb-2 */}
                 Warning
                 <AlertCircle className="w-4 h-4" />
               </h4>
-              <div className="text-red-100 leading-relaxed prose prose-invert prose-sm max-w-none">
+              <div className="text-red-100 leading-relaxed prose prose-invert prose-sm max-w-none prose-content">
                 {children}
               </div>
             </div>
@@ -265,7 +271,9 @@ function Intro({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
               <Eye className="w-7 h-7 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
+            {/* The Intro component doesn't have an h4 within the flex-1 div,
+                so only added relative z-10 */}
+            <div className="flex-1 relative z-10">
               <div className="text-xl text-gray-200 leading-relaxed font-medium">
                 {children}
               </div>
@@ -287,12 +295,15 @@ function ActionPlan({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <BookOpen className="w-6 h-6 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
-              <h4 className="text-green-300 font-bold text-2xl mb-6 flex items-center gap-3">
+            <div className="flex-1 relative z-10">
+              {/* Changed mb-6 to mb-4 to reduce space below title */}
+              <h4 className="text-green-300 font-bold text-2xl mb-4 flex items-center gap-3"> 
                 Action Plan
                 <ArrowRight className="w-6 h-6" />
               </h4>
-              <div className="text-green-100 leading-relaxed prose prose-invert max-w-none prose-strong:text-green-200">
+              {/* Removed prose-strong:text-green-200 if it was causing issues,
+                  and added prose-content */}
+              <div className="text-green-100 leading-relaxed prose prose-invert max-w-none prose-content"> 
                 {children}
               </div>
             </div>
@@ -313,7 +324,7 @@ function Highlight({ children }: { children: React.ReactNode }) {
             <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <div className="flex-1"> {/* Removed min-w-0 */}
+            <div className="flex-1 relative z-10">
               <div className="text-yellow-100 leading-relaxed text-lg font-medium">
                 {children}
               </div>
