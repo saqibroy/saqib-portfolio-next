@@ -4,10 +4,11 @@ import { AxePuppeteer } from '@axe-core/puppeteer';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Import Puppeteer types consistently from puppeteer-core
-import type { Browser, Page, LaunchOptions } from 'puppeteer-core';
+import type { Browser, Page } from 'puppeteer-core';
 
 // Define types for dynamic imports
 interface PuppeteerLike {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   launch: (options: any) => Promise<any>;
 }
 
@@ -103,7 +104,7 @@ async function getBrowser(): Promise<Browser> {
       // Configure chromium for Vercel
       await chromium.font('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
       
-      const launchOptions: LaunchOptions = {
+      const launchOptions = {
         args: [
           ...chromium.args,
           '--no-sandbox',
@@ -136,7 +137,7 @@ async function getBrowser(): Promise<Browser> {
       const puppeteerModule = await import('puppeteer');
       puppeteer = puppeteerModule.default as unknown as PuppeteerLike;
       
-      const launchOptions: LaunchOptions = {
+      const launchOptions = {
         headless: true,
         args: [
           '--no-sandbox',
@@ -265,6 +266,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     console.log('Running accessibility analysis...');
     // Run axe analysis with timeout
     const axeResults = await Promise.race([
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       new AxePuppeteer(page as any)
         .withRules(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze(),
