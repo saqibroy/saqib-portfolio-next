@@ -1,13 +1,39 @@
 // src/app/api/check-accessibility/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer, { Browser, Page } from 'puppeteer';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
+// Conditional import for Puppeteer based on environment
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let puppeteer: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let chromium: any = null;
+
+// Initialize modules based on environment
+if (process.env.VERCEL) {
+  // Production on Vercel
+  import('puppeteer-core')
+    .then((module) => {
+      puppeteer = module;
+    })
+    .catch((error) => console.error('Failed to import puppeteer-core:', error));
+
+  import('@sparticuz/chromium')
+    .then((module) => {
+      chromium = module;
+    })
+    .catch((error) => console.error('Failed to import @sparticuz/chromium:', error));
+} else {
+  // Local development
+  import('puppeteer')
+    .then((module) => {
+      puppeteer = module;
+    })
+    .catch((error) => console.error('Failed to import puppeteer:', error));
+}
+
 // Initialize Gemini AI outside the handler to reuse the instance
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-// Use a model appropriate for text generation. 'gemini-pro' is generally good for this.
-// 'gemini-1.5-flash' is faster and cheaper, also a good option if available and suitable.
 const geminiModel = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 // Define an interface for the enhanced violation
@@ -23,6 +49,15 @@ interface EnhancedViolation {
 }
 
 export async function POST(req: NextRequest) {
+  // Ensure Puppeteer and Chromium are loaded before proceeding
+  if (!puppeteer || (process.env.VERCEL && !chromium)) {
+    console.error('Puppeteer or Chromium not yet loaded for API route.');
+    return NextResponse.json(
+      { message: 'Server is initializing. Please try again in a moment.' },
+      { status: 503 }
+    );
+  }
+
   if (req.method !== 'POST') {
     return NextResponse.json({ message: 'Method Not Allowed' }, { status: 405 });
   }
@@ -33,27 +68,37 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'URL is required' }, { status: 400 });
   }
 
-  let browser: Browser | null = null;
-  let page: Page | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let browser: any = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let page: any = null;
 
   try {
-    browser = await puppeteer.launch({
-      headless: true, // Use boolean for compatibility with @types/puppeteer
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-      ],
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const launchOptions: any = {
+      headless: "new",
+      args: process.env.VERCEL
+        ? [...(chromium?.args || []), '--no-sandbox', '--disable-setuid-sandbox']
+        : ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: process.env.VERCEL ? await chromium?.executablePath() : undefined,
+    };
+
+    browser = await puppeteer.launch(launchOptions);
     page = await browser.newPage();
 
     await page.setBypassCSP(true);
 
     try {
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+      await page.goto(url, { waitUntil: 'networkidle0', timeout: 45000 });
     } catch (gotoError) {
       console.warn(`Failed to navigate to ${url}: `, gotoError);
+      // Check for 403 errors specifically
+      if ((gotoError as Error).message.includes('403 Forbidden')) {
+        return NextResponse.json({
+          message: `Access to ${url} was blocked. The website might be detecting automated access or has strict security.`,
+          details: (gotoError as Error).message
+        }, { status: 403 });
+      }
       return NextResponse.json({
         message: `Could not load the URL. Please ensure it's publicly accessible and correct.`,
         details: (gotoError as Error).message
@@ -93,10 +138,8 @@ export async function POST(req: NextRequest) {
       try {
         const result = await geminiModel.generateContent(prompt);
         let responseText = result.response.text();
-
-        // Clean up markdown code blocks if Gemini returns them
         responseText = responseText.replace(/```json|```/g, '').trim();
-        
+
         let aiDetails: { plainExplanation: string; fixSuggestion: string } = {
           plainExplanation: "AI explanation could not be generated.",
           fixSuggestion: "Please consult WCAG guidelines or official documentation for a fix."
@@ -105,8 +148,8 @@ export async function POST(req: NextRequest) {
         try {
           aiDetails = JSON.parse(responseText);
         } catch {
-          console.warn('Failed to parse AI response as JSON, falling back to raw text:', responseText);
-          aiDetails.plainExplanation = `AI response malformed. Original AI text: ${responseText.substring(0, 200)}...`;
+          console.warn("Failed to parse AI response as JSON for violation:", violation.id, responseText);
+          aiDetails.plainExplanation = `AI response malformed. Original AI text: ${responseText.substring(0, Math.min(responseText.length, 200))}...`;
         }
 
         enhancedViolations.push({
@@ -164,10 +207,11 @@ export async function POST(req: NextRequest) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Full accessibility check failed:', error);
+    console.error('Full accessibility check failed (unhandled):', error);
     return NextResponse.json({
-      message: 'Failed to perform accessibility check.',
+      message: 'Failed to perform accessibility check. An unexpected server error occurred.',
       error: (error as Error).message,
+      stack: process.env.NODE_ENV === 'development' ? (error as Error).stack : undefined
     }, { status: 500 });
   } finally {
     if (browser) {
