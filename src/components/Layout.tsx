@@ -180,22 +180,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <AIBadge />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-violet-500/0 via-purple-500/0 to-fuchsia-500/0 group-hover:from-violet-500/10 group-hover:via-purple-500/10 group-hover:to-fuchsia-500/10 transition-all duration-300" />
               </motion.a>
-
-              {/* New Accessibility Checker Link */}
-              <motion.a 
-                href="/accessibility-checker" 
-                className="group relative flex items-center gap-3 px-4 py-2 rounded-xl transition-all duration-300"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                <span className="relative z-10 text-gray-300 group-hover:text-white font-medium">
-                  A11y Check
-                </span>
-                {/* Optional: Add a small sparkle/AI badge here if you want to highlight it */}
-                <Sparkles className="w-4 h-4 text-yellow-300" /> 
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-500/0 via-blue-500/0 to-purple-500/0 group-hover:from-green-500/10 group-hover:via-blue-500/10 group-hover:to-purple-500/10 transition-all duration-300" />
-              </motion.a>
-
+              
               <motion.button
                 onClick={() => setIsContactOpen(true)}
                 className="relative px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 text-white font-medium overflow-hidden group"
@@ -260,48 +245,37 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             
             <nav className="flex flex-col items-center space-y-8 text-xl relative z-10">
-            {!isCVPage && (
+              {!isCVPage && (
+                <motion.a 
+                  href="/cv" 
+                  className="text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                >
+                  CV
+                </motion.a>
+              )}
+              
               <motion.a 
-                href="/cv" 
-                className="text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
+                href="/blog" 
+                className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
                 onClick={() => setIsMobileMenuOpen(false)}
                 whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
               >
-                CV
+                Blog
+                <AIBadge />
               </motion.a>
-            )}
-            <motion.a 
-              href="/blog" 
-              className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
-              onClick={() => setIsMobileMenuOpen(false)}
-              whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-              whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-            >
-              Blog
-              <AIBadge />
-            </motion.a>
-
-            {/* New Accessibility Checker Link for Mobile */}
-            <motion.a 
-              href="/accessibility-checker" 
-              className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
-              onClick={() => setIsMobileMenuOpen(false)}
-              whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-              whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-            >
-              A11y Check
-              <Sparkles className="w-4 h-4 text-yellow-300" />
-            </motion.a>
-
-            <motion.button
-              onClick={() => { setIsContactOpen(true); setIsMobileMenuOpen(false); }}
-              className="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 text-white text-lg font-medium"
-              whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-              whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-            >
-              Contact
-            </motion.button>
+              
+              <motion.button
+                onClick={() => { setIsContactOpen(true); setIsMobileMenuOpen(false); }}
+                className="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 text-white text-lg font-medium"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+              >
+                Contact
+              </motion.button>
             </nav>
           </motion.div>
         )}
