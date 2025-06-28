@@ -1,0 +1,12 @@
+{
+    "functions": {
+      "src/app/api/check-accessibility/route.ts": {
+        "maxDuration": 30
+      }
+    },
+    "build": {
+      "env": {
+        "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
+      }
+    }
+  }

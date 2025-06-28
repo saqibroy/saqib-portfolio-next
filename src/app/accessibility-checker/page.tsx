@@ -73,30 +73,55 @@ export default function AccessibilityCheckerPage() {
     setLoading(true);
     setReport(null);
     setError(null);
-
+  
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       setError('Please enter a valid URL starting with http:// or https://');
       setLoading(false);
       return;
     }
-
+  
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 second timeout
+  
       const response = await fetch('/api/check-accessibility', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
+        signal: controller.signal,
       });
-
+  
+      clearTimeout(timeoutId);
+  
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to generate report.');
+        
+        // Handle specific error types
+        if (response.status === 403) {
+          throw new Error('This website blocks automated access. Please try a different URL.');
+        } else if (response.status === 408) {
+          throw new Error('The website took too long to load. Please try again or use a different URL.');
+        } else if (response.status === 500) {
+          throw new Error('Server error occurred. Please try again in a few moments.');
+        } else {
+          throw new Error(errorData.message || 'Failed to generate report.');
+        }
       }
-
+  
       const data: AccessibilityReport = await response.json();
       setReport(data);
     } catch (err) {
       console.error('Frontend fetch error:', err);
-      setError((err as Error).message || 'An unexpected error occurred.');
+      
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          setError('Request timed out. The analysis is taking too long. Please try a simpler website.');
+        } else {
+          setError(err.message || 'An unexpected error occurred.');
+        }
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }
