@@ -4,6 +4,7 @@
         "maxDuration": 30
       }
     },
+    "regions": ["iad1"],
     "build": {
       "env": {
         "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
