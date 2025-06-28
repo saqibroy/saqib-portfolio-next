@@ -3,38 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Conditional import for Puppeteer based on environment
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let puppeteer: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let chromium: any = null;
-
-// Initialize modules based on environment
-if (process.env.VERCEL) {
-  // Production on Vercel
-  import('puppeteer-core')
-    .then((module) => {
-      puppeteer = module;
-    })
-    .catch((error) => console.error('Failed to import puppeteer-core:', error));
-
-  import('@sparticuz/chromium')
-    .then((module) => {
-      chromium = module;
-    })
-    .catch((error) => console.error('Failed to import @sparticuz/chromium:', error));
-} else {
-  // Local development
-  import('puppeteer')
-    .then((module) => {
-      puppeteer = module;
-    })
-    .catch((error) => console.error('Failed to import puppeteer:', error));
-}
-
-// Initialize Gemini AI outside the handler to reuse the instance
+// Initialize Gemini AI globally - this is fine as it's not resource-intensive or browser-dependent
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const geminiModel = genAI.getGenerativeModel({ model: 'gemini-pro' });
+const geminiModel = genAI.getGenerativeModel({ model: 'gemini-pro' }); // Using 'gemini-pro' as before
 
 // Define an interface for the enhanced violation
 interface EnhancedViolation {
@@ -48,16 +19,11 @@ interface EnhancedViolation {
   fixSuggestion?: string;
 }
 
-export async function POST(req: NextRequest) {
-  // Ensure Puppeteer and Chromium are loaded before proceeding
-  if (!puppeteer || (process.env.VERCEL && !chromium)) {
-    console.error('Puppeteer or Chromium not yet loaded for API route.');
-    return NextResponse.json(
-      { message: 'Server is initializing. Please try again in a moment.' },
-      { status: 503 }
-    );
-  }
+// Cached browser instance to reuse for warm invocations.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let cachedBrowser: any = null;
 
+export async function POST(req: NextRequest) {
   if (req.method !== 'POST') {
     return NextResponse.json({ message: 'Method Not Allowed' }, { status: 405 });
   }
@@ -69,30 +35,65 @@ export async function POST(req: NextRequest) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let browser: any = null;
+  let puppeteerModule: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let page: any = null;
+  let launchOptions: any;
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const launchOptions: any = {
-      headless: "new",
-      args: process.env.VERCEL
-        ? [...(chromium?.args || []), '--no-sandbox', '--disable-setuid-sandbox']
-        : ['--no-sandbox', '--disable-setuid-sandbox'],
-      executablePath: process.env.VERCEL ? await chromium?.executablePath() : undefined,
-    };
+    // Dynamically import Puppeteer and Chromium based on the environment.
+    // This ensures they are loaded when the function is executed.
+    if (process.env.VERCEL) {
+      // Production on Vercel
+      puppeteerModule = await import('puppeteer-core');
+      const chromiumModule = await import('@sparticuz/chromium');
 
-    browser = await puppeteer.launch(launchOptions);
-    page = await browser.newPage();
+      launchOptions = {
+        headless: true, // Use boolean for compatibility
+        args: [...chromiumModule.default.args, '--no-sandbox', '--disable-setuid-sandbox', '--single-process'],
+        executablePath: await chromiumModule.default.executablePath(),
+      };
+    } else {
+      // Local development (assumes 'puppeteer' is installed as a dev dependency)
+      puppeteerModule = await import('puppeteer');
+      launchOptions = {
+        headless: true, // Use boolean for compatibility
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        // executablePath: undefined; // Puppeteer will find its own bundled Chromium
+      };
+    }
+  } catch (importError) {
+    console.error('Failed to load Puppeteer or Chromium at runtime:', importError);
+    return NextResponse.json(
+      {
+        message: 'Server initialization failed due to missing browser dependencies. Please check Vercel logs.',
+        error: (importError as Error).message,
+      },
+      { status: 500 } // Return 500 if critical dependencies can't be loaded
+    );
+  }
 
-    await page.setBypassCSP(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let browserInstance: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let pageInstance: any = null;
+
+  try {
+    // Reuse cached browser instance if available
+    if (cachedBrowser) {
+      browserInstance = cachedBrowser;
+    } else {
+      browserInstance = await puppeteerModule.launch(launchOptions);
+      cachedBrowser = browserInstance; // Cache the new browser instance
+    }
+
+    pageInstance = await browserInstance.newPage();
+    await pageInstance.setBypassCSP(true);
 
     try {
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 45000 });
+      // Increase timeout for page navigation to be very generous
+      await pageInstance.goto(url, { waitUntil: 'networkidle0', timeout: 60000 }); // 60 seconds
     } catch (gotoError) {
       console.warn(`Failed to navigate to ${url}: `, gotoError);
-      // Check for 403 errors specifically
       if ((gotoError as Error).message.includes('403 Forbidden')) {
         return NextResponse.json({
           message: `Access to ${url} was blocked. The website might be detecting automated access or has strict security.`,
@@ -105,7 +106,7 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    const axeResults = await new AxePuppeteer(page)
+    const axeResults = await new AxePuppeteer(pageInstance)
       .withRules(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze();
 
@@ -148,7 +149,7 @@ export async function POST(req: NextRequest) {
         try {
           aiDetails = JSON.parse(responseText);
         } catch {
-          console.warn("Failed to parse AI response as JSON for violation:", violation.id, responseText);
+          console.warn("Failed to parse AI response as JSON for violation:", violation.id, responseText.substring(0, Math.min(responseText.length, 200)));
           aiDetails.plainExplanation = `AI response malformed. Original AI text: ${responseText.substring(0, Math.min(responseText.length, 200))}...`;
         }
 
@@ -214,8 +215,9 @@ export async function POST(req: NextRequest) {
       stack: process.env.NODE_ENV === 'development' ? (error as Error).stack : undefined
     }, { status: 500 });
   } finally {
-    if (browser) {
-      await browser.close();
+    // Only close the page, NOT the browser, to allow reuse for warm invocations.
+    if (pageInstance) {
+      await pageInstance.close();
     }
   }
 }
