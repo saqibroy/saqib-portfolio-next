@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Menu, X, Github, Linkedin, Mail, Home, Check, Sparkles, Brain, Zap } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Mail, Home, Check, Sparkles, Brain, Zap, Shield, Search } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,6 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isCVPage = pathname === '/cv';
+  const isAccessibilityPage = pathname === '/accessibility-checker';
 
   const email = 'saqib@ssohail.com';
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
@@ -42,6 +43,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const handleCopyEmail = () => {
     const tempInput = document.createElement('textarea');
@@ -59,32 +74,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setIsContactOpen(false);
   };
 
-  // Enhanced AI Badge Component
-  const AIBadge = () => (
+  // Tiny AI Badge Component
+  const TinyAIBadge = () => (
     <motion.div 
-      className="relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-violet-600/90 via-purple-600/90 to-fuchsia-600/90 backdrop-blur-md border border-violet-400/30 shadow-lg"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.05, rotate: 1 }}
-      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+      className="relative inline-flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-violet-600/90 via-purple-600/90 to-fuchsia-600/90 backdrop-blur-md border border-violet-400/30 shadow-sm"
+      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 1 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
       {/* Animated background glow */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-fuchsia-600/20 blur-md animate-pulse" />
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-fuchsia-600/20 blur-sm animate-pulse" />
       
       {/* Icon with animation */}
       <motion.div
         animate={shouldReduceMotion ? {} : { rotate: [0, 5, -5, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
-        <Brain className="w-4 h-4 text-white drop-shadow-sm" />
+        <Brain className="w-2.5 h-2.5 text-white drop-shadow-sm" />
       </motion.div>
       
       {/* Text */}
-      <span className="text-sm font-bold text-white drop-shadow-sm tracking-wide">
+      <span className="text-xs font-bold text-white drop-shadow-sm tracking-wide">
         AI
       </span>
       
       {/* Sparkle effect */}
       <motion.div
-        className="absolute -top-1 -right-1"
+        className="absolute -top-0.5 -right-0.5"
         animate={shouldReduceMotion ? {} : { 
           scale: [0, 1, 0],
           rotate: [0, 180, 360]
@@ -95,13 +110,88 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           ease: "easeInOut"
         }}
       >
-        <Sparkles className="w-3 h-3 text-yellow-300 drop-shadow-sm" />
+        <Sparkles className="w-2 h-2 text-yellow-300 drop-shadow-sm" />
       </motion.div>
       
       {/* Subtle pulse ring */}
       <div className="absolute inset-0 rounded-full border border-white/20 animate-ping opacity-30" />
     </motion.div>
   );
+
+  // Tiny Accessibility Badge Component with AI
+  const TinyAccessibilityBadge = () => (
+    <motion.div 
+      className="relative inline-flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-600/90 via-teal-600/90 to-cyan-600/90 backdrop-blur-md border border-emerald-400/30 shadow-sm"
+      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -1 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+    >
+      {/* Animated background glow */}
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-600/20 via-teal-600/20 to-cyan-600/20 blur-sm animate-pulse" />
+      
+      {/* Brain icon with subtle animation for AI */}
+      <motion.div
+        animate={shouldReduceMotion ? {} : { 
+          scale: [1, 1.1, 1],
+          rotate: [0, 2, -2, 0]
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <Brain className="w-2.5 h-2.5 text-white drop-shadow-sm" />
+      </motion.div>
+      
+      {/* Text */}
+      <span className="text-xs font-bold text-white drop-shadow-sm tracking-wide">
+        AI
+      </span>
+      
+      {/* Shield effect */}
+      <motion.div
+        className="absolute -top-0.5 -right-0.5"
+        animate={shouldReduceMotion ? {} : { 
+          scale: [0, 1, 0],
+          rotate: [0, -180, -360]
+        }}
+        transition={{ 
+          duration: 2.5, 
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.5
+        }}
+      >
+        <Shield className="w-2 h-2 text-green-300 drop-shadow-sm" />
+      </motion.div>
+      
+      {/* Subtle pulse ring */}
+      <div className="absolute inset-0 rounded-full border border-white/20 animate-ping opacity-30" />
+    </motion.div>
+  );
+
+  // Consistent nav button styles
+  const NavButton = ({ href, children, onClick, className = "" }: { 
+    href?: string; 
+    children: React.ReactNode; 
+    onClick?: () => void;
+    className?: string;
+  }) => {
+    const buttonContent = (
+      <motion.div
+        className={`group relative px-4 py-2 rounded-xl transition-all duration-300 ${className}`}
+        whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+        whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+      >
+        <span className="relative z-10 text-gray-300 group-hover:text-white font-medium">
+          {children}
+        </span>
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-emerald-500/0 group-hover:from-blue-500/10 group-hover:via-purple-500/10 group-hover:to-emerald-500/10 transition-all duration-300" />
+      </motion.div>
+    );
+
+    if (href) {
+      return <a href={href}>{buttonContent}</a>;
+    }
+
+    return <button onClick={onClick}>{buttonContent}</button>;
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative">
@@ -153,33 +243,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </a>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8 items-center">
+            <div className="hidden lg:flex space-x-6 items-center">
               {!isCVPage && (
-                <motion.a 
-                  href="/cv" 
-                  className="group relative px-4 py-2 rounded-xl transition-all duration-300"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                >
-                  <span className="relative z-10 text-gray-300 group-hover:text-white font-medium">
-                    CV
-                  </span>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-emerald-500/0 group-hover:from-blue-500/10 group-hover:via-purple-500/10 group-hover:to-emerald-500/10 transition-all duration-300" />
-                </motion.a>
+                <NavButton href="/cv">
+                  CV
+                </NavButton>
               )}
               
-              <motion.a 
-                href="/blog" 
-                className="group relative flex items-center gap-3 px-4 py-2 rounded-xl transition-all duration-300"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                <span className="relative z-10 text-gray-300 group-hover:text-white font-medium">
-                  Blog
+              <NavButton href="/blog">
+                <span className="flex items-center">
+                  Blog<TinyAIBadge />
                 </span>
-                <AIBadge />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-violet-500/0 via-purple-500/0 to-fuchsia-500/0 group-hover:from-violet-500/10 group-hover:via-purple-500/10 group-hover:to-fuchsia-500/10 transition-all duration-300" />
-              </motion.a>
+              </NavButton>
+
+              {/* Updated Accessibility Checker Button with shorter name */}
+              {!isAccessibilityPage && (
+                <NavButton href="/accessibility-checker">
+                  <span className="flex items-center">
+                    A11y Audit<TinyAccessibilityBadge />
+                  </span>
+                </NavButton>
+              )}
               
               <motion.button
                 onClick={() => setIsContactOpen(true)}
@@ -199,7 +283,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <motion.button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-3 rounded-xl text-gray-300 hover:text-white focus:outline-none bg-white/5 border border-white/10"
@@ -219,7 +303,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </nav>
       </header>
 
-      {/* Enhanced Mobile Menu */}
+      {/* Enhanced Mobile Menu - Fixed height and no scroll */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -227,7 +311,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-40 flex flex-col p-8 md:hidden"
+            className="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-40 flex flex-col p-8 lg:hidden overflow-hidden"
           >
             {/* Animated background */}
             <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-purple-900/20 to-fuchsia-900/20" />
@@ -244,7 +328,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </motion.button>
             </div>
             
-            <nav className="flex flex-col items-center space-y-8 text-xl relative z-10">
+            <nav className="flex flex-col items-center justify-center flex-1 space-y-8 text-xl relative z-10">
               {!isCVPage && (
                 <motion.a 
                   href="/cv" 
@@ -259,14 +343,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               <motion.a 
                 href="/blog" 
-                className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
+                className="flex items-center text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
                 onClick={() => setIsMobileMenuOpen(false)}
                 whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
               >
-                Blog
-                <AIBadge />
+                <span className="flex items-center">
+                  Blog<TinyAIBadge />
+                </span>
               </motion.a>
+
+              {/* Mobile Accessibility Link with updated name */}
+              {!isAccessibilityPage && (
+                <motion.a 
+                  href="/accessibility-checker" 
+                  className="flex items-center text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                >
+                  <span className="flex items-center">
+                    A11y Audit<TinyAccessibilityBadge />
+                  </span>
+                </motion.a>
+              )}
               
               <motion.button
                 onClick={() => { setIsContactOpen(true); setIsMobileMenuOpen(false); }}
@@ -295,7 +395,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             transition={{ duration: shouldReduceMotion ? 0.5 : 1, delay: 0.5 }}
             className="flex flex-col items-center space-y-4"
           >
-            <div className="flex justify-center space-x-6 flex-wrap">
+            <div className="flex justify-center items-center space-x-4 md:space-x-6 flex-wrap gap-y-4">
               {[
                 {
                   name: 'GitHub',
