@@ -58,7 +58,7 @@ const AudioSummaryPlayer: React.FC<AudioSummaryPlayerProps> = ({ postContent, po
 
   // TTS Microservice URL
   // NOTE: You should configure NEXT_PUBLIC_TTS_SERVICE_URL in your .env file for production
-  const TTS_SERVICE_URL = process.env.NEXT_PUBLIC_TTS_SERVICE_URL || 'https://ai-tts-service.onrender.com';
+  const TTS_SERVICE_URL = process.env.TTS_SERVICE_URL;
 
   // Cache configuration
   const CACHE_EXPIRY_HOURS = 240; // 24 hours
