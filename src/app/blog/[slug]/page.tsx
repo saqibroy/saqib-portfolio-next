@@ -7,7 +7,7 @@ import MDXContent from '@/components/MDXContent';
 import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AudioSummaryPlayer from "./AudioSummaryPlayer";
-import { GiscusComments, SocialShareButtons, StickySocialActions, AIFeaturesBanner } from './ClientComponents';
+import { GiscusComments, StickySocialActions, AIFeaturesBanner } from './ClientComponents';
 // Import the new utility function
 import { getOptimizedImageProps } from '@/utils/imageOptimization'; // Adjust path if different
 
