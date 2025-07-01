@@ -256,14 +256,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </span>
               </NavButton>
 
-              {/* Updated Accessibility Checker Button with shorter name */}
-              {!isAccessibilityPage && (
+              {/* Updated Accessibility Checker Button with shorter name 
+                {!isAccessibilityPage && (
                 <NavButton href="/accessibility-checker">
                   <span className="flex items-center">
                     A11y Audit<TinyAccessibilityBadge />
                   </span>
                 </NavButton>
               )}
+
+*/}
+              
               
               <motion.button
                 onClick={() => setIsContactOpen(true)}
@@ -353,8 +356,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </span>
               </motion.a>
 
-              {/* Mobile Accessibility Link with updated name */}
-              {!isAccessibilityPage && (
+              {/* Mobile Accessibility Link with updated name 
+                {!isAccessibilityPage && (
                 <motion.a 
                   href="/accessibility-checker" 
                   className="flex items-center text-gray-300 hover:text-white transition-colors p-4 rounded-xl hover:bg-white/5"
@@ -367,6 +370,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </span>
                 </motion.a>
               )}
+              */}
+              
               
               <motion.button
                 onClick={() => { setIsContactOpen(true); setIsMobileMenuOpen(false); }}
