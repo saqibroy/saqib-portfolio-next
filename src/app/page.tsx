@@ -4,6 +4,9 @@ import { motion, useReducedMotion } from 'framer-motion';
 import Layout from '@/components/Layout'; // Keep Layout import
 import Link from 'next/link'; // Keep Link for Next.js environment
 import { Sparkles, Zap, Code, Rocket, Globe, ArrowRight, Star } from 'lucide-react';
+import { AboutHero, SkillsHighlight } from '@/components/AboutSection';
+import { ProjectsShowcase } from '@/components/ProjectsShowcase';
+import { ExpertiseShowcase } from '@/components/ExpertiseShowcase';
 
 // Enhanced Background Elements Component
 interface BackgroundElement {
@@ -250,6 +253,59 @@ const Home: React.FC = () => {
               </Link>
             </motion.div>
           </div>
+        </div>
+
+        {/* New sections using updated data */}
+        <div className="relative z-10 w-full bg-gray-900/50">
+          {/* About Section */}
+          <section className="py-16 sm:py-24 px-4">
+            <div className="max-w-6xl mx-auto">
+              <AboutHero compact={false} />
+            </div>
+          </section>
+
+          {/* Skills Section */}
+          <section className="py-16 sm:py-24 px-4 bg-gray-950/50">
+            <div className="max-w-6xl mx-auto">
+              <SkillsHighlight showIntro={true} />
+            </div>
+          </section>
+
+          {/* Featured Projects Section */}
+          <section className="py-16 sm:py-24 px-4">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-emerald-400 to-purple-400 bg-clip-text text-transparent">
+                  Featured Projects
+                </h2>
+                <p className="text-gray-400 text-lg mb-12">A selection of my recent work and open-source contributions</p>
+              </motion.div>
+              <ProjectsShowcase featured={true} />
+            </div>
+          </section>
+
+          {/* Expertise Section */}
+          <section className="py-16 sm:py-24 px-4 bg-gray-950/50">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-emerald-400 to-purple-400 bg-clip-text text-transparent">
+                  Technical Expertise
+                </h2>
+                <p className="text-gray-400 text-lg mb-12">Services and skills across the full stack</p>
+              </motion.div>
+              <ExpertiseShowcase />
+            </div>
+          </section>
         </div>
       </div>
     </Layout>
