@@ -270,6 +270,7 @@ const SkillsVisualization = () => {
 interface ProjectCardProps {
   project: {
     title: string;
+    company?: string;
     description: string;
     tech: string[];
     github?: string | null;
@@ -297,7 +298,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variants, custom }) 
       <div className={`bg-gradient-to-r from-blue-800/30 to-transparent h-1.5 w-full`}></div>
 
       <div className="p-6 flex flex-col h-full">
-        <h3 className="text-xl font-semibold mb-2 text-white">{project.title}</h3>
+        <div className="mb-2">
+          <h3 className="text-xl font-semibold text-white">{project.title}</h3>
+          {project.company && (
+            <p className="text-sm text-gray-400 mt-1">@ {project.company}</p>
+          )}
+        </div>
         <p className="text-gray-300 mb-4 flex-grow">{project.description}</p>
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tech.map((tech) => (
@@ -512,6 +518,7 @@ const CVPage: React.FC = () => {
   const featuredProjectsData = [
     {
       title: "Headless Contract Editor",
+      company: "Velsa Technologies",
       description: "A document editor with dynamic merge fields and conditional clauses, integrated with an LLM pipeline to automate contract generation.",
       tech: ["React", "FastAPI", "LLM", "Stripe"],
       github: null,
@@ -519,6 +526,7 @@ const CVPage: React.FC = () => {
     },
     {
       title: "AI Chatbot Platform",
+      company: "Velsa Technologies",
       description: "Multi-chain agentic LLM pipeline with self-correction loops, vector DB retrieval, and microservice architecture.",
       tech: ["LangChain", "RAG", "Django", "FastAPI"],
       github: null,
@@ -526,6 +534,7 @@ const CVPage: React.FC = () => {
     },
     {
       title: "JAMstack Platform",
+      company: "Tactical Tech",
       description: "Developed and maintained JAMstack architecture using Decap CMS and custom Node.js API powering React frontends.",
       tech: ["Next.js", "Node.js", "Decap CMS"],
       github: null,
@@ -533,23 +542,10 @@ const CVPage: React.FC = () => {
     },
     {
       title: "GDPR Consent Manager",
+      company: "Tactical Tech",
       description: "Centralised consent management system ensuring WCAG compliance across 5+ web applications.",
       tech: ["Next.js", "TypeScript", "WCAG 2.1"],
       github: null,
-      live: null,
-    },
-    {
-      title: "Portfolio Website",
-      description: "A modern portfolio website showcasing projects and expertise with responsive design and smooth animations.",
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-      github: "https://github.com/saqibroy/saqib-portfolio-next",
-      live: "https://ssohail.com",
-    },
-    {
-      title: "Solar Facility Dashboard",
-      description: "Full-stack application for managing solar facilities, uploading performance data via CSV files, and visualizing facility performance through interactive charts.",
-      tech: ["React", "TypeScript", "Material UI", "Apollo GraphQL", "MongoDB"],
-      github: "https://github.com/saqibroy/solar-facility-dashboard",
       live: null,
     },
   ];
@@ -617,45 +613,101 @@ const CVPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "jobs-tracker-bot",
-                description: "Fully async Python bot monitoring 11 remote job boards for full-stack developer positions in EU/Germany. Smart filtering by location and role, NGO classification, match scoring (0-100%), Discord/Telegram notifications with color-coded embeds.",
-                tech: ["Python", "FastAPI", "Discord.py", "Playwright", "BeautifulSoup"],
+                title: "German Citizenship Test Trainer",
+                description: "Master the German Einbürgerungstest with intelligent spaced repetition learning. Features 310 official questions, full-length practice quizzes, vocabulary training, grammar lessons, flashcards, progress tracking, and offline PWA support. Bilingual (German/English) with achievement badges.",
+                tech: ["TypeScript", "React", "Spaced Repetition"],
+                github: "https://github.com/saqibroy/german-citizenship-test-trainer",
+                live: null,
+              },
+              {
+                title: "Portfolio Website",
+                description: "Modern, performant personal portfolio website showcasing web development skills. Features gradient backgrounds, VS Code-inspired code snippet typing effect, animated backgrounds, mobile-friendly design, AI-powered blog with MDX support, and smooth Framer Motion animations.",
+                tech: ["Next.js 14", "React 18", "TypeScript", "Tailwind CSS", "Framer Motion"],
+                github: "https://github.com/saqibroy/saqib-portfolio-next",
+                live: "https://ssohail.com",
+              },
+              {
+                title: "Trainer",
+                description: "German Practice Trainer — Smart grammar practice application with Spaced Repetition System (SRS). Supports 7 question types (fill-in-blank, transform, multi-blank, identify/label, reading, writing, speaking). Features progress tracking, local storage, bulk import, and detailed statistics. Perfect for telc B1 exam preparation.",
+                tech: ["TypeScript", "React 18", "Vite", "Tailwind CSS"],
+                github: "https://github.com/saqibroy/trainer",
+                live: null,
+              },
+              {
+                title: "Web Crawler Dashboard",
+                description: "Full-stack web application for crawling URLs and analyzing page health. Backend extracts HTML version, titles, headings, link counts, broken links (4xx/5xx), login forms. Interactive React dashboard with pagination, sorting, search, status filtering, bulk actions, real-time updates, and detailed charts.",
+                tech: ["TypeScript", "React 18", "Next.js", "Go", "Gin", "MySQL", "TanStack Query"],
+                github: "https://github.com/saqibroy/web-crawler-dashboard",
+                live: null,
+              },
+              {
+                title: "Modern CV Template",
+                description: "Clean, professional, ATS-optimized CV/resume LaTeX template using moderncv contemporary style. Gradient header, circular photo, vertical timeline, two PDF outputs (HD and compressed <1MB), privacy-safe design, cerulean color scheme, HTTPS links, and microtype enhancements.",
+                tech: ["LaTeX", "Ghostscript"],
+                github: "https://github.com/saqibroy/modern-cv-template",
+                live: null,
+              },
+              {
+                title: "Jobs Tracker Bot",
+                description: "Fully async Python bot monitoring 11 remote job boards for full-stack developer positions in EU/Germany. Smart filtering by location and role, NGO classification, match scoring (0-100%), Discord/Telegram notifications with color-coded embeds, GitHub Actions CI/CD, Docker-ready with 520+ tests.",
+                tech: ["Python 3", "FastAPI", "Discord.py", "Playwright", "BeautifulSoup"],
                 github: "https://github.com/saqibroy/jobs-tracker-bot",
                 live: null,
               },
               {
-                title: "deutsch-b1-vokab",
-                description: "DeutschTrainer — B1 Vocabulary Practice PWA. Mobile-first progressive web app for German B1 (telc) vocabulary. Flashcard and type-answer modes, smart spaced repetition, performance tracking, category filtering, offline support, dark theme.",
-                tech: ["JavaScript", "CSS", "HTML5", "PWA"],
+                title: "Deutsch B1 Vokab",
+                description: "DeutschTrainer — B1 Vocabulary Practice PWA. Mobile-first progressive web app for German B1 (telc) vocabulary. Features flashcard and type-answer modes, smart spaced repetition, performance tracking, category filtering, offline support, dark theme, add custom words, and search/filter functionality.",
+                tech: ["TypeScript", "JavaScript", "CSS", "HTML5", "PWA"],
                 github: "https://github.com/saqibroy/deutsch-b1-vokab",
                 live: null,
               },
               {
-                title: "accessibility-check-microservice",
-                description: "Lightweight Node.js microservice for static accessibility analysis using axe-core and JSDOM. WCAG 2.1 A/AA compliance checks, robust HTML fetching, comprehensive error handling, CORS enabled, graceful shutdown.",
-                tech: ["Node.js", "Express.js", "Axe-core", "JSDOM"],
+                title: "Accessibility Check Microservice",
+                description: "Lightweight Node.js microservice for static accessibility analysis using axe-core and JSDOM. No headless browser needed. WCAG 2.1 A/AA compliance checks, robust HTML fetching, comprehensive error handling, CORS enabled, graceful shutdown, deployed on Render.",
+                tech: ["JavaScript", "Node.js", "Express.js", "Axe-core", "JSDOM"],
                 github: "https://github.com/saqibroy/accessibility-check-microservice",
                 live: null,
               },
               {
-                title: "servdubai-astro",
-                description: "Modern Astro website for ServDubai, Dubai's premier building services. Targets new apartment residents and building management. Multiple service listings, AMC packages, booking forms, responsive mobile-first design, emerald/teal color scheme.",
-                tech: ["TypeScript", "Astro", "React", "Tailwind CSS", "Framer Motion"],
+                title: "ServDubai Astro",
+                description: "Modern Astro website for ServDubai, Dubai's premier building services. Targets new apartment residents and building management. Features multiple service listings, AMC packages, booking forms, responsive mobile-first design, emerald/teal color scheme, and react islands for interactivity.",
+                tech: ["TypeScript", "Astro 4.x", "React", "Tailwind CSS", "Framer Motion"],
                 github: "https://github.com/saqibroy/servdubai-astro",
                 live: null,
               },
               {
-                title: "ai-tts-service",
-                description: "High-quality text-to-speech microservice using FastAPI and Google Cloud TTS API. Multiple neural voices, adjustable speed (0.25x-4.0x) and pitch (-20 to +20), WAV audio download, CORS enabled, free deployment on Render.",
+                title: "AI TTS Service",
+                description: "High-quality text-to-speech microservice using FastAPI and Google Cloud TTS API. Multiple neural voices, adjustable speed (0.25x-4.0x) and pitch (-20 to +20), WAV audio download, CORS enabled, free deployment on Render, and easy REST API integration.",
                 tech: ["Python", "FastAPI", "Google Cloud TTS"],
                 github: "https://github.com/saqibroy/ai-tts-service",
                 live: null,
               },
               {
-                title: "rpi-homelab-stack",
-                description: "Comprehensive Docker Compose setup for Raspberry Pi homelab. Pi-hole (network-wide ad blocking), Nextcloud (self-hosted cloud), Home Assistant (automation), Frigate (AI-powered NVR), CodeProject.AI (local AI processing), MySQL.",
+                title: "RPi Homelab Stack",
+                description: "Comprehensive Docker Compose setup for Raspberry Pi homelab. Features Pi-hole (network-wide ad blocking), Nextcloud (self-hosted cloud), Home Assistant (automation), Frigate (AI-powered NVR with object detection), CodeProject.AI (local AI processing), MySQL. Includes macvlan networking, health checks, and detailed documentation.",
                 tech: ["Docker Compose", "YAML", "Linux"],
                 github: "https://github.com/saqibroy/rpi-homelab-stack",
+                live: null,
+              },
+              {
+                title: "Solar Facility Dashboard",
+                description: "Full-stack application for managing solar facilities and visualizing performance. Features user authentication (JWT), facility CRUD operations, CSV upload for performance data, interactive Recharts visualizations, Apollo GraphQL API, Mongoose MongoDB ODM, and form validation with React Hook Form.",
+                tech: ["TypeScript", "React 18", "Material UI 5", "Apollo GraphQL", "MongoDB"],
+                github: "https://github.com/saqibroy/solar-facility-dashboard",
+                live: null,
+              },
+              {
+                title: "Crunchy Snacks",
+                description: "Dry fruits e-commerce platform with product catalog, shopping cart, checkout flow, inventory management, and admin panel. Built with modern web technologies for smooth user experience and responsive design.",
+                tech: ["React", "Node.js", "Express", "MongoDB", "Stripe"],
+                github: "https://github.com/saqibroy/crunchy-snacks",
+                live: null,
+              },
+              {
+                title: "Renewable Energy Dashboard",
+                description: "Advanced energy management dashboard built with cutting-edge frontend technologies. Features module federation for scalable micro-frontends, monorepo management with Turborepo, and support for multiple frameworks (React and Vue).",
+                tech: ["TypeScript", "Vite", "React", "Vue", "Module Federation", "Turborepo"],
+                github: "https://github.com/saqibroy/enewable-energy-dashboard",
                 live: null,
               },
             ].map((project, index) => (
