@@ -140,12 +140,12 @@ const SkillsVisualization = () => {
       color: "#3B82F6",
       icon: "💻",
       skills: [
-        { name: "React.js & Next.js", level: "Expert", description: "Building performant, accessible UIs with modern React patterns and SSR" },
-        { name: "TypeScript", level: "Expert", description: "Writing type-safe, maintainable code with strict type checking" },
-        { name: "Vue.js & Nuxt.js", level: "Advanced", description: "Developing scalable applications with Vue ecosystem" },
-        { name: "Tailwind CSS", level: "Advanced", description: "Creating responsive, utility-first designs with modern CSS frameworks" },
-        { name: "GraphQL & Apollo", level: "Advanced", description: "Building efficient data fetching layers with type-safe queries" },
-        { name: "Figma", level: "Expert", description: "Designing and prototyping user interfaces, creating design systems, and implementing CSS-ready designs with proper spacing, typography, and responsive breakpoints" }
+        { name: "React.js & Next.js", level: "Expert", description: "Building performant, accessible UIs with modern React patterns, SSR, and performance optimization" },
+        { name: "TypeScript", level: "Expert", description: "Writing type-safe, maintainable code with strict type checking and advanced type system features" },
+        { name: "Vue.js & Nuxt.js", level: "Advanced", description: "Developing scalable applications with Vue ecosystem and server-side rendering" },
+        { name: "Tailwind CSS & CSS Frameworks", level: "Expert", description: "Creating responsive, utility-first designs with modern CSS and building design systems" },
+        { name: "GraphQL & Apollo", level: "Advanced", description: "Building efficient data fetching layers with type-safe queries and client-side caching" },
+        { name: "Web Accessibility (WCAG 2.1)", level: "Expert", description: "Implementing WCAG 2.1 AA compliance with ARIA labels, keyboard navigation, and screen reader support" }
       ]
     },
     {
@@ -153,12 +153,12 @@ const SkillsVisualization = () => {
       color: "#10B981",
       icon: "⚙️",
       skills: [
-        { name: "Node.js", level: "Expert", description: "Building scalable APIs and microservices with Express and Fastify" },
-        { name: "Ruby on Rails", level: "Advanced", description: "Developing full-stack applications with MVC architecture" },
-        { name: "Symfony", level: "Advanced", description: "Creating robust PHP applications with modern frameworks" },
-        { name: "OpenAPI", level: "Expert", description: "Designing and documenting RESTful APIs with Swagger/OpenAPI specifications" },
-        { name: "GraphQL & Apollo", level: "Advanced", description: "Designing efficient GraphQL schemas, resolvers, and data processing pipelines for complex data requirements" },
-        { name: "MongoDB", level: "Advanced", description: "Working with NoSQL databases and document-based data models" }
+        { name: "Python & FastAPI", level: "Advanced", description: "Building high-performance APIs and microservices with modern async patterns" },
+        { name: "Node.js & Express", level: "Expert", description: "Creating scalable APIs and microservices with Express, Fastify, and related frameworks" },
+        { name: "Ruby on Rails", level: "Advanced", description: "Developing full-stack applications with MVC architecture and Rails conventions" },
+        { name: "Django", level: "Advanced", description: "Building robust web applications with Django ORM and RESTful API design" },
+        { name: "LLM & AI Integration", level: "Competent", description: "LangChain, Google Gemini, RAG Pipelines, agentic workflows, and multi-chain LLM systems" },
+        { name: "PostgreSQL & MongoDB", level: "Expert", description: "Designing efficient schemas, optimizing queries, and managing both SQL and NoSQL databases" }
       ]
     },
     {
@@ -166,12 +166,12 @@ const SkillsVisualization = () => {
       color: "#8B5CF6",
       icon: "🚀",
       skills: [
-        { name: "Docker", level: "Advanced", description: "Containerizing applications for consistent deployments and development environments" },
-        { name: "GitLab CI/CD", level: "Expert", description: "Implementing automated deployment pipelines with proper testing and quality gates" },
-        { name: "Testing", level: "Expert", description: "Jest, Vitest, RSpec - Ensuring code quality with automated testing and TDD practices" },
-        { name: "Optimization", level: "Expert", description: "Code splitting, lazy loading, and caching strategies for optimal performance" },
-        { name: "Accessibility", level: "Expert", description: "Implementing WCAG guidelines, ARIA labels, screen reader support, and keyboard navigation" },
-        { name: "Software Principles", level: "Expert", description: "Applying SOLID principles, DRY, KISS, and YAGNI for maintainable code" }
+        { name: "Docker & Containerization", level: "Advanced", description: "Containerizing applications for consistent deployments and managing microservices" },
+        { name: "CI/CD & GitLab CI", level: "Expert", description: "Implementing automated deployment pipelines with testing gates and production-ready workflows" },
+        { name: "Testing & Quality Assurance", level: "Expert", description: "Jest, Vitest, RSpec, PHPUnit - ensuring code quality with automated testing and TDD" },
+        { name: "Performance Optimization", level: "Expert", description: "Code splitting, lazy loading, caching strategies, and comprehensive performance analysis" },
+        { name: "RESTful API & GraphQL Design", level: "Expert", description: "Designing efficient, scalable APIs with proper versioning, error handling, and documentation" },
+        { name: "Software Engineering Principles", level: "Expert", description: "SOLID principles, DRY, KISS, YAGNI - writing maintainable and scalable code" }
       ]
     }
   ];
@@ -365,6 +365,22 @@ const CVPage: React.FC = () => {
 
   const experienceData = [
     {
+      title: "Senior Full-Stack Engineer",
+      company: "Velsa Technologies",
+      duration: "08/2025 - Present",
+      location: "Berlin, Germany",
+      locationType: "Onsite",
+      type: "Full Time",
+      items: [
+        "Architected a headless contract editor in React with merge fields, inline option toolbars, and toggleable conditional clauses.",
+        "Built a conversational chatbot wizard guiding users through contract creation via structured Q&A, auto-populating documents via API.",
+        "Designed and deployed a FastAPI microservice for AI inference using multi-chain LLM pipeline (Google Gemini) with vector database retrieval (RAG).",
+        "Integrated Stripe payment flows with webhook handling for contract purchase and download gating.",
+        "Developed Django backend for user management, contract storage, and multi-service API orchestration.",
+        "Tech Stack: React.js • FastAPI • Python • Django • Google Gemini • Stripe",
+      ],
+    },
+    {
       title: "Front-End Developer",
       company: "Tactical Tech (NGO)",
       duration: "08/2019 - 04/2025",
@@ -372,13 +388,11 @@ const CVPage: React.FC = () => {
       locationType: "Remote",
       type: "Full Time",
       items: [
-        "Modernized 3 legacy apps via Next.js and Nuxt.js migration, achieving faster load times through code splitting and lazy loading.",
-        "Drove Web Accessibility compliance across 5+ apps using ARIA roles, screen reader support, keyboard navigation, and Lighthouse audits.",
-        "Implemented SEO enhancements (structured data, semantic HTML, meta tags) boosting organic traffic.",
-        "Designed and developed end-to-end responsive website, implementing pixel-perfect CSS for components.",
-        "Optimized state management using Zustand and Pinia with memoization techniques, reducing unnecessary re-renders.",
-        "Optimized Decap CMS workflows and enforced alt-text/SEO fields, cutting content team effort.",
-        "Led GDPR/accessibility compliance for privacy interfaces used by numerous monthly users.",
+        "Migrated 3 legacy applications to Next.js and Nuxt.js, reducing initial load times by 30% through code splitting and lazy loading.",
+        "Achieved WCAG 2.1 AA compliance across 5+ applications using ARIA roles, keyboard navigation, and Lighthouse audits.",
+        "Implemented structured data, semantic HTML, and meta tag strategies that increased organic search traffic.",
+        "Designed pixel-perfect responsive UIs using Tailwind CSS and Tachyons CSS across multiple projects.",
+        "Refactored Decap CMS schema architecture, eliminating query overhead and reducing editorial workflow time by 50%+.",
       ],
     },
     {
@@ -445,11 +459,11 @@ const CVPage: React.FC = () => {
 
   const trainingData = [
     {
-      title: "PHP Essential Training",
-      institution: "Eagale Solutions",
-      duration: "11/2015 - 01/2016",
-      location: "Gujranwala, Pakistan",
-      details: "Covered fundamental PHP concepts, including MySQL database interaction and file handling.",
+      title: "German B1 Certificate",
+      institution: "Language Proficiency Certification",
+      duration: "2025",
+      location: "Germany",
+      details: "Achieved B1 (Upper-Intermediate) proficiency level in German language, demonstrating advanced conversational and professional communication abilities.",
     },
     {
       title: "Basic Life Support & Fire Safety Course",
@@ -485,7 +499,7 @@ const CVPage: React.FC = () => {
 
   const languagesData = [
     { lang: "English", proficiency: "Fluent" },
-    { lang: "German", proficiency: "Basic" },
+    { lang: "German", proficiency: "B1 (Upper-Intermediate)" },
     { lang: "Urdu/Panjabi", proficiency: "Native" },
   ];
 
@@ -497,85 +511,43 @@ const CVPage: React.FC = () => {
 
   const featuredProjectsData = [
     {
-      title: "Modern Todo App",
-      description: "A full-stack todo application with a modern UI, real-time updates, and user authentication.",
-      tech: ["React", "TypeScript", "Node.js", "Express", "MongoDB"],
-      github: "https://github.com/saqibroy/modern-todo-app-react-ts",
-      live: "https://modern-todo-app-react-ts.vercel.app/",
-    },
-    {
-      title: "Todo App API",
-      description: "RESTful API backend for the todo application with JWT authentication and MongoDB integration.",
-      tech: ["Node.js", "Express", "MongoDB", "JWT"],
-      github: "https://github.com/saqibroy/todo-app-api",
-      live: "https://todo-app-api-production-2b49.up.railway.app/todos",
-    },
-    {
-      title: "Virtual Currency Transfer App",
-      description: "A web application for virtual currency transfers with real-time updates and transaction history.",
-      tech: ["React", "TypeScript", "Node.js", "Express", "MongoDB"],
-      github: "https://github.com/saqibroy/virtual-currency-transfer-app",
+      title: "Headless Contract Editor",
+      description: "A document editor with dynamic merge fields and conditional clauses, integrated with an LLM pipeline to automate contract generation.",
+      tech: ["React", "FastAPI", "LLM", "Stripe"],
+      github: null,
       live: null,
     },
     {
-      title: "Notes App",
-      description: "A modern notes application with markdown support and real-time updates.",
-      tech: ["React", "TypeScript", "Vite", "Tailwind CSS"],
-      github: "https://github.com/saqibroy/notes-app-react-vite",
+      title: "AI Chatbot Platform",
+      description: "Multi-chain agentic LLM pipeline with self-correction loops, vector DB retrieval, and microservice architecture.",
+      tech: ["LangChain", "RAG", "Django", "FastAPI"],
+      github: null,
+      live: null,
+    },
+    {
+      title: "JAMstack Platform",
+      description: "Developed and maintained JAMstack architecture using Decap CMS and custom Node.js API powering React frontends.",
+      tech: ["Next.js", "Node.js", "Decap CMS"],
+      github: null,
+      live: null,
+    },
+    {
+      title: "GDPR Consent Manager",
+      description: "Centralised consent management system ensuring WCAG compliance across 5+ web applications.",
+      tech: ["Next.js", "TypeScript", "WCAG 2.1"],
+      github: null,
       live: null,
     },
     {
       title: "Portfolio Website",
-      description: "A modern portfolio website built with Next.js, featuring a responsive design and smooth animations.",
+      description: "A modern portfolio website showcasing projects and expertise with responsive design and smooth animations.",
       tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
       github: "https://github.com/saqibroy/saqib-portfolio-next",
-      live: "https://saqibroy.vercel.app",
-    },
-    {
-      title: "Into Cities",
-      description: "A platform for exploring and discovering cities around the world.",
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
-      live: "https://intocities.com",
-      github: null,
-    },
-    {
-      title: "Influence Industry",
-      description: "A platform analyzing the influence industry and its impact on society.",
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
-      live: "https://influenceindustry.org/",
-      github: null,
-    },
-    {
-      title: "Tactical Tech",
-      description: "A website for Tactical Tech, an organization working at the intersection of technology, human rights, and civil liberties.",
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
-      live: "https://tacticaltech.org",
-      github: null,
-    },
-    {
-      title: "Exposing the Invisible",
-      description: "A platform dedicated to investigative journalism and digital security.",
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
-      live: "https://exposingtheinvisible.org",
-      github: null,
-    },
-    {
-      title: "Digital Enquirer",
-      description: "A platform for digital investigations and research.",
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
-      live: "https://digitalenquirer.org",
-      github: null,
-    },
-    {
-      title: "geheimness.de",
-      description: "Anonymous storytelling platform.",
-      tech: [],
-      live: "https://geheimness.de",
-      github: null,
+      live: "https://ssohail.com",
     },
     {
       title: "Solar Facility Dashboard",
-      description: "A full-stack application for managing solar facilities, uploading performance data via CSV files, and visualizing facility performance through interactive charts.",
+      description: "Full-stack application for managing solar facilities, uploading performance data via CSV files, and visualizing facility performance through interactive charts.",
       tech: ["React", "TypeScript", "Material UI", "Apollo GraphQL", "MongoDB"],
       github: "https://github.com/saqibroy/solar-facility-dashboard",
       live: null,
@@ -627,6 +599,66 @@ const CVPage: React.FC = () => {
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProjectsData.map((project, index) => (
+              <ProjectCard key={index} project={project} />
+            ))}
+          </div>
+        </section>
+
+        {/* Open Source Section */}
+        <section className="mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: shouldReduceMotion ? 0.5 : 0.8, delay: 0.25 }}
+            className="text-3xl md:text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent"
+          >
+            Open Source
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: "jobs-tracker-bot",
+                description: "Fully async Python bot monitoring 11 remote job boards for full-stack developer positions in EU/Germany. Smart filtering by location and role, NGO classification, match scoring (0-100%), Discord/Telegram notifications with color-coded embeds.",
+                tech: ["Python", "FastAPI", "Discord.py", "Playwright", "BeautifulSoup"],
+                github: "https://github.com/saqibroy/jobs-tracker-bot",
+                live: null,
+              },
+              {
+                title: "deutsch-b1-vokab",
+                description: "DeutschTrainer — B1 Vocabulary Practice PWA. Mobile-first progressive web app for German B1 (telc) vocabulary. Flashcard and type-answer modes, smart spaced repetition, performance tracking, category filtering, offline support, dark theme.",
+                tech: ["JavaScript", "CSS", "HTML5", "PWA"],
+                github: "https://github.com/saqibroy/deutsch-b1-vokab",
+                live: null,
+              },
+              {
+                title: "accessibility-check-microservice",
+                description: "Lightweight Node.js microservice for static accessibility analysis using axe-core and JSDOM. WCAG 2.1 A/AA compliance checks, robust HTML fetching, comprehensive error handling, CORS enabled, graceful shutdown.",
+                tech: ["Node.js", "Express.js", "Axe-core", "JSDOM"],
+                github: "https://github.com/saqibroy/accessibility-check-microservice",
+                live: null,
+              },
+              {
+                title: "servdubai-astro",
+                description: "Modern Astro website for ServDubai, Dubai's premier building services. Targets new apartment residents and building management. Multiple service listings, AMC packages, booking forms, responsive mobile-first design, emerald/teal color scheme.",
+                tech: ["TypeScript", "Astro", "React", "Tailwind CSS", "Framer Motion"],
+                github: "https://github.com/saqibroy/servdubai-astro",
+                live: null,
+              },
+              {
+                title: "ai-tts-service",
+                description: "High-quality text-to-speech microservice using FastAPI and Google Cloud TTS API. Multiple neural voices, adjustable speed (0.25x-4.0x) and pitch (-20 to +20), WAV audio download, CORS enabled, free deployment on Render.",
+                tech: ["Python", "FastAPI", "Google Cloud TTS"],
+                github: "https://github.com/saqibroy/ai-tts-service",
+                live: null,
+              },
+              {
+                title: "rpi-homelab-stack",
+                description: "Comprehensive Docker Compose setup for Raspberry Pi homelab. Pi-hole (network-wide ad blocking), Nextcloud (self-hosted cloud), Home Assistant (automation), Frigate (AI-powered NVR), CodeProject.AI (local AI processing), MySQL.",
+                tech: ["Docker Compose", "YAML", "Linux"],
+                github: "https://github.com/saqibroy/rpi-homelab-stack",
+                live: null,
+              },
+            ].map((project, index) => (
               <ProjectCard key={index} project={project} />
             ))}
           </div>
@@ -851,12 +883,12 @@ const CVPage: React.FC = () => {
                 className="mb-8 overflow-hidden rounded-xl bg-gradient-to-b from-gray-800/50 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/80 transition-all duration-300 shadow-lg shadow-black/20 text-center"
               >
                  {/* Gradient header - based on proficiency */}
-                 <div className={`bg-gradient-to-r ${lang.proficiency === "Native" ? "from-green-800/30" : lang.proficiency === "Fluent" ? "from-blue-800/30" : "from-purple-800/30"} to-transparent h-1.5 w-full`}></div>
+                 <div className={`bg-gradient-to-r ${lang.proficiency === "Native" ? "from-green-800/30" : lang.proficiency.includes("B1") ? "from-amber-800/30" : lang.proficiency === "Fluent" ? "from-blue-800/30" : "from-purple-800/30"} to-transparent h-1.5 w-full`}></div>
 
                 <div className="p-6 flex flex-col items-center">
                   <h3 className="text-xl font-semibold text-white mb-2">{lang.lang}</h3>
                    <span
-                      className={`px-3 py-1 rounded-lg text-xs font-medium ${lang.proficiency === "Native" ? "bg-green-900/40 text-green-300 ring-1 ring-green-700" : lang.proficiency === "Fluent" ? "bg-blue-900/40 text-blue-300 ring-1 ring-blue-700" : "bg-purple-900/40 text-purple-300 ring-1 ring-purple-700"}`}
+                      className={`px-3 py-1 rounded-lg text-xs font-medium ${lang.proficiency === "Native" ? "bg-green-900/40 text-green-300 ring-1 ring-green-700" : lang.proficiency.includes("B1") ? "bg-amber-900/40 text-amber-300 ring-1 ring-amber-700" : lang.proficiency === "Fluent" ? "bg-blue-900/40 text-blue-300 ring-1 ring-blue-700" : "bg-purple-900/40 text-purple-300 ring-1 ring-purple-700"}`}
                     >
                       {lang.proficiency}
                     </span>

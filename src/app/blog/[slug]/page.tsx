@@ -192,7 +192,7 @@ export default function PostPage({
           {heroImageProps && ( // Check if imageProps exist
             <div className="relative aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-8 sm:mb-12">
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
-              <Image {...heroImageProps} fill /> {/* Spread the generated props directly */}
+              <Image {...heroImageProps} /> {/* Spread the generated props directly */}
             </div>
           )}
           {/* Fallback for cases where post.image is not present or optimization issues */}

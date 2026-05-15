@@ -12,6 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isHydrated, setIsHydrated] = useState<boolean>(false);
   const shouldReduceMotion = useReducedMotion();
   
   // Mock pathname for demo - replace with actual usePathname() in your Next.js app
@@ -34,11 +35,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
 
   useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
     const timer = setTimeout(() => {
       setIsWaitingPeriod(false);
     }, 1500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isHydrated]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
