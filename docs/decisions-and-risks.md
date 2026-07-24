@@ -31,6 +31,7 @@
 | D-019 | Use secure stable nested overrides for Next's PostCSS and Sharp paths | Wait for an upstream Next release; force npm audit remediation | Current stable PostCSS 8.5.22 and Sharp 0.35.3 resolve the production audit without downgrading or preview software | Accepted |
 | D-021 | Make selected web fonts optional and keep mobile H1s on a stable local serif fallback | Preload fonts with `swap`; remove the serif identity | Prevents late font application from becoming the mobile LCP while preserving the CV-inspired pairing when the fonts are available | Accepted |
 | D-022 | Accept a bounded 161 kB shared-runtime JavaScript exception for this release | Rework the approved Next App Router architecture; block release indefinitely | The user approved the 31 kB difference after local measurements confirmed all user-facing LCP, accessibility, SEO, and CLS targets pass | Accepted 2026-07-25; re-measure after material framework or client-island changes |
+| D-023 | Permit controlled production verification through PR #11 before protected-preview manual testing | Wait for a Vercel bypass; directly push to `master` | Vercel SSO prevents external preview verification and the user approved production validation; the PR must have passing checks and any rollback must be a revert commit | Accepted 2026-07-25; production verification remains required before release completion |
 
 ## Risk register
 

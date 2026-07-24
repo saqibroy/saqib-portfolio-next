@@ -83,3 +83,10 @@ install and the full local quality suite, and pushed as `9827e73`. The PR's
 Vercel deployment and GitHub Actions `quality` workflow both passed for that
 commit. Manual protected-preview verification remains the only Phase 10
 release gate.
+
+Because Vercel SSO blocks external preview verification, the user approved a
+controlled production-verification exception on 2026-07-25. PR #11 may be
+merged only after its current checks pass; it must not be pushed directly to
+`master`. Production verification will use `https://ssohail.com`. Any defect
+found during that check must be rolled back with a Git revert commit rather than
+rewriting the default branch history.
