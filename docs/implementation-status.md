@@ -6,7 +6,7 @@
 
 **Last updated:** 2026-07-24
 
-**Overall state:** IN PROGRESS; merge gate blocked by three upstream Next 16.2.11 advisories
+**Overall state:** DONE; Phase 4 is next
 
 ## Status rules
 
@@ -30,7 +30,7 @@ whose status changes.
 | 0. Audit, governance, tracking | DONE | None | `upgrade` PR to `master` |
 | 1. Factual content foundation | DONE | Phase 0 commit `461f917` | Stacked PR; merge after Phase 0 |
 | 2. Writing pipeline migration | DONE | Phase 1 commit `6c16e40` | Stacked PR; merge after Phases 0–1 |
-| 3. Framework/dependencies/quality | IN PROGRESS | Phase 2 commit `169a6df` | Stacked PR; merge after Phases 0–2 |
+| 3. Framework/dependencies/quality | DONE | Phase 2 commit `169a6df` | Stacked PR; merge after Phases 0–2 |
 | 4. Design foundations/theme | NOT STARTED | Phase 3 merged | Separate PR |
 | 5. Senior homepage | NOT STARTED | Phase 4 merged | Separate PR |
 | 6. Work/case studies | NOT STARTED | Phases 1, 4, 5 | Separate PR |
@@ -87,7 +87,7 @@ whose status changes.
 | P3.05 | Replace `next lint`; add all approved scripts | DONE | P3.03 | `package.json` direct `eslint`, typecheck, test, e2e, a11y, build commands | Keep commands non-interactive |
 | P3.06 | Add Vitest, Testing Library, Playwright, axe, and CI | DONE | P3.05 | `vitest.config.ts`, tests, `playwright.config.ts`, workflow | Expand coverage in phases 4–9 |
 | P3.07 | Resolve Motion warning and remove obsolete/undeclared packages | DONE | P3.03 | Next 16 build has no Motion warning; unused Contentlayer-era packages/components removed | Recheck after design migration |
-| P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | BLOCKED | P3.01–P3.07 | Clean install and all commands pass; audit has 3 high advisories nested in locked `next@16.2.11` | Revisit when a compatible patched Next release is approved; do not use npm's forced downgrade |
+| P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | DONE | P3.01–P3.07 | `npm ci`, all six quality scripts, and `npm audit --omit=dev --audit-level=high` pass | Re-run before every merge |
 
 ## Phase 4 — Design foundations and theme
 
