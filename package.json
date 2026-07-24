@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build && ts-node scripts/optimize-images.ts",
     "start": "next start",
     "lint": "next lint",
@@ -20,10 +20,10 @@
     "geist": "^1.3.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.513.0",
-    "next": "^14.2.29",
+    "next": "15.5.21",
     "next-mdx-remote": "^6.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-intersection-observer": "^9.16.0",
     "react-syntax-highlighter": "^15.6.1"
   },
@@ -33,10 +33,10 @@
     "@tailwindcss/typography": "^0.5.10",
     "@types/date-fns": "^2.6.0",
     "@types/node": "^20.17.27",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.4",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "15.5.21",
     "glob": "^11.0.3",
     "picomatch": "^4.0.5",
     "rimraf": "^6.0.1",
@@ -44,5 +44,9 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3"
   }
 }
