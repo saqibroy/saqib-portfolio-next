@@ -23,6 +23,7 @@
 | D-013 | Keep accessibility checker unlinked and `noindex` by default | Promote after local proxy changes only | Critical SSRF/concurrency controls live in an external service boundary | Accepted |
 | D-014 | Omit unanswered case-study details | Infer likely architecture; add generic future behavior | Factuality is more important than narrative completeness | Accepted |
 | D-015 | Do not silently delete existing posts | Rewrite in place without record; remove dated posts | Preserves source and makes editorial decisions auditable | Accepted |
+| D-016 | Start Phase 1 as a stacked branch from `upgrade` | Wait for Phase 0 merge; continue directly on `upgrade` | The user explicitly authorized forward implementation before review; preserving a separate branch keeps the change reviewable | Accepted |
 
 ## Risk register
 

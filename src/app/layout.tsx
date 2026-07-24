@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { portfolioContent } from '@/content/portfolio';
 import "./globals.css";
 
 import { Analytics } from '@vercel/analytics/react';
@@ -17,43 +18,49 @@ export const viewport = {
   ],
 };
 
+const { profile } = portfolioContent;
+
 export const metadata: Metadata = {
-  title: "Saqib Sohail - Full Stack Developer",
-  description: "Full stack developer and software engineer specializing in modern web technologies. Experienced in React, TypeScript, Node.js, and more.",
-  keywords: ["Full Stack Developer", "React", "TypeScript", "Node.js", "Next.js", "Web Development", "Software Engineer"],
-  authors: [{ name: "Saqib Sohail" }],
-  creator: "Saqib Sohail",
-  publisher: "Saqib Sohail",
+  title: {
+    default: `${profile.name} — ${profile.positioning}`,
+    template: `%s | ${profile.name}`,
+  },
+  description: profile.proposition,
+  keywords: [
+    'Senior Frontend Engineer',
+    'Senior Full-Stack Engineer',
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Django',
+    'FastAPI',
+    'Accessibility',
+    'Performance',
+  ],
+  authors: [{ name: profile.name }],
+  creator: profile.name,
+  publisher: profile.name,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://ssohail.com'),
+  metadataBase: new URL(profile.website),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "Saqib Sohail - Full Stack Developer",
-    description: "Full stack developer and software engineer specializing in modern web technologies.",
-    url: 'https://saqibroy.vercel.app',
-    siteName: "Saqib Sohail Portfolio",
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Saqib Sohail - Full Stack Developer',
-      },
-    ],
+    title: `${profile.name} — ${profile.positioning}`,
+    description: profile.proposition,
+    url: profile.website,
+    siteName: `${profile.name} Portfolio`,
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
-    title: "Saqib Sohail - Full Stack Developer",
-    description: "Full stack developer and software engineer specializing in modern web technologies.",
-    images: ['/og-image.png'],
+    card: 'summary',
+    title: `${profile.name} — ${profile.positioning}`,
+    description: profile.proposition,
   },
   robots: {
     index: true,
@@ -101,4 +108,3 @@ export default function RootLayout({
     </html>
   );
 }
-

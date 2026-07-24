@@ -83,7 +83,7 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | Current route | Current content | Disposition | Target |
 | --- | --- | --- | --- |
 | `/` | Generic animated hero, technology copy, CV/blog CTAs | Rewrite | Senior homepage |
-| `/cv` | Skills, roles, projects, education, training, leadership, languages | Rewrite | `/experience`; permanent redirect |
+| `/cv` | Server-rendered factual experience, selected work, education, languages, and CV downloads | Rewrite again in Phase 7 | `/experience`; permanent redirect |
 | `/blog` | Two-post index with universal AI/audio promotion | Rewrite | `/writing`; permanent redirect |
 | `/blog/[slug]` | MDX article, AI banner/audio, comments, sharing, author bio | Rewrite | `/writing/[slug]`; preserve slugs |
 | `/accessibility-checker` | Public form and AI-enhanced results UI | Defer | Keep unlinked and `noindex` |
@@ -103,7 +103,12 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | CV and blog CTAs | Useful actions but wrong destinations/hierarchy | Rewrite |
 | No proof metrics, work, capabilities, or writing preview | Missing senior evidence | Add in Phase 5 |
 
-## Current CV-page content
+## CV-page content before Phase 1
+
+The monolithic client page and the entries in this section were replaced in
+Phase 1 by the validated shared content model. The inventory remains here as
+the audit record for claims that must not return. `/cv` is still a temporary
+route and will move to `/experience` in Phase 7.
 
 ### Experience and profile
 
@@ -223,7 +228,7 @@ positioning. It is **Rewrite** to the approved engineering positioning.
 | Framework placeholders | `next.svg`, `vercel.svg`, `file.svg`, `globe.svg`, `window.svg` | Remove if confirmed unused |
 | Static sitemap | `public/sitemap.xml` | Replace in Phase 10 |
 | TTS worker | `public/tts-worker.js` | Verify with the audio feature; remove if unused |
-| CV downloads | Not currently present | Add approved ATS and visual PDFs in Phase 1 |
+| CV downloads | `public/downloads/saqib-sohail-cv-ats.pdf` and `public/downloads/saqib-sohail-cv-visual.pdf` | Added in Phase 1; ATS is primary |
 | OG image | Referenced but absent | Generate in Phase 10 |
 
 ## Repository documentation

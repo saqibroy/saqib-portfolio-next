@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 0 — Audit, governance, and tracking
+**Current phase:** Phase 1 — Factual content foundation
 
-**Current branch:** `upgrade`
+**Current branch:** `phase-1-content-foundation` (stacked on `upgrade`)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE
+**Overall state:** DONE with two deferred follow-ups
 
 ## Status rules
 
@@ -28,7 +28,7 @@ whose status changes.
 | Phase | State | Dependency | Planned delivery |
 | --- | --- | --- | --- |
 | 0. Audit, governance, tracking | DONE | None | `upgrade` PR to `master` |
-| 1. Factual content foundation | NOT STARTED | Phase 0 merged | Separate PR |
+| 1. Factual content foundation | DONE | Phase 0 commit `461f917` | Stacked PR; merge after Phase 0 |
 | 2. Writing pipeline migration | NOT STARTED | Phase 1 merged | Separate PR |
 | 3. Framework/dependencies/quality | NOT STARTED | Phase 2 merged | Separate PR |
 | 4. Design foundations/theme | NOT STARTED | Phase 3 merged | Separate PR |
@@ -58,12 +58,12 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P1.01 | Add typed profile, role, capability, metric, project, evidence, and writing interfaces | NOT STARTED | Phase 0 merged | — | Create Phase 1 branch |
-| P1.02 | Add runtime/build validation for IDs, slugs, dates, URLs, evidence, and metrics | NOT STARTED | P1.01 | — | Unit-test invalid fixtures |
-| P1.03 | Add approved/publicly-verified/needs-review claim registry | NOT STARTED | P1.01 | — | Seed from content inventory |
-| P1.04 | Align employment, education, languages, and positioning | NOT STARTED | P1.02–P1.03 | — | Use approved wording only |
-| P1.05 | Remove subjective ratings and unsupported public claims | NOT STARTED | P1.03 | — | Search rendered/source text |
-| P1.06 | Add ATS primary and visual secondary PDF downloads | NOT STARTED | P1.04 | — | Verify response, filename, and labels |
+| P1.01 | Add typed profile, role, capability, metric, project, evidence, and writing interfaces | DONE | Phase 0 commit `461f917` | `src/content/portfolio.ts` | Reuse as the only source for new pages |
+| P1.02 | Add runtime/build validation for IDs, slugs, dates, URLs, evidence, and metrics | DEFERRED | P1.01 | `validatePortfolioContent()` executes during production build | Add negative-fixture unit tests when the Phase 3 test harness exists |
+| P1.03 | Add approved/publicly-verified/needs-review claim registry | DONE | P1.01 | `EvidenceRef.status` and article `reviewStatus` in `src/content/portfolio.ts` | Seed new content from approved/publicly-verified records only |
+| P1.04 | Align employment, education, languages, and positioning | DONE | P1.01–P1.03 | `src/content/portfolio.ts`, `/cv`, root/CV metadata | Recheck against a new CV before any download replacement |
+| P1.05 | Remove subjective ratings and unsupported public claims | DEFERRED | P1.03 | `/cv` replacement removes ratings and the retired CV claims | Homepage cleanup is Phase 5; article/UI cleanup is Phase 8 |
+| P1.06 | Add ATS primary and visual secondary PDF downloads | DONE | P1.04 | `public/downloads/`; HTTP 200 and SHA-256 evidence in Phase 1 report | Recheck files whenever CV source changes |
 
 ## Phase 2 — Writing pipeline migration
 
