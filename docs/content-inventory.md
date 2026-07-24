@@ -83,7 +83,7 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | Current route | Current content | Disposition | Target |
 | --- | --- | --- | --- |
 | `/` | Generic animated hero, technology copy, CV/blog CTAs | Rewrite | Senior homepage |
-| `/cv` | Server-rendered factual experience, selected work, education, languages, and CV downloads | Rewrite again in Phase 7 | `/experience`; permanent redirect |
+| `/cv` | Legacy route | DONE in Phase 7 | Permanent redirect to `/experience` |
 | `/blog` | Server-rendered two-post writing index; articles remain `needs-review` | Rewrite | `/writing`; permanent redirect |
 | `/blog/[slug]` | Server-rendered MDX article; source preserved, no promoted audio/AI/comments/sharing | Rewrite | `/writing/[slug]`; preserve slugs |
 | `/accessibility-checker` | Public form and AI-enhanced results UI | Defer | Keep unlinked and `noindex` |
@@ -107,8 +107,8 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 
 The monolithic client page and the entries in this section were replaced in
 Phase 1 by the validated shared content model. The inventory remains here as
-the audit record for claims that must not return. `/cv` is still a temporary
-route and will move to `/experience` in Phase 7.
+the audit record for claims that must not return. Phase 7 replaced the
+temporary `/cv` route with `/experience` and a permanent redirect.
 
 ### Experience and profile
 

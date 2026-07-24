@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 6 — Work and case studies
+**Current phase:** Phase 7 — Experience and legacy CV route
 
-**Current branch:** `phase-6-work-case-studies` (stacked on Phase 5)
+**Current branch:** `phase-7-experience-redirect` (stacked on Phase 6)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE; Phase 7 is next
+**Overall state:** DONE; Phase 8 is next
 
 ## Status rules
 
@@ -34,7 +34,7 @@ whose status changes.
 | 4. Design foundations/theme | DONE | Phase 3 commit `9ce7b49` | Stacked PR; merge after Phases 0–3 |
 | 5. Senior homepage | DONE | Phase 4 commit `53c7165` | Stacked PR; merge after Phases 0–4 |
 | 6. Work/case studies | DONE | Phase 5 commit `40eeb41` | Stacked PR; merge after Phases 0–5 |
-| 7. Experience/legacy CV route | NOT STARTED | Phases 1, 4 | Separate PR |
+| 7. Experience/legacy CV route | DONE | Phases 1, 4 | Separate PR |
 | 8. Writing experience/review | NOT STARTED | Phases 2, 4 | Separate PR |
 | 9. Accessibility security gate | NOT STARTED | Phase 3; external evidence | Separate PR |
 | 10. SEO/performance/docs/release | NOT STARTED | Phases 5–9 dispositions | Separate PR |
@@ -128,11 +128,11 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P7.01 | Add server-rendered `/experience` from shared content | NOT STARTED | Phases 1/4 | — | Render verified roles/capabilities |
-| P7.02 | Add accurate education, languages, and earlier roles | NOT STARTED | P7.01 | — | Avoid engineering-leadership implication |
-| P7.03 | Add ATS primary and visual secondary download UI | NOT STARTED | P1.06/P7.01 | — | Test files and labels |
-| P7.04 | Permanently redirect `/cv` | NOT STARTED | P7.01–P7.03 | — | Redirect/canonical tests |
-| P7.05 | Remove old CV component and update links/metadata | NOT STARTED | P7.04 | — | Search legacy references |
+| P7.01 | Add server-rendered `/experience` from shared content | DONE | Phases 1/4 | `src/app/experience/page.tsx`; route browser test | Reuse the shared content model for factual edits |
+| P7.02 | Add accurate education, languages, and earlier roles | DONE | P7.01 | `src/app/experience/page.tsx`; `portfolioContent` | Avoid engineering-leadership implication in future wording |
+| P7.03 | Add ATS primary and visual secondary download UI | DONE | P1.06/P7.01 | `experience.spec.ts`: labelled links and HTTP 200 checks | Recheck files whenever CV source changes |
+| P7.04 | Permanently redirect `/cv` | DONE | P7.01–P7.03 | `next.config.mjs`; browser test asserts 308 and destination | Keep the redirect in the Phase 10 sitemap/canonical review |
+| P7.05 | Remove old CV component and update links/metadata | DONE | P7.04 | Deleted `src/app/cv`; navigation, home link, route test, and canonical metadata updated | Search legacy references again during Phase 10 |
 
 ## Phase 8 — Writing experience and review
 

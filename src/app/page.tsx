@@ -17,7 +17,7 @@ export default function HomePage() {
         <p className="homepage-proposition">{profile.proposition}</p>
         <div className="homepage-actions">
           <a className="button button-primary" href={profile.downloads.ats}>Download ATS CV</a>
-          <Link className="button button-secondary" href="/cv">View experience</Link>
+          <Link className="button button-secondary" href="/experience">View experience</Link>
         </div>
       </section>
 

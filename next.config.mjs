@@ -45,12 +45,7 @@ const nextConfig = {
   // Redirect and rewrite rules if needed
   async redirects() {
     return [
-      // Example redirect
-      // {
-      //   source: '/old-path',
-      //   destination: '/new-path',
-      //   permanent: true,
-      // },
+      { source: '/cv', destination: '/experience', permanent: true },
     ];
   },
 };
