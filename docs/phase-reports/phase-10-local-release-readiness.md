@@ -42,9 +42,10 @@ Accessibility, SEO, and CLS targets pass in the local lab. Removing the unused
 home measurement from 3.03 s/164 kB to 2.84 s/161 kB, while retaining Source
 Serif 4 with `font-display: swap`. The 2.5-second LCP target and 130 kB
 homepage first-load JavaScript target still do not pass. No Vercel preview, CI
-run, screen-reader smoke test, no-JavaScript review, or deployment verification
-has been performed. These are recorded as deferred release gates, not as
-completed work.
+run, screen-reader smoke test, or deployment verification has been performed.
+Automated no-JavaScript comprehension checks pass for the homepage system-flow
+text and a writing article. The remaining items are recorded as deferred release
+gates, not as completed work.
 
 ## Next action
 

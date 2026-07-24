@@ -168,7 +168,7 @@ whose status changes.
 | P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local Lighthouse 12.8.2 JSON reports under `/tmp` | Repeat against deployment preview when available |
 | P10.06 | Pass performance and accessibility release budgets | DEFERRED | P10.05 | After removing telemetry and an unused 58 kB mono font: accessibility/SEO 100, CLS 0; LCP median 2.60–2.84 s and script transfer 161 kB | Revisit after performance work brings LCP ≤2.5 s and homepage scripts <130 kB, or approve documented exception |
-| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DEFERRED | P10.01–P10.06 | Local automated redirects/downloads/metadata pass; `release-checklist.md` records manual/preview items | Revisit when a Vercel preview and approved performance disposition are available |
+| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DEFERRED | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; `release-checklist.md` records remaining manual/preview items | Revisit when a Vercel preview and approved performance disposition are available |
 
 ## Blockers
 
