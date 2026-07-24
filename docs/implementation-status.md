@@ -2,11 +2,11 @@
 
 **Current phase:** Phase 10 — SEO, performance, documentation, and release
 
-**Current branch:** `phase-10-release-readiness` (stacked on Phase 9)
+**Current branch:** `phase-10-production-evidence` (final evidence PR)
 
-**Last updated:** 2026-07-24
+**Last updated:** 2026-07-25
 
-**Overall state:** IN PROGRESS; the local performance gate is complete with an approved runtime exception, and preview/manual release verification remains
+**Overall state:** DONE; deployed production verification and the user-confirmed manual accessibility review are complete
 
 ## Status rules
 
@@ -37,7 +37,7 @@ whose status changes.
 | 7. Experience/legacy CV route | DONE | Phases 1, 4 | Separate PR |
 | 8. Writing experience/review | DONE | Phases 2, 4 | Separate PR |
 | 9. Accessibility security gate | DONE (promotion DEFERRED) | Phase 3; external evidence | Separate PR |
-| 10. SEO/performance/docs/release | IN PROGRESS | Phases 5–9 dispositions | Separate PR; preview and performance follow-up required |
+| 10. SEO/performance/docs/release | DONE | Phases 5–9 dispositions | PRs #11–#13; production verification and manual review complete |
 
 ## Phase 0 — Audit, governance, and tracking
 
@@ -168,7 +168,7 @@ whose status changes.
 | P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local and twelve live-production Lighthouse 12.8.2 JSON reports under `/tmp` | Re-measure after material framework, global client-island, or delivery changes |
 | P10.06 | Pass performance and accessibility release budgets | DONE | P10.05 | Three-run local medians meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0); user approved the documented 161 kB shared-runtime exception on 2026-07-25 | Re-measure and revisit the exception if framework, global client islands, or first-load script composition changes materially |
-| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | IN PROGRESS | P10.01–P10.06 | Production checks pass after repair PR #12: routes/details/downloads, redirects, metadata, screenshots, theme, keyboard skip focus, touch flow, no-JS content, and four three-run Lighthouse medians | Complete the remaining human 200% zoom, reduced-motion/high-contrast, and VoiceOver/NVDA checks in `release-checklist.md` |
+| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DONE | P10.01–P10.06 | Production checks pass after repair PR #12: routes/details/downloads, redirects, metadata, screenshots, theme, keyboard skip focus, touch flow, no-JS content, and four three-run Lighthouse medians; user confirmed the remaining manual review on 2026-07-25 | Re-run the release checklist after material route, interaction, accessibility, framework, or delivery changes |
 
 ## Blockers
 

@@ -36,7 +36,7 @@ The Lighthouse JSON files are temporary local evidence under `/tmp`, not
 repository assets. The test-generated screenshot capture set is intentionally
 untracked under `test-results/` in line with the repository policy.
 
-## Release status: manual accessibility verification pending
+## Release status: complete
 
 Accessibility, SEO, CLS, and the 2.5-second LCP target now pass in the local
 lab. Removing the unused 58 kB Geist Mono font and Vercel client telemetry,
@@ -48,16 +48,16 @@ scripts, dominated by the shared Next App Router runtime rather than the small
 route-specific client islands. The user approved this bounded 31 kB runtime
 exception on 2026-07-25; it must be re-measured after any material framework or
 global client-island change. Production verification and CI evidence are
-recorded below; screen-reader and remaining human accessibility checks are not
-yet complete.
+recorded below. The user confirmed the remaining manual accessibility checks on
+2026-07-25.
 Automated no-JavaScript comprehension checks pass for the homepage system-flow
-text and a writing article. The remaining items are recorded as deferred release
-gates, not as completed work.
+text and a writing article. All Phase 10 release gates are complete; the
+Accessibility Checker promotion remains separately deferred under Phase 9.
 
 ## Next action
 
-Complete the remaining 200% zoom, reduced-motion/high-contrast, and VoiceOver
-or NVDA checks against production before marking Phase 10 done.
+Re-run this checklist after a material route, interaction, accessibility,
+framework, or delivery change.
 
 ## Preview attempt
 
@@ -116,3 +116,6 @@ did not move keyboard focus. PR #12 added a programmatic focus target and a
 regression test, then passed Vercel and the GitHub Actions quality workflow.
 The repaired production deployment was verified to move focus to
 `#main-content` after skip-link activation.
+
+The user then confirmed the 200% zoom, reduced-motion/high-contrast, and
+VoiceOver or NVDA smoke checks against production on 2026-07-25.
