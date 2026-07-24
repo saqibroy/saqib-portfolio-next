@@ -1,126 +1,59 @@
-# 🚀 Personal Portfolio Website
+# Saqib Sohail — systems notebook portfolio
 
-[![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react)](https://reactjs.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-14.x-black?logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![Framer Motion](https://img.shields.io/badge/Framer_Motion-Latest-0055FF?logo=framer)](https://www.framer.com/motion/)
+An evidence-led portfolio for Saqib Sohail, a Senior Full-Stack Engineer based in
+Berlin. The application is built with Next.js, React and TypeScript and uses a typed
+content layer so profile, work and CV facts are maintained in one place.
 
-## 📝 Description
+## Local development
 
-A modern, performant personal portfolio website showcasing my web development skills with an innovative, interactive design. Built with Next.js, TypeScript, and Tailwind CSS, featuring smooth animations and a dynamic background.
+Node.js 20.9 or newer is required.
 
-## ✨ Features
-
-- 🎨 Responsive design with gradient backgrounds
-- 🌟 Framer Motion animations
-- 💻 VS Code-inspired code snippet typing effect
-- 🌈 Animated background with random code-like elements
-- 📱 Mobile-friendly interface
-- 🚀 Performance-optimized
-- 🤖 **AI-powered Blog** with modern UI, featuring an 'AI ✨' badge in the navigation to highlight AI-driven content and features
-
-## 🖼️ Screenshots
-
-![Portfolio Preview](/path/to/screenshot.png)
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Content**: Contentlayer, MDX, date-fns
-- **AI/UX**: Custom badge and blog UI enhancements
-- **Deployment**: Vercel (recommended)
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18.x
-- npm or yarn
-
-### Installation
-
-1. Clone the repository
-
-   ```bash
-   git clone https://github.com/yourusername/portfolio-website.git
-   ```
-
-2. Install dependencies
-
-   ```bash
-   cd portfolio-website
-   npm install
-   ```
-
-3. Run development server
-
-   ```bash
-   npm run dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## 🔧 Customization
-
-Easily customize the content by modifying:
-
-- `codeSnippet` text
-- Social media links
-- Background element generation
-- Hero text
-
-## 📦 Scripts
-
-- `npm run dev`: Start development server
-- `npm run build`: Create production build
-- `npm run start`: Start production server
-- `npm run lint`: Run ESLint
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📜 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## 📫 Contact
-
-Saqib Sohail
-
-- GitHub: [@saqibroy](https://github.com/saqibroy)
-- LinkedIn: [Saqib Sohail](https://linkedin.com/in/saqibroy)
-
-## 🌟 Show Your Support
-
-Give a ⭐️ if this project helped you!
-
-## Blog & AI Features
-
-The Blog section is now AI-powered, featuring:
-
-- Modern, accessible UI/UX for reading and exploring articles
-- An 'AI ✨' badge in the navigation to highlight AI-driven content and features
-- MDX-based posts with interactive and dynamic elements
-- Enhanced performance and accessibility
-
-### Setup for Blog & AI Features
-
-After pulling the latest changes, run:
-
-```
+```bash
 npm install
 npm run dev
 ```
 
-This will install new dependencies (Contentlayer, date-fns, @tailwindcss/typography, @types/date-fns, @types/contentlayer, @types/next-contentlayer) and start the development server.
+Open `http://localhost:3000`.
+
+## Quality commands
+
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run test:e2e
+npm run analyze
+```
+
+The browser test suite covers the core routes, the mail contact action, reduced-motion
+rendering and automated accessibility checks.
+
+## Content
+
+Verified profile and CV data lives in `src/content`. Case studies are structured data
+rendered through one reusable route template. Update facts there rather than inside
+page components.
+
+The audit and implementation record are in `docs/`.
+
+## CV PDF
+
+After building the site and starting it on port 3000, regenerate the verified PDF with:
+
+```bash
+npm run generate:cv
+```
+
+## Deployment
+
+The site can run on any Node.js host supported by Next.js:
+
+```bash
+npm ci
+npm run build
+npm run start
+```
+
+Set the production domain to `https://ssohail.com`. No application secrets are
+required for the rebuilt portfolio.

@@ -1,259 +1,158 @@
-'use client'
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import Layout from '@/components/Layout'; // Keep Layout import
-import Link from 'next/link'; // Keep Link for Next.js environment
-import { Sparkles, Zap, Code, Rocket, Globe, ArrowRight, Star } from 'lucide-react';
+import { ArrowDown, ArrowRight, Mail } from "lucide-react";
+import Link from "next/link";
+import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
+import { EvidenceStrip } from "@/components/home/EvidenceStrip";
+import { SystemBlueprint } from "@/components/home/SystemBlueprint";
+import { ArrowLink } from "@/components/ui/ArrowLink";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import {
+  caseStudies,
+  profile,
+  projects,
+  systemDesignApproach,
+} from "@/lib/content";
 
-// Enhanced Background Elements Component
-interface BackgroundElement {
-  id: number;
-  x: number;
-  y: number;
-  char: string;
-  delay: number;
-  duration: number;
-  color: string;
-  size: number; // Added size to interface
-}
-
-const BackgroundElements: React.FC<{ elements: BackgroundElement[] }> = React.memo(({ elements }) => {
-  const shouldReduceMotion = useReducedMotion();
-  
-  return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      {/* Gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }} />
-      
-      {/* Code elements */}
-      {elements.map((element) => (
-        <motion.div
-          key={element.id}
-          className="absolute font-mono font-bold"
-          style={{
-            left: `${element.x}%`,
-            top: `${element.y}%`,
-            color: element.color,
-            fontSize: `${element.size}px`
-          }}
-          initial={{ opacity: 0, y: -50, rotate: -10 }}
-          animate={{ 
-            opacity: shouldReduceMotion ? [0, 0.4, 0] : [0, 0.8, 0],
-            y: shouldReduceMotion ? [0, 30, 60] : [0, 60, 120],
-            rotate: shouldReduceMotion ? [-10, 0, 10] : [-10, 5, 20]
-          }}
-          transition={{
-            duration: shouldReduceMotion ? element.duration * 0.8 : element.duration, // Slower duration
-            delay: element.delay,
-            repeat: Infinity,
-            repeatType: 'loop',
-            ease: "easeInOut"
-          }}
-          aria-hidden="true"
-        >
-          {element.char}
-        </motion.div>
-      ))}
-    </div>
+export default function HomePage() {
+  const secondaryProjects = projects.filter(
+    (project) => project.slug !== "jobs-tracker-bot",
   );
-});
-
-BackgroundElements.displayName = 'BackgroundElements';
-
-// Enhanced AI Badge for CTA buttons - Now directly on the button without a separate icon
-const EnhancedAIBadge = () => {
-  const shouldReduceMotion = useReducedMotion();
-  
-  return (
-    <motion.div 
-      className="absolute -top-3 -right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-xs font-bold shadow-lg border border-violet-400/40"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
-      animate={shouldReduceMotion ? {} : { 
-        boxShadow: [
-          '0 4px 15px rgba(139, 92, 246, 0.3)',
-          '0 4px 25px rgba(139, 92, 246, 0.5)',
-          '0 4px 15px rgba(139, 92, 246, 0.3)'
-        ]
-      }}
-      transition={{ duration: 2, repeat: Infinity }}
-    >
-      <motion.div
-        animate={shouldReduceMotion ? {} : { rotate: [0, 360] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      >
-        <Sparkles className="w-3 h-3" />
-      </motion.div>
-    </motion.div>
-  );
-};
-
-// Skill badges component
-const SkillBadges = () => {
-  const skills = [
-    { name: 'React', color: 'from-blue-500 to-cyan-500', icon: <Code className="w-4 h-4" /> },
-    { name: 'Next.js', color: 'from-gray-700 to-gray-900', icon: <Rocket className="w-4 h-4" /> },
-    { name: 'TypeScript', color: 'from-blue-600 to-blue-800', icon: <Zap className="w-4 h-4" /> },
-    { name: 'Node.js', color: 'from-green-500 to-green-700', icon: <Globe className="w-4 h-4" /> },
-  ];
 
   return (
-    <motion.div 
-      className="flex flex-wrap justify-center gap-3 mt-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.8 }}
-    >
-      {skills.map((skill, index) => (
-        <motion.div
-          key={skill.name}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${skill.color} text-white text-sm font-medium shadow-lg backdrop-blur-sm border border-white/20`}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.9 + index * 0.1 }}
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {skill.icon}
-          <span>{skill.name}</span>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-};
-
-// Deterministic background elements generation
-const generateBackgroundElements = (count: number): BackgroundElement[] => {
-  const chars = ['0', '1', '>=', '<', '>', ',', '/', '{', '}', '()', '.', 'i', 'AI']; 
-  const colors = ['hsl(180, 70%, 50%)', 'hsl(240, 70%, 60%)', 'hsl(300, 70%, 70%)']; 
-  const sizes = [12, 16, 20, 24]; 
-
-  const elements: BackgroundElement[] = [];
-  
-  for (let i = 0; i < count; i++) {
-    const seed = i * 16807 % 2147483647;
-    const x = (seed % 100) / 100;
-    const y = ((seed * 16807) % 2147483647 % 100) / 100;
-    const charIndex = ((seed * 16807) % 2147483647) % chars.length;
-    const delay = (seed % 2000) / 1000;
-    const duration = 5 + (seed % 6000) / 1000; // Increased base duration for slower movement
-    const colorIndex = ((seed * 16807 * 2) % 2147483647) % colors.length;
-    const sizeIndex = ((seed * 16807 * 3) % 2147483647) % sizes.length;
-
-    elements.push({
-      id: i,
-      x: x * 100,
-      y: y * 100,
-      char: chars[charIndex],
-      delay,
-      duration,
-      color: colors[colorIndex],
-      size: sizes[sizeIndex]
-    });
-  }
-  
-  return elements;
-};
-
-const Home: React.FC = () => {
-  const [stage, setStage] = useState<number>(0);
-  const shouldReduceMotion = useReducedMotion();
-  const backgroundElements = useMemo(() => generateBackgroundElements(70), []); 
-
-  useEffect(() => {
-    const stages = [
-      () => {
-        setStage(1);
-        return () => {};
-      },
-      () => {
-        return () => {};
-      }
-    ];
-
-    const cleanup = stages[stage]();
-    return cleanup;
-  }, [stage]);
-
-  return (
-    <Layout>
-      <div className="relative bg-gray-950 text-white font-sans">
-        <Suspense fallback={<div className="fixed inset-0 bg-gray-900" />}>
-          <BackgroundElements elements={backgroundElements} />
-        </Suspense>
-
-        <div className="relative z-10 px-4 py-8 sm:py-16 pt-28 sm:pt-32">
-          <div className="w-full max-w-6xl mx-auto min-h-[calc(100vh-200px)] flex flex-col justify-center">
-            <motion.div 
-              className="text-center mb-8 sm:mb-12" 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: shouldReduceMotion ? 0.5 : 1 }}
-            >
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: shouldReduceMotion ? 0.25 : 0.5 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 via-green-300 to-purple-400 bg-clip-text text-transparent leading-tight px-2 sm:px-0 drop-shadow-lg" 
+    <main id="main-content">
+      <section className="bg-navy text-white">
+        <div className="mx-auto grid w-[min(calc(100%-2rem),var(--shell))] gap-12 py-14 lg:py-20 xl:grid-cols-[minmax(0,0.92fr)_minmax(36rem,1.08fr)] xl:items-center xl:gap-10">
+          <div>
+            <div className="flex items-center gap-4">
+              <span
+                className="hidden h-px w-10 bg-verdigris sm:block"
+                aria-hidden="true"
+              />
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.17em] text-verdigris">
+                Portfolio / Systems notebook / 2026
+              </p>
+            </div>
+            <h1 className="mt-7 max-w-2xl font-sans text-[clamp(3.25rem,4.3vw,4rem)] font-medium leading-[0.95] tracking-[-0.05em] text-white">
+              <span className="xl:block">I design and build </span>
+              <span className="xl:block">web products across </span>
+              <span className="xl:block">interfaces, services </span>
+              <span className="xl:block">and AI workflows.</span>
+            </h1>
+            <p className="mt-7 max-w-xl text-base leading-relaxed text-white/68 md:text-lg">
+              {profile.hero.supporting}
+            </p>
+            <p className="mt-5 max-w-xl font-mono text-[0.68rem] uppercase leading-relaxed tracking-[0.12em] text-white/60">
+              {profile.hero.roleLine}
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                className="inline-flex items-center gap-2.5 bg-cerulean px-5 py-3.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-verdigris hover:text-navy"
+                href="/work"
               >
-                Full-Stack Engineer & Tech Enthusiast
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.2 }}
-                className="text-base sm:text-lg md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto px-2 sm:px-0 opacity-90 leading-relaxed" 
-              >
-                Building performant, accessible, and scalable web applications using modern technologies.
-                I also explore the exciting world of AI on my <a href="https://ssohail.com/blog" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">blog</a>.
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center px-2 sm:px-0" 
-            >
-              <Link 
-                href="/cv"
-                className="w-full sm:w-auto inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 relative overflow-hidden group" 
-              >
-                <motion.span 
-                  className="relative z-10 flex items-center justify-center gap-2"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                >
-                  Explore My Work
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
-                </motion.span>
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+                View selected work <ArrowRight aria-hidden="true" size={17} />
               </Link>
-              
-              <Link 
-                href="/blog"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 relative overflow-hidden border border-purple-400/20 group" 
+              <a
+                className="inline-flex items-center gap-2.5 border border-rule-dark px-5 py-3.5 text-sm font-semibold text-white no-underline transition-colors hover:border-cerulean"
+                href="/Saqib_Sohail_CV.pdf"
+                download
               >
-                <motion.div 
-                  className="relative flex items-center gap-3"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                >
-                  <EnhancedAIBadge />
-                </motion.div>
-                {/* Changed the text content */}
-                <span className="leading-none">See my Blog</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-fuchsia-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-              </Link>
-            </motion.div>
+                Download CV <ArrowDown aria-hidden="true" size={17} />
+              </a>
+              <a
+                className="inline-flex items-center gap-2 border-b border-verdigris px-1 py-2 text-sm font-semibold text-white no-underline"
+                href={`mailto:${profile.email}`}
+              >
+                Contact <Mail aria-hidden="true" size={16} />
+              </a>
+            </div>
           </div>
+          <SystemBlueprint />
         </div>
-      </div>
-    </Layout>
-  );
-};
+      </section>
 
-export default Home;
+      <EvidenceStrip />
+
+      <section
+        className="mx-auto w-[min(calc(100%-2rem),var(--shell))] py-24 md:py-32"
+        id="selected-work"
+      >
+        <SectionHeading
+          index="01"
+          eyebrow="Selected work"
+          title="The problem, the boundary, the decision."
+          description="Three case studies grounded in delivered work, with responsibility and outcomes stated before technology."
+        />
+        <div className="mt-14 border-y border-rule">
+          {caseStudies.map((study, index) => (
+            <CaseStudyCard key={study.slug} study={study} index={index} />
+          ))}
+        </div>
+        <div className="mt-8">
+          <ArrowLink href="/work">View the complete work index</ArrowLink>
+        </div>
+      </section>
+
+      <section className="border-y border-rule bg-paper">
+        <div className="mx-auto w-[min(calc(100%-2rem),var(--shell))] py-24 md:py-32">
+          <SectionHeading
+            index="02"
+            eyebrow="Working approach"
+            title="System design starts with product clarity."
+            description="A practical sequence for exposing responsibilities and tradeoffs without implying enterprise scale."
+          />
+          <ol className="relative mt-16 list-none p-0 before:absolute before:bottom-8 before:left-[1.15rem] before:top-8 before:w-px before:bg-rule md:grid md:grid-cols-5 md:gap-0 md:before:left-0 md:before:right-0 md:before:top-[1.4rem] md:before:h-px md:before:w-auto">
+            {systemDesignApproach.map((item) => (
+              <li
+                className="relative grid grid-cols-[3rem_1fr] gap-4 pb-10 last:pb-0 md:block md:border-l md:border-rule md:px-5 md:pb-0 md:first:border-l-0 md:first:pl-0"
+                key={item.step}
+              >
+                <span className="relative z-10 grid size-9 place-items-center border border-cerulean bg-paper font-mono text-[0.64rem] text-cerulean">
+                  {item.step}
+                </span>
+                <div className="md:mt-7">
+                  <h3 className="font-serif text-2xl leading-tight text-ink">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+                    {item.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="mx-auto w-[min(calc(100%-2rem),var(--shell))] py-24 md:py-32">
+        <SectionHeading
+          index="03"
+          eyebrow="Open source"
+          title="Focused tools with explicit jobs."
+          description="Two additional verified projects. Jobs Tracker Bot is covered once, in selected work above."
+        />
+        <div className="mt-14 grid border-y border-rule md:grid-cols-2 md:divide-x md:divide-rule">
+          {secondaryProjects.map((project, index) => (
+            <article
+              key={project.slug}
+              className={`py-8 md:px-9 ${index === 0 ? "border-b border-rule md:border-b-0 md:pl-0" : "md:pr-0"}`}
+            >
+              <p className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-cerulean">
+                {project.technologies.join(" · ")}
+              </p>
+              <h3 className="mt-4 font-serif text-3xl text-ink">
+                {project.title}
+              </h3>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-muted">
+                {project.description}
+              </p>
+              <ul className="mt-6 grid gap-2 border-l border-rule pl-5 text-sm text-ink">
+                {project.evidence.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
