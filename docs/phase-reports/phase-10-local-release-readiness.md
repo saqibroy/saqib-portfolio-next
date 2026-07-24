@@ -76,3 +76,10 @@ Vercel Authentication protects that URL and redirects unauthenticated requests
 to SSO, so automated external verification cannot proceed from this environment
 yet. Open it while signed in to Vercel, or grant a secure automation bypass
 outside the repository; never commit a token or bypass secret.
+
+GitHub Actions initially exposed an npm 10 lockfile incompatibility. The
+lockfile was regenerated with npm 10.9.2, validated with an npm 10 clean
+install and the full local quality suite, and pushed as `9827e73`. The PR's
+Vercel deployment and GitHub Actions `quality` workflow both passed for that
+commit. Manual protected-preview verification remains the only Phase 10
+release gate.
