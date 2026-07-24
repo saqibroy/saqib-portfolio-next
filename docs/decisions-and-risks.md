@@ -24,12 +24,13 @@
 | D-014 | Omit unanswered case-study details | Infer likely architecture; add generic future behavior | Factuality is more important than narrative completeness | Accepted |
 | D-015 | Do not silently delete existing posts | Rewrite in place without record; remove dated posts | Preserves source and makes editorial decisions auditable | Accepted |
 | D-016 | Start Phase 1 as a stacked branch from `upgrade` | Wait for Phase 0 merge; continue directly on `upgrade` | The user explicitly authorized forward implementation before review; preserving a separate branch keeps the change reviewable | Accepted |
+| D-017 | Remove unverified AI/audio/comments/sharing from article rendering | Keep isolated controls visible while reviewing | The features are not verified for availability, privacy, accessibility, or cost, and must not be advertised | Accepted |
 
 ## Risk register
 
 | ID | Risk | Likelihood / impact | Mitigation | Owner phase | Revisit trigger | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| R-001 | Contentlayer removal changes article rendering or slugs | Medium / High | Snapshot source, add slug/metadata tests, compare rendered previews | Phase 2 | Before deleting Contentlayer config | Open |
+| R-001 | Contentlayer removal changes article rendering or slugs | Medium / High | Source-preserving Git move, build-generated post routes, and Phase 3 tests | Phases 2–3 | Negative-fixture/route tests added | Monitoring |
 | R-002 | Next 14→16 upgrade introduces route/cache/image regressions | Medium / High | Upgrade through Next 15 in separate commits and run full route/build tests | Phase 3 | Each major-version commit | Open |
 | R-003 | Current dependency tree includes high/critical advisories | High / High | Early isolated migration/upgrade; no forced audit rewrite | Phases 2–3 | Clean production audit | Open |
 | R-004 | Factual content remains duplicated during transition | High / Medium | Typed source of truth and claim registry before new pages | Phase 1 | Before first redesigned page | Open |

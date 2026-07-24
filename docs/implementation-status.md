@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 1 — Factual content foundation
+**Current phase:** Phase 2 — Writing pipeline migration
 
-**Current branch:** `phase-1-content-foundation` (stacked on `upgrade`)
+**Current branch:** `phase-2-writing-pipeline` (stacked on Phase 1)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE with two deferred follow-ups
+**Overall state:** DONE; Phase 3 is next
 
 ## Status rules
 
@@ -29,7 +29,7 @@ whose status changes.
 | --- | --- | --- | --- |
 | 0. Audit, governance, tracking | DONE | None | `upgrade` PR to `master` |
 | 1. Factual content foundation | DONE | Phase 0 commit `461f917` | Stacked PR; merge after Phase 0 |
-| 2. Writing pipeline migration | NOT STARTED | Phase 1 merged | Separate PR |
+| 2. Writing pipeline migration | DONE | Phase 1 commit `6c16e40` | Stacked PR; merge after Phases 0–1 |
 | 3. Framework/dependencies/quality | NOT STARTED | Phase 2 merged | Separate PR |
 | 4. Design foundations/theme | NOT STARTED | Phase 3 merged | Separate PR |
 | 5. Senior homepage | NOT STARTED | Phase 4 merged | Separate PR |
@@ -69,18 +69,18 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P2.01 | Snapshot/preserve both MDX sources and metadata | NOT STARTED | Phase 1 merged | — | Add migration fixtures |
-| P2.02 | Add server-only MDX loading and schema validation | NOT STARTED | P2.01 | — | Validate slugs and missing content |
-| P2.03 | Preserve existing post URLs/content during migration | NOT STARTED | P2.02 | — | Route comparison tests |
-| P2.04 | Mark unsupported article claims for editorial review | NOT STARTED | P2.01 | — | Use content inventory findings |
-| P2.05 | Remove Contentlayer packages/config/generated aliases | NOT STARTED | P2.02–P2.03 | — | Require clean install |
-| P2.06 | Keep optional article interaction in isolated client islands | NOT STARTED | P2.02 | — | Measure article route JS |
+| P2.01 | Snapshot/preserve both MDX sources and metadata | DONE | Phase 1 commit `6c16e40` | Git rename to `content/writing/`; original frontmatter/body preserved | Line-by-line editorial review in Phase 8 |
+| P2.02 | Add server-only MDX loading and schema validation | DONE | P2.01 | `src/lib/writing.ts` validates filename, metadata, dates, image paths, and tags | Add negative-fixture tests with Phase 3 harness |
+| P2.03 | Preserve existing post URLs/content during migration | DONE | P2.02 | Production build generated both `/blog/[slug]` pages | Redirect paths move only in Phase 8 |
+| P2.04 | Mark unsupported article claims for editorial review | DONE | P2.01 | `WritingPost.reviewStatus` is `needs-review` for both migrated articles | Review each article line-by-line in Phase 8 |
+| P2.05 | Remove Contentlayer packages/config/generated aliases | DONE | P2.02–P2.03 | `package.json`, `next.config.mjs`, `tsconfig.json`; clean build | Confirm clean `npm ci` in Phase 3 quality gate |
+| P2.06 | Keep optional article interaction in isolated client islands | DONE | P2.02 | `ArticleContent` is server-rendered; audio, comments, sharing, and AI promotion are not rendered | Reconsider features only after Phase 8/9 reviews |
 
 ## Phase 3 — Framework, dependencies, and quality
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P3.01 | Consolidate Next config | NOT STARTED | Phase 2 merged | — | Preserve reviewed headers/images/redirects |
+| P3.01 | Consolidate Next config | DONE | Phase 2 | Single compatible `next.config.mjs` preserves reviewed headers/images | Recheck compatibility during Next upgrade |
 | P3.02 | Upgrade Next 14→15→16.2.11 in separate commits | NOT STARTED | P3.01 | — | Run official codemods |
 | P3.03 | Align React 19.2, types, ESLint, and TypeScript | NOT STARTED | P3.02 | — | Resolve all peer dependencies |
 | P3.04 | Add Node engine and Node 22 CI runtime | NOT STARTED | P3.02 | — | Verify clean environment |

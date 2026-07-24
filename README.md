@@ -105,22 +105,10 @@ Saqib Sohail
 
 Give a ⭐️ if this project helped you!
 
-## Blog & AI Features
+## Writing
 
-The Blog section is now AI-powered, featuring:
-
-- Modern, accessible UI/UX for reading and exploring articles
-- An 'AI ✨' badge in the navigation to highlight AI-driven content and features
-- MDX-based posts with interactive and dynamic elements
-- Enhanced performance and accessibility
-
-### Setup for Blog & AI Features
-
-After pulling the latest changes, run:
-
-```
-npm install
-npm run dev
-```
-
-This will install new dependencies (Contentlayer, date-fns, @tailwindcss/typography, @types/date-fns, @types/contentlayer, @types/next-contentlayer) and start the development server.
+Writing is loaded from local MDX files in `content/writing/` through a
+server-only, schema-validated pipeline. Audio summaries, AI labels, comments,
+and sharing controls are intentionally not promoted until their availability,
+privacy, accessibility, and cost are reviewed. The README will receive its
+complete architecture and setup rewrite in Phase 10.

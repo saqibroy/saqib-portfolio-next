@@ -84,8 +84,8 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | --- | --- | --- | --- |
 | `/` | Generic animated hero, technology copy, CV/blog CTAs | Rewrite | Senior homepage |
 | `/cv` | Server-rendered factual experience, selected work, education, languages, and CV downloads | Rewrite again in Phase 7 | `/experience`; permanent redirect |
-| `/blog` | Two-post index with universal AI/audio promotion | Rewrite | `/writing`; permanent redirect |
-| `/blog/[slug]` | MDX article, AI banner/audio, comments, sharing, author bio | Rewrite | `/writing/[slug]`; preserve slugs |
+| `/blog` | Server-rendered two-post writing index; articles remain `needs-review` | Rewrite | `/writing`; permanent redirect |
+| `/blog/[slug]` | Server-rendered MDX article; source preserved, no promoted audio/AI/comments/sharing | Rewrite | `/writing/[slug]`; preserve slugs |
 | `/accessibility-checker` | Public form and AI-enhanced results UI | Defer | Keep unlinked and `noindex` |
 | `/api/check-accessibility` | Proxy plus Gemini explanations | Defer | Security-gated API |
 | `/api/generate-audio-summary` | Gemini summary generation endpoint | Verify | Retain only if feature/privacy/cost review passes |
