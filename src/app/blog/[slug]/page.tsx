@@ -8,7 +8,7 @@ import ArticleContent from '@/components/writing/ArticleContent';
 import { getWritingPostBySlug, getWritingPosts } from '@/lib/writing';
 
 type PostPageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 const dateFormatter = new Intl.DateTimeFormat('en', {
@@ -23,7 +23,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const post = await getWritingPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getWritingPostBySlug(slug);
   if (!post) return { title: 'Article not found' };
 
   const title = `${post.title} | Saqib Sohail`;
@@ -47,7 +48,8 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getWritingPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getWritingPostBySlug(slug);
   if (!post) notFound();
 
   return (
