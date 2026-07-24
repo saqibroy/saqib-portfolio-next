@@ -56,7 +56,7 @@ export default function HomePage() {
               <ul aria-label={`${project.title} technologies`}>
                 {project.technologies.slice(0, 5).map((technology) => <li key={technology}>{technology}</li>)}
               </ul>
-              {project.repositoryUrl ? <a href={project.repositoryUrl} rel="noreferrer">View repository</a> : <span>Case study in preparation</span>}
+              <Link href={`/work/${project.slug}`}>Read case study</Link>
             </article>
           ))}
         </div>

@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 5 — Senior homepage
+**Current phase:** Phase 6 — Work and case studies
 
-**Current branch:** `phase-5-senior-homepage` (stacked on Phase 4)
+**Current branch:** `phase-6-work-case-studies` (stacked on Phase 5)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE with one deferred performance measurement
+**Overall state:** DONE; Phase 7 is next
 
 ## Status rules
 
@@ -33,7 +33,7 @@ whose status changes.
 | 3. Framework/dependencies/quality | DONE | Phase 2 commit `169a6df` | Stacked PR; merge after Phases 0–2 |
 | 4. Design foundations/theme | DONE | Phase 3 commit `9ce7b49` | Stacked PR; merge after Phases 0–3 |
 | 5. Senior homepage | DONE | Phase 4 commit `53c7165` | Stacked PR; merge after Phases 0–4 |
-| 6. Work/case studies | NOT STARTED | Phases 1, 4, 5 | Separate PR |
+| 6. Work/case studies | DONE | Phase 5 commit `40eeb41` | Stacked PR; merge after Phases 0–5 |
 | 7. Experience/legacy CV route | NOT STARTED | Phases 1, 4 | Separate PR |
 | 8. Writing experience/review | NOT STARTED | Phases 2, 4 | Separate PR |
 | 9. Accessibility security gate | NOT STARTED | Phase 3; external evidence | Separate PR |
@@ -116,13 +116,13 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P6.01 | Add `/work` and validated `/work/[slug]` model | NOT STARTED | Phases 1/4/5 | — | Add missing/duplicate slug tests |
-| P6.02 | Publish Jobs Tracker Bot case study | NOT STARTED | P6.01 | — | Link public evidence |
-| P6.03 | Publish Tactical Tech modernisation case study | NOT STARTED | P6.01 | — | Preserve title/contribution context |
-| P6.04 | Publish Web Crawler Dashboard case study | NOT STARTED | P6.01 | — | Link public evidence |
-| P6.05 | Publish reviewed redacted Velsa case study | NOT STARTED | P6.01; factual review | — | Omit unsupported answers |
-| P6.06 | Add accessible architecture diagrams/text alternatives | NOT STARTED | P6.02–P6.05 | — | Keyboard/no-JS/manual review |
-| P6.07 | Keep accessibility platform unpublished | NOT STARTED | P6.01 | — | Revisit only after Phase 9 gate |
+| P6.01 | Add `/work` and validated `/work/[slug]` model | DONE | Phases 1/4/5 | `caseStudies`, validator tests, generated static routes | Keep required section keys stable |
+| P6.02 | Publish Jobs Tracker Bot case study | DONE | P6.01 | `/work/jobs-tracker-bot`; public repository evidence | Recheck if repository changes materially |
+| P6.03 | Publish Tactical Tech modernisation case study | DONE | P6.01 | `/work/tactical-tech-platform-modernisation`; contribution wording retained | Do not strengthen scope |
+| P6.04 | Publish Web Crawler Dashboard case study | DONE | P6.01 | `/work/web-crawler-dashboard`; public repository evidence | Recheck if repository changes materially |
+| P6.05 | Publish reviewed redacted Velsa case study | DONE | P6.01; factual review | `/work/ai-assisted-contract-workflow`; unsupported sections omitted | Maintain confidentiality ceiling |
+| P6.06 | Add accessible architecture diagrams/text alternatives | DONE | P6.02–P6.05 | Semantic ordered flows plus attached text alternatives; mobile screenshot | Recheck if diagrams become interactive |
+| P6.07 | Keep accessibility platform unpublished | DONE | P6.01 | Validator/unit and 404 browser test | Revisit only after Phase 9 gate |
 
 ## Phase 7 — Experience and CV redirect
 
