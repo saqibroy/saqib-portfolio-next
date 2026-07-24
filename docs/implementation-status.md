@@ -87,7 +87,7 @@ whose status changes.
 | P3.05 | Replace `next lint`; add all approved scripts | DONE | P3.03 | `package.json` direct `eslint`, typecheck, test, e2e, a11y, build commands | Keep commands non-interactive |
 | P3.06 | Add Vitest, Testing Library, Playwright, axe, and CI | DONE | P3.05 | `vitest.config.ts`, tests, `playwright.config.ts`, workflow | Expand coverage in phases 4–9 |
 | P3.07 | Resolve Motion warning and remove obsolete/undeclared packages | DONE | P3.03 | Next 16 build has no Motion warning; unused Contentlayer-era packages/components removed | Recheck after design migration |
-| P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | DONE | P3.01–P3.07 | `npm ci`, all six quality scripts, and `npm audit --omit=dev --audit-level=high` pass | Re-run before every merge |
+| P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | DONE | P3.01–P3.07 | `npm ci`, CI-compatible `npm@10.9.2 ci`, all six quality scripts, and `npm audit --omit=dev --audit-level=high` pass | Re-run before every merge and retain npm 10 lockfile compatibility while CI uses Node 22 |
 
 ## Phase 4 — Design foundations and theme
 
