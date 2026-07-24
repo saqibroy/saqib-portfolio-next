@@ -20,9 +20,10 @@
 
 ## Local performance evidence
 
-Environment: local production `next start`, Lighthouse 12.8.2, mobile default
-emulation, three cold runs per route. Lighthouse 13 requires Node 22.19+, while
-the current runtime is Node 22.18, so 12.8.2 is the newest compatible tool.
+Environment: local production `next start`, Lighthouse 12.8.2 invoked as a
+one-off tool, mobile default emulation, three cold runs per route. Lighthouse
+13 requires Node 22.19+, while the current runtime is Node 22.18, so 12.8.2 is
+the newest compatible tool.
 
 | Route | Performance median | Accessibility median | SEO median | LCP median | CLS median | Script transfer |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

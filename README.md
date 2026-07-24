@@ -63,6 +63,13 @@ legacy redirects, CV downloads, metadata, keyboard interactions, checker
 failure paths, and responsive captures. Axe checks run in light and dark
 themes; they complement manual testing.
 
+For the documented local performance profile, run Lighthouse as a one-off tool
+instead of adding it to application dependencies:
+
+```bash
+npx --yes lighthouse@12.8.2 http://127.0.0.1:3000/ --only-categories=performance,accessibility,seo --chrome-flags="--headless --no-sandbox"
+```
+
 ## Content and factuality
 
 `AGENTS.md` is the repository’s working agreement. In short:
