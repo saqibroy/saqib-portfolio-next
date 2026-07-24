@@ -1,4 +1,4 @@
-# Phase 10 Local Release-Readiness Report
+# Phase 10 Release-Readiness Report
 
 **Branch:** `phase-10-release-readiness` (stacked on Phase 9)
 
@@ -36,7 +36,7 @@ The Lighthouse JSON files are temporary local evidence under `/tmp`, not
 repository assets. The test-generated screenshot capture set is intentionally
 untracked under `test-results/` in line with the repository policy.
 
-## Release status: preview verification pending
+## Release status: complete
 
 Accessibility, SEO, CLS, and the 2.5-second LCP target now pass in the local
 lab. Removing the unused 58 kB Geist Mono font and Vercel client telemetry,
@@ -47,17 +47,17 @@ target does not pass: Lighthouse measures 157 KiB (161 kB) of transferred
 scripts, dominated by the shared Next App Router runtime rather than the small
 route-specific client islands. The user approved this bounded 31 kB runtime
 exception on 2026-07-25; it must be re-measured after any material framework or
-global client-island change. No Vercel preview, CI run, screen-reader smoke
-test, or deployment verification has been performed.
+global client-island change. Production verification and CI evidence are
+recorded below. The user confirmed the remaining manual accessibility checks on
+2026-07-25.
 Automated no-JavaScript comprehension checks pass for the homepage system-flow
-text and a writing article. The remaining items are recorded as deferred release
-gates, not as completed work.
+text and a writing article. All Phase 10 release gates are complete; the
+Accessibility Checker promotion remains separately deferred under Phase 9.
 
 ## Next action
 
-Deploy a preview and complete `docs/release-checklist.md`, including redirect,
-download, manual accessibility, and preview-performance verification, before
-marking Phase 10 done.
+Re-run this checklist after a material route, interaction, accessibility,
+framework, or delivery change.
 
 ## Preview attempt
 
@@ -90,3 +90,32 @@ merged only after its current checks pass; it must not be pushed directly to
 `master`. Production verification will use `https://ssohail.com`. Any defect
 found during that check must be rolled back with a Git revert commit rather than
 rewriting the default branch history.
+
+## Production verification
+
+Vercel deployed PR #11 to `https://ssohail.com` successfully on 2026-07-25.
+Direct production checks confirmed HTTP 200 responses for every intended public
+index and detail route, HTTP 308 legacy redirects, both PDF downloads, canonical
+robots and sitemap behaviour, and the checker remaining `noindex`, unlinked,
+and absent from the sitemap. Browser checks confirmed the expected headings,
+theme persistence, mobile navigation, touch system-flow selection, and primary
+content with JavaScript disabled. Light/dark desktop/mobile homepage captures
+were generated and visually inspected as temporary local evidence.
+
+Three live Lighthouse 12.8.2 mobile strict-target runs per route produced:
+
+| Route | Performance median | Accessibility median | SEO median | LCP median | CLS median |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `/` | 98 | 100 | 100 | 1.87 s | 0 |
+| `/work` | 98 | 100 | 100 | 1.89 s | 0 |
+| `/experience` | 98 | 100 | 100 | 1.89 s | 0 |
+| `/writing` | 98 | 100 | 100 | 1.83 s | 0 |
+
+Production testing found that the skip link scrolled to the main landmark but
+did not move keyboard focus. PR #12 added a programmatic focus target and a
+regression test, then passed Vercel and the GitHub Actions quality workflow.
+The repaired production deployment was verified to move focus to
+`#main-content` after skip-link activation.
+
+The user then confirmed the 200% zoom, reduced-motion/high-contrast, and
+VoiceOver or NVDA smoke checks against production on 2026-07-25.
