@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Source_Sans_3, Source_Serif_4 } from 'next/font/google';
-import { GeistMono } from "geist/font/mono";
 import { portfolioContent } from '@/content/portfolio';
 import "./globals.css";
 
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { ThemeProvider } from '@/components/site/ThemeProvider';
@@ -102,7 +99,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${sourceSans.variable} ${sourceSerif.variable} ${GeistMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${sourceSans.variable} ${sourceSerif.variable}`}>
       <head>
         <link rel="preconnect" href="https://github.com" />
         <link rel="preconnect" href="https://linkedin.com" />
@@ -121,8 +118,6 @@ export default function RootLayout({
           <SiteHeader />
           <main id="main-content">{children}</main>
           <SiteFooter />
-          <Analytics />
-          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

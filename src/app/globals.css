@@ -185,12 +185,12 @@ a { color: inherit; }
 .system-flow-connections path { fill: none; stroke: var(--accent); stroke-dasharray: 1 1; stroke-width: 0.35; }
 .system-flow-nodes > button { position: relative; z-index: 1; min-height: 7rem; padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--surface); color: var(--text-muted); font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
 .system-flow-nodes > button.is-active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--surface)); color: var(--text); }
-.system-flow-nodes span { display: block; margin-bottom: 1.4rem; color: var(--accent-strong); font-family: var(--font-geist-mono), monospace; font-size: 0.75rem; }
+.system-flow-nodes span { display: block; margin-bottom: 1.4rem; color: var(--accent-strong); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.75rem; }
 .system-flow-details { max-width: 48rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
 .system-flow-details p { color: var(--text-muted); line-height: 1.55; }
 .system-flow-details ul { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0; list-style: none; }
 .system-flow-details li { padding: 0.35rem 0.6rem; border-radius: 999px; background: var(--surface-muted); font-size: 0.85rem; font-weight: 650; }
-.system-flow-text { margin: 1.5rem 0 0; color: var(--text-muted); font-family: var(--font-geist-mono), monospace; font-size: 0.8rem; }
+.system-flow-text { margin: 1.5rem 0 0; color: var(--text-muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.8rem; }
 
 @media (max-width: 800px) {
   .proof-strip { grid-template-columns: repeat(2, 1fr); }
@@ -255,7 +255,7 @@ a { color: inherit; }
 .role-heading { display: flex; justify-content: space-between; gap: 2rem; }
 .role-heading h3 { font-size: 1.4rem; }
 .role-heading p, .role-heading time, .role-tech { color: var(--text-muted); }
-.role-heading time { font-family: var(--font-geist-mono), monospace; font-size: .85rem; white-space: nowrap; }
+.role-heading time { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .85rem; white-space: nowrap; }
 .role-tech { font-size: .9rem; }
 .role-list ul { max-width: 50rem; margin: 1.2rem 0 0; padding-left: 1.1rem; }
 .role-list li li { margin: .6rem 0; color: var(--text-muted); line-height: 1.55; }
@@ -276,7 +276,7 @@ a { color: inherit; }
 .writing-list h2 { max-width: 28ch; margin: .4rem 0 .8rem; font-size: clamp(1.7rem, 3vw, 2.45rem); line-height: 1.08; }
 .writing-list h2 a, .writing-post nav a, .writing-content a { color: var(--accent-strong); }
 .writing-list > article > p:not(.writing-meta) { max-width: 44rem; color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; }
-.writing-meta { color: var(--text-muted); font-family: var(--font-geist-mono), monospace; font-size: .82rem; }
+.writing-meta { color: var(--text-muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .82rem; }
 .writing-list ul, .writing-post header ul { display: flex; flex-wrap: wrap; gap: .45rem; padding: 0; list-style: none; }
 .writing-list li, .writing-post header li { padding: .25rem .55rem; border-radius: 999px; background: var(--surface-muted); color: var(--text-muted); font-size: .8rem; }
 .writing-post { max-width: 64rem; }
@@ -288,7 +288,7 @@ a { color: inherit; }
 .writing-content p, .writing-content li { color: var(--text-muted); }
 .writing-content ul, .writing-content ol { padding-left: 1.35rem; }
 .writing-content li { margin: .55rem 0; }
-.writing-content code { padding: .1rem .3rem; border-radius: .25rem; background: var(--surface-muted); font-family: var(--font-geist-mono), monospace; font-size: .9em; }
+.writing-content code { padding: .1rem .3rem; border-radius: .25rem; background: var(--surface-muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .9em; }
 .writing-content pre { overflow-x: auto; padding: 1rem; border-radius: .5rem; background: var(--surface-muted); }
 .writing-content pre code { padding: 0; background: transparent; }
 @media (max-width: 700px) { .writing-page, .writing-post { width: min(100% - 1.25rem, 72rem); } }

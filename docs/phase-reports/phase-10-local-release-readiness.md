@@ -26,10 +26,10 @@ the current runtime is Node 22.18, so 12.8.2 is the newest compatible tool.
 
 | Route | Performance median | Accessibility median | SEO median | LCP median | CLS median | Script transfer |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| `/` | 93 | 100 | 100 | 3.03 s | 0 | 164 kB |
-| `/work` | 94 | 100 | 100 | 3.03 s | 0 | 164 kB |
-| `/experience` | 94 | 100 | 100 | 3.03 s | 0 | 164 kB |
-| `/writing` | 94 | 100 | 100 | 3.02 s | 0 | 164 kB |
+| `/` | 95 | 100 | 100 | 2.84 s | 0 | 161 kB |
+| `/work` | 96 | 100 | 100 | 2.70 s | 0 | 161 kB |
+| `/experience` | 97 | 100 | 100 | 2.60 s | 0 | 161 kB |
+| `/writing` | 96 | 100 | 100 | 2.71 s | 0 | 161 kB |
 
 The Lighthouse JSON files are temporary local evidence under `/tmp`, not
 repository assets. The test-generated screenshot capture set is intentionally
@@ -37,11 +37,14 @@ untracked under `test-results/` in line with the repository policy.
 
 ## Release status: not ready
 
-Accessibility, SEO, and CLS targets pass in the local lab. The 2.5-second LCP
-target and 130 kB homepage first-load JavaScript target do not pass. No Vercel
-preview, CI run, screen-reader smoke test, no-JavaScript review, or deployment
-verification has been performed. These are recorded as deferred release gates,
-not as completed work.
+Accessibility, SEO, and CLS targets pass in the local lab. Removing the unused
+58 kB Geist Mono font and Vercel client telemetry improved the original local
+home measurement from 3.03 s/164 kB to 2.84 s/161 kB, while retaining Source
+Serif 4 with `font-display: swap`. The 2.5-second LCP target and 130 kB
+homepage first-load JavaScript target still do not pass. No Vercel preview, CI
+run, screen-reader smoke test, no-JavaScript review, or deployment verification
+has been performed. These are recorded as deferred release gates, not as
+completed work.
 
 ## Next action
 
