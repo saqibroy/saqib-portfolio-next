@@ -1,25 +1,19 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Menu, X, Github, Linkedin, Mail, Home, Check, Sparkles, Brain, Zap, Shield, Search } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Mail, Home, Check } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [isWaitingPeriod, setIsWaitingPeriod] = useState<boolean>(true);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [isHydrated, setIsHydrated] = useState<boolean>(false);
   const shouldReduceMotion = useReducedMotion();
   
-  // Mock pathname for demo - replace with actual usePathname() in your Next.js app
-  // Use Next.js usePathname for correct routing context
-  // Remove type error by using string includes or equality
-  // If not in Next.js app directory, replace with a prop or context as needed
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const usePathname = () => {
     if (typeof window !== 'undefined') {
       return window.location.pathname;
@@ -29,26 +23,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isCVPage = pathname === '/cv';
-  const isAccessibilityPage = pathname === '/accessibility-checker';
 
   const email = 'saqib@ssohail.com';
   const linkedinUrl = 'https://linkedin.com/in/saqibroy';
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isHydrated) return;
-    const timer = setTimeout(() => {
-      setIsWaitingPeriod(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, [isHydrated]);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -80,98 +57,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setIsContactOpen(false);
   };
 
-  // Tiny AI Badge Component
-  const TinyAIBadge = () => (
-    <motion.div 
-      className="relative inline-flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-violet-600/90 via-purple-600/90 to-fuchsia-600/90 backdrop-blur-md border border-violet-400/30 shadow-sm"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 1 }}
-      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-    >
-      {/* Animated background glow */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-fuchsia-600/20 blur-sm animate-pulse" />
-      
-      {/* Icon with animation */}
-      <motion.div
-        animate={shouldReduceMotion ? {} : { rotate: [0, 5, -5, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <Brain className="w-2.5 h-2.5 text-white drop-shadow-sm" />
-      </motion.div>
-      
-      {/* Text */}
-      <span className="text-xs font-bold text-white drop-shadow-sm tracking-wide">
-        AI
-      </span>
-      
-      {/* Sparkle effect */}
-      <motion.div
-        className="absolute -top-0.5 -right-0.5"
-        animate={shouldReduceMotion ? {} : { 
-          scale: [0, 1, 0],
-          rotate: [0, 180, 360]
-        }}
-        transition={{ 
-          duration: 2, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Sparkles className="w-2 h-2 text-yellow-300 drop-shadow-sm" />
-      </motion.div>
-      
-      {/* Subtle pulse ring */}
-      <div className="absolute inset-0 rounded-full border border-white/20 animate-ping opacity-30" />
-    </motion.div>
-  );
-
-  // Tiny Accessibility Badge Component with AI
-  const TinyAccessibilityBadge = () => (
-    <motion.div 
-      className="relative inline-flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-600/90 via-teal-600/90 to-cyan-600/90 backdrop-blur-md border border-emerald-400/30 shadow-sm"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -1 }}
-      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-    >
-      {/* Animated background glow */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-600/20 via-teal-600/20 to-cyan-600/20 blur-sm animate-pulse" />
-      
-      {/* Brain icon with subtle animation for AI */}
-      <motion.div
-        animate={shouldReduceMotion ? {} : { 
-          scale: [1, 1.1, 1],
-          rotate: [0, 2, -2, 0]
-        }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <Brain className="w-2.5 h-2.5 text-white drop-shadow-sm" />
-      </motion.div>
-      
-      {/* Text */}
-      <span className="text-xs font-bold text-white drop-shadow-sm tracking-wide">
-        AI
-      </span>
-      
-      {/* Shield effect */}
-      <motion.div
-        className="absolute -top-0.5 -right-0.5"
-        animate={shouldReduceMotion ? {} : { 
-          scale: [0, 1, 0],
-          rotate: [0, -180, -360]
-        }}
-        transition={{ 
-          duration: 2.5, 
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5
-        }}
-      >
-        <Shield className="w-2 h-2 text-green-300 drop-shadow-sm" />
-      </motion.div>
-      
-      {/* Subtle pulse ring */}
-      <div className="absolute inset-0 rounded-full border border-white/20 animate-ping opacity-30" />
-    </motion.div>
-  );
-
   // Consistent nav button styles
   const NavButton = ({ href, children, onClick, className = "" }: { 
     href?: string; 
@@ -193,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     );
 
     if (href) {
-      return <a href={href}>{buttonContent}</a>;
+      return <Link href={href}>{buttonContent}</Link>;
     }
 
     return <button onClick={onClick}>{buttonContent}</button>;
@@ -221,7 +106,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             {/* Logo */}
-            <a href="/" className="group" aria-label="Home">
+            <Link href="/" className="group" aria-label="Home">
               <motion.div 
                 className="text-xl font-bold flex items-center space-x-3"
                 whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
@@ -246,7 +131,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Saqib Sohail
                 </motion.span>
               </motion.div>
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex space-x-6 items-center">
@@ -258,7 +143,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               <NavButton href="/blog">
                 <span className="flex items-center">
-                  Blog<TinyAIBadge />
+                  Blog
                 </span>
               </NavButton>
 
@@ -358,7 +243,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
               >
                 <span className="flex items-center">
-                  Blog<TinyAIBadge />
+                  Blog
                 </span>
               </motion.a>
 

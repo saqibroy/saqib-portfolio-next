@@ -50,7 +50,7 @@ interface AccessibilityReport {
   };
   violations: AccessibilityViolation[];
   passes: number;
-  incomplete: any[];
+  incomplete: unknown[];
   remainingViolations?: number;
   aiSummary?: string;
 }
@@ -118,14 +118,6 @@ export default function AccessibilityPage() {
     };
   }, [loading]);
 
-  // Reset loading states when loading stops
-  useEffect(() => {
-    if (!loading) {
-      setCurrentMessageIndex(0);
-      setLoadingProgress(0);
-    }
-  }, [loading]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
@@ -164,6 +156,8 @@ export default function AccessibilityPage() {
     } finally {
       setTimeout(() => {
         setLoading(false);
+        setCurrentMessageIndex(0);
+        setLoadingProgress(0);
       }, 500);
     }
   };

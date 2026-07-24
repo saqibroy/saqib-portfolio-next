@@ -71,7 +71,7 @@ ${content.substring(0, 5000)}`; // Increased content length for better context
     console.log('Summary generated successfully');
     
     // Clean up any remaining conversational elements
-    let cleanedSummary = summary.trim()
+    const cleanedSummary = summary.trim()
       .replace(/^(Hi there,?|Hello,?|Greetings,?)\s*/i, '')
       .replace(/^(This article|This blog post|This piece|The article|The post)\s+(discusses|explains|covers|explores)\s+/i, '')
       .replace(/^(In this article|In this post),?\s+/i, '')

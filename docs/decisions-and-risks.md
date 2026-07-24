@@ -25,6 +25,7 @@
 | D-015 | Do not silently delete existing posts | Rewrite in place without record; remove dated posts | Preserves source and makes editorial decisions auditable | Accepted |
 | D-016 | Start Phase 1 as a stacked branch from `upgrade` | Wait for Phase 0 merge; continue directly on `upgrade` | The user explicitly authorized forward implementation before review; preserving a separate branch keeps the change reviewable | Accepted |
 | D-017 | Remove unverified AI/audio/comments/sharing from article rendering | Keep isolated controls visible while reviewing | The features are not verified for availability, privacy, accessibility, or cost, and must not be advertised | Accepted |
+| D-018 | Retain ESLint 9 with Next 16 | Use ESLint 10 immediately | The Next 16 React plugin configuration crashes under ESLint 10; ESLint 9 satisfies Next 16's peer range and runs the full ruleset | Accepted |
 
 ## Risk register
 
@@ -47,6 +48,7 @@
 | R-015 | Untracked user artifacts are accidentally removed | Low / High | Never clean them implicitly; track ignore/disposition separately | All | Before cleanup/ignore change | Monitoring |
 | R-016 | CV files drift from website facts | Medium / Medium | Stable downloads and shared release checklist comparing dates/title/languages | Phases 1/10 | Every CV replacement | Open |
 | R-017 | Source Sans/Serif loading harms LCP or privacy | Low / Medium | Use `next/font`, subset, preload only required weights, measure | Phase 4 | Font implementation | Open |
+| R-018 | Locked Next 16.2.11 carries nested high advisories | High / High | Apply non-forced direct remediation; block merge until an approved compatible upstream release resolves Next's nested PostCSS/Sharp paths | Phase 3 | Compatible patched Next release is available | Open |
 
 ## Deferred decisions with defaults
 

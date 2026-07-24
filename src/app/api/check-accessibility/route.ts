@@ -8,8 +8,7 @@ import {
   AccessibilityApiResponse,
   EnhancedAccessibilityApiResponse,
   AccessibilityCheckRequest,
-  AIExplanation,
-  GeminiConfig
+  AIExplanation
 } from '@/types/accessibility';
 
 // Generate AI-enhanced explanations using Gemini

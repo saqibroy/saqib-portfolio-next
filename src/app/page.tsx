@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Layout from '@/components/Layout'; // Keep Layout import
 import Link from 'next/link'; // Keep Link for Next.js environment
-import { Sparkles, Zap, Code, Rocket, Globe, ArrowRight, Star } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 
 // Enhanced Background Elements Component
 interface BackgroundElement {
@@ -85,40 +85,6 @@ const EnhancedAIBadge = () => {
       >
         <Sparkles className="w-3 h-3" />
       </motion.div>
-    </motion.div>
-  );
-};
-
-// Skill badges component
-const SkillBadges = () => {
-  const skills = [
-    { name: 'React', color: 'from-blue-500 to-cyan-500', icon: <Code className="w-4 h-4" /> },
-    { name: 'Next.js', color: 'from-gray-700 to-gray-900', icon: <Rocket className="w-4 h-4" /> },
-    { name: 'TypeScript', color: 'from-blue-600 to-blue-800', icon: <Zap className="w-4 h-4" /> },
-    { name: 'Node.js', color: 'from-green-500 to-green-700', icon: <Globe className="w-4 h-4" /> },
-  ];
-
-  return (
-    <motion.div 
-      className="flex flex-wrap justify-center gap-3 mt-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.8 }}
-    >
-      {skills.map((skill, index) => (
-        <motion.div
-          key={skill.name}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${skill.color} text-white text-sm font-medium shadow-lg backdrop-blur-sm border border-white/20`}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.9 + index * 0.1 }}
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {skill.icon}
-          <span>{skill.name}</span>
-        </motion.div>
-      ))}
     </motion.div>
   );
 };

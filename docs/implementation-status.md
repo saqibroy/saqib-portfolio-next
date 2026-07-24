@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 2 — Writing pipeline migration
+**Current phase:** Phase 3 — Framework, dependencies, and quality
 
-**Current branch:** `phase-2-writing-pipeline` (stacked on Phase 1)
+**Current branch:** `phase-3-framework-quality` (stacked on Phase 2)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE; Phase 3 is next
+**Overall state:** IN PROGRESS; merge gate blocked by three upstream Next 16.2.11 advisories
 
 ## Status rules
 
@@ -30,7 +30,7 @@ whose status changes.
 | 0. Audit, governance, tracking | DONE | None | `upgrade` PR to `master` |
 | 1. Factual content foundation | DONE | Phase 0 commit `461f917` | Stacked PR; merge after Phase 0 |
 | 2. Writing pipeline migration | DONE | Phase 1 commit `6c16e40` | Stacked PR; merge after Phases 0–1 |
-| 3. Framework/dependencies/quality | NOT STARTED | Phase 2 merged | Separate PR |
+| 3. Framework/dependencies/quality | IN PROGRESS | Phase 2 commit `169a6df` | Stacked PR; merge after Phases 0–2 |
 | 4. Design foundations/theme | NOT STARTED | Phase 3 merged | Separate PR |
 | 5. Senior homepage | NOT STARTED | Phase 4 merged | Separate PR |
 | 6. Work/case studies | NOT STARTED | Phases 1, 4, 5 | Separate PR |
@@ -81,13 +81,13 @@ whose status changes.
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
 | P3.01 | Consolidate Next config | DONE | Phase 2 | Single compatible `next.config.mjs` preserves reviewed headers/images | Recheck compatibility during Next upgrade |
-| P3.02 | Upgrade Next 14→15→16.2.11 in separate commits | NOT STARTED | P3.01 | — | Run official codemods |
-| P3.03 | Align React 19.2, types, ESLint, and TypeScript | NOT STARTED | P3.02 | — | Resolve all peer dependencies |
-| P3.04 | Add Node engine and Node 22 CI runtime | NOT STARTED | P3.02 | — | Verify clean environment |
-| P3.05 | Replace `next lint`; add all approved scripts | NOT STARTED | P3.03 | — | Make commands non-interactive |
-| P3.06 | Add Vitest, Testing Library, Playwright, axe, and CI | NOT STARTED | P3.05 | — | Seed smoke/content tests |
-| P3.07 | Resolve Motion warning and remove obsolete/undeclared packages | NOT STARTED | P3.03 | — | Compare dependency tree |
-| P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | NOT STARTED | P3.01–P3.07 | — | No high/critical production advisories |
+| P3.02 | Upgrade Next 14→15→16.2.11 in separate commits | DONE | P3.01 | Commits `45e029f`, `50bd626`; official codemods | Reassess Next only when security advisory has a compatible patched release |
+| P3.03 | Align React 19.2, types, ESLint, and TypeScript | DONE | P3.02 | React/DOM 19.2.8, matching types, ESLint 9.39.5, Next 16 flat config | Keep aligned during dependency updates |
+| P3.04 | Add Node engine and Node 22 CI runtime | DONE | P3.02 | `package.json` engines; `.github/workflows/quality.yml` | Verify CI run after PR opens |
+| P3.05 | Replace `next lint`; add all approved scripts | DONE | P3.03 | `package.json` direct `eslint`, typecheck, test, e2e, a11y, build commands | Keep commands non-interactive |
+| P3.06 | Add Vitest, Testing Library, Playwright, axe, and CI | DONE | P3.05 | `vitest.config.ts`, tests, `playwright.config.ts`, workflow | Expand coverage in phases 4–9 |
+| P3.07 | Resolve Motion warning and remove obsolete/undeclared packages | DONE | P3.03 | Next 16 build has no Motion warning; unused Contentlayer-era packages/components removed | Recheck after design migration |
+| P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | BLOCKED | P3.01–P3.07 | Clean install and all commands pass; audit has 3 high advisories nested in locked `next@16.2.11` | Revisit when a compatible patched Next release is approved; do not use npm's forced downgrade |
 
 ## Phase 4 — Design foundations and theme
 
