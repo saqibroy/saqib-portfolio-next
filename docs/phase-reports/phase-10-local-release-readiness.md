@@ -58,3 +58,10 @@ gates, not as completed work.
 Deploy a preview and complete `docs/release-checklist.md`, including redirect,
 download, manual accessibility, and preview-performance verification, before
 marking Phase 10 done.
+
+## Preview attempt
+
+On 2026-07-25, `npx --yes vercel@latest --yes` was attempted from this branch.
+The Vercel CLI rejected the configured token as invalid before project linking or
+deployment. No preview was created. Refresh Vercel authentication before
+retrying; do not replace or expose credentials in the repository.
