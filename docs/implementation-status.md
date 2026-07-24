@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 3 — Framework, dependencies, and quality
+**Current phase:** Phase 4 — Design foundations and theme
 
-**Current branch:** `phase-3-framework-quality` (stacked on Phase 2)
+**Current branch:** `phase-4-design-foundations` (stacked on Phase 3)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE; Phase 4 is next
+**Overall state:** IN PROGRESS; shared design/theme foundation complete
 
 ## Status rules
 
@@ -31,7 +31,7 @@ whose status changes.
 | 1. Factual content foundation | DONE | Phase 0 commit `461f917` | Stacked PR; merge after Phase 0 |
 | 2. Writing pipeline migration | DONE | Phase 1 commit `6c16e40` | Stacked PR; merge after Phases 0–1 |
 | 3. Framework/dependencies/quality | DONE | Phase 2 commit `169a6df` | Stacked PR; merge after Phases 0–2 |
-| 4. Design foundations/theme | NOT STARTED | Phase 3 merged | Separate PR |
+| 4. Design foundations/theme | IN PROGRESS | Phase 3 commit `9ce7b49` | Stacked PR; merge after Phases 0–3 |
 | 5. Senior homepage | NOT STARTED | Phase 4 merged | Separate PR |
 | 6. Work/case studies | NOT STARTED | Phases 1, 4, 5 | Separate PR |
 | 7. Experience/legacy CV route | NOT STARTED | Phases 1, 4 | Separate PR |
@@ -93,13 +93,13 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P4.01 | Add semantic light/dark design tokens and AA contrast evidence | NOT STARTED | Phase 3 merged | — | Test all token pairings |
-| P4.02 | Add approved font pairing with measured loading | NOT STARTED | P4.01 | — | Limit subsets/weights |
-| P4.03 | Add no-flash system-default theme and accessible toggle | NOT STARTED | P4.01 | — | Test persistence/hydration |
-| P4.04 | Split server layout and client navigation/theme/contact islands | NOT STARTED | P4.03 | — | Remove monolithic layout |
-| P4.05 | Add skip link, focus system, zoom, landmarks, and dialog/menu behavior | NOT STARTED | P4.04 | — | Keyboard/axe/manual tests |
-| P4.06 | Add application-level reduced motion | NOT STARTED | P4.04 | — | Eliminate continuous reduced-mode motion |
-| P4.07 | Remove template decorations and deprecated navigation/clipboard code | NOT STARTED | P4.04–P4.06 | — | Source and visual sweep |
+| P4.01 | Add semantic light/dark design tokens and AA contrast evidence | DONE | Phase 3 commit `9ce7b49` | `globals.css` token pairs and light/dark browser screenshots | Recheck any new token pair before use |
+| P4.02 | Add approved font pairing with measured loading | DONE | P4.01 | `next/font` Source Sans 3/Source Serif 4 with swap loading | Measure page-level impact in Phase 10 |
+| P4.03 | Add no-flash system-default theme and accessible toggle | DONE | P4.01 | `next-themes`, hydration-safe `ThemeToggle`, browser persistence test | Cover both themes with axe assertions after route redesign |
+| P4.04 | Split server layout and client navigation/theme/contact islands | DONE | P4.03 | Server `SiteHeader`/`SiteFooter`; theme/mobile client islands; server compatibility layout | Remove compatibility wrapper as routes are redesigned |
+| P4.05 | Add skip link, focus system, zoom, landmarks, and dialog/menu behavior | IN PROGRESS | P4.04 | Skip link, visible focus, unrestricted zoom, one shared `main`, mobile-menu keyboard test | Add dialog focus management only if a dialog returns; strengthen axe in Phase 4 follow-up |
+| P4.06 | Add application-level reduced motion | DONE | P4.04 | Global `prefers-reduced-motion` policy | Remove legacy continuous motion in Phase 5 homepage redesign |
+| P4.07 | Remove template decorations and deprecated navigation/clipboard code | IN PROGRESS | P4.04–P4.06 | Legacy `Layout` animations and `document.execCommand` removed | Sweep remaining route-level template styling in Phases 5, 7, and 8 |
 
 ## Phase 5 — Senior homepage
 

@@ -22,7 +22,7 @@ export default async function BlogPage() {
 
   return (
     <Layout>
-      <main className="container mx-auto px-4 pb-16 pt-32 sm:pt-36">
+      <div className="container mx-auto px-4 pb-16 pt-32 sm:pt-36">
         <header className="mx-auto mb-12 max-w-3xl text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Technical writing</p>
           <h1 className="mb-4 text-4xl font-bold tracking-tight text-white md:text-5xl">Writing</h1>
@@ -67,7 +67,7 @@ export default async function BlogPage() {
             </article>
           ))}
         </section>
-      </main>
+      </div>
     </Layout>
   );
 }

@@ -54,7 +54,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <Layout>
-      <main className="pb-20 pt-28 sm:pt-32">
+      <div className="pb-20 pt-28 sm:pt-32">
         <article className="container mx-auto max-w-5xl px-4">
           <nav aria-label="Breadcrumb" className="mb-8 text-sm text-gray-400">
             <Link href="/" className="rounded hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Home</Link>
@@ -93,7 +93,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <ArticleContent source={post.body} />
           </div>
         </article>
-      </main>
+      </div>
     </Layout>
   );
 }

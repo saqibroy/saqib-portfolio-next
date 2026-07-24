@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
+import { Source_Sans_3, Source_Serif_4 } from 'next/font/google';
 import { GeistMono } from "geist/font/mono";
 import { portfolioContent } from '@/content/portfolio';
 import "./globals.css";
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SiteFooter } from '@/components/site/SiteFooter';
+import { SiteHeader } from '@/components/site/SiteHeader';
+import { ThemeProvider } from '@/components/site/ThemeProvider';
+
+const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' });
+const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'swap' });
 
 // Moved viewport and themeColor to their own exports as per Next.js 14+ recommendations
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#111827' },
@@ -95,15 +100,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.className} ${GeistMono.className}`}>
+    <html lang="en" suppressHydrationWarning className={`${sourceSans.variable} ${sourceSerif.variable} ${GeistMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://github.com" />
         <link rel="preconnect" href="https://linkedin.com" />
       </head>
-      <body className="bg-gray-900 text-white antialiased">
-        {children}
-        <Analytics />
-        <SpeedInsights />
+      <body>
+        <ThemeProvider>
+          <a className="skip-link" href="#main-content">Skip to main content</a>
+          <SiteHeader />
+          <main id="main-content">{children}</main>
+          <SiteFooter />
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
       </body>
     </html>
   );
