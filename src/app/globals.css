@@ -292,3 +292,23 @@ a { color: inherit; }
 .writing-content pre { overflow-x: auto; padding: 1rem; border-radius: .5rem; background: var(--surface-muted); }
 .writing-content pre code { padding: 0; background: transparent; }
 @media (max-width: 700px) { .writing-page, .writing-post { width: min(100% - 1.25rem, 72rem); } }
+
+.checker-page { width: min(100% - 2rem, 62rem); margin: 0 auto; padding: clamp(4rem, 8vw, 7rem) 0; }
+.checker-hero { max-width: 52rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.checker-hero h1, .checker-results h2, .checker-limitations h2 { margin: 0; font-size: clamp(2.4rem, 5vw, 4.25rem); line-height: 1.03; letter-spacing: -.04em; }
+.checker-hero > p:last-child, .checker-results header > p, .checker-limitations p { color: var(--text-muted); font-size: 1.08rem; line-height: 1.65; }
+.checker-panel, .checker-results { padding: clamp(2rem, 5vw, 3.5rem) 0; border-bottom: 1px solid var(--border); }
+.checker-panel h2 { margin: 0 0 1.25rem; font-size: 1.6rem; }
+.checker-panel label { display: block; margin-bottom: .5rem; font-weight: 750; }
+.checker-input-row { display: flex; gap: .75rem; }
+.checker-input-row input { min-width: 0; flex: 1; min-height: 3rem; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: .4rem; background: var(--surface); color: var(--text); font: inherit; }
+.checker-input-row button { gap: .45rem; min-height: 3rem; white-space: nowrap; cursor: pointer; }
+.checker-input-row button:disabled { cursor: wait; opacity: .7; }
+.checker-note, .checker-status, .checker-error { display: flex; align-items: center; gap: .55rem; margin: 1rem 0 0; color: var(--text-muted); font-size: .92rem; line-height: 1.5; }
+.checker-status { color: var(--accent-strong); font-weight: 650; }.checker-status svg { animation: checker-spin 1s linear infinite; }.checker-error { color: #a51d1d; font-weight: 650; }.dark .checker-error { color: #ffaaa3; }
+.checker-results header h2 { margin: 0 0 .8rem; font-size: clamp(2rem, 3.5vw, 3rem); }.checker-results header a, .checker-violations a { display: inline-flex; align-items: center; gap: .25rem; color: var(--accent-strong); }
+.checker-summary { display: grid; grid-template-columns: repeat(3, 1fr); margin: 2rem 0; border-block: 1px solid var(--border); }.checker-summary div { padding: 1rem; border-right: 1px solid var(--border); }.checker-summary div:last-child { border: 0; }.checker-summary dt { color: var(--text-muted); font-size: .8rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }.checker-summary dd { margin: .2rem 0 0; font-family: var(--font-source-serif), Georgia, serif; font-size: 2rem; }
+.checker-violations { margin: 0; padding: 0; list-style: none; }.checker-violations > li { padding: 1.5rem; border: 1px solid var(--border); border-radius: .65rem; background: var(--surface); }.checker-violations > li + li { margin-top: 1rem; }.checker-violations h3 { margin: .35rem 0; font-family: var(--font-source-sans), sans-serif; font-size: 1.2rem; }.checker-violations p:not(.checker-impact) { color: var(--text-muted); line-height: 1.55; }.checker-impact { margin: 0; color: var(--accent-strong); font-size: .8rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }.checker-violations details { margin-top: 1rem; color: var(--text-muted); }.checker-violations summary { cursor: pointer; font-weight: 650; }.checker-violations ul { margin: 1rem 0 0; padding-left: 1.2rem; }.checker-violations ul li { display: grid; gap: .4rem; margin: .8rem 0; }.checker-violations code { overflow-wrap: anywhere; padding: .15rem .3rem; border-radius: .25rem; background: var(--surface-muted); font-family: var(--font-geist-mono), monospace; font-size: .82rem; }.checker-empty { display: flex; align-items: center; gap: .5rem; color: var(--text-muted); }
+.checker-limitations { display: flex; gap: 1rem; margin-top: 3rem; padding: 1.5rem; border-radius: .65rem; background: var(--surface-muted); }.checker-limitations > svg { flex: 0 0 auto; color: var(--accent-strong); }.checker-limitations h2 { font-family: var(--font-source-sans), sans-serif; font-size: 1.2rem; }.checker-limitations p { margin-bottom: 0; font-size: 1rem; }
+@keyframes checker-spin { to { transform: rotate(360deg); } }
+@media (max-width: 700px) { .checker-page { width: min(100% - 1.25rem, 62rem); }.checker-input-row { display: grid; }.checker-input-row button { width: 100%; }.checker-summary { grid-template-columns: 1fr; }.checker-summary div { border-right: 0; border-bottom: 1px solid var(--border); }.checker-summary div:last-child { border-bottom: 0; } }

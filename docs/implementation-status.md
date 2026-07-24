@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 8 — Writing experience and review
+**Current phase:** Phase 9 — Accessibility checker security gate
 
-**Current branch:** `phase-8-writing-experience` (stacked on Phase 7)
+**Current branch:** `phase-9-accessibility-security` (stacked on Phase 8)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE; Phase 9 is next
+**Overall state:** DONE; Phase 10 is next; checker promotion is DEFERRED
 
 ## Status rules
 
@@ -36,7 +36,7 @@ whose status changes.
 | 6. Work/case studies | DONE | Phase 5 commit `40eeb41` | Stacked PR; merge after Phases 0–5 |
 | 7. Experience/legacy CV route | DONE | Phases 1, 4 | Separate PR |
 | 8. Writing experience/review | DONE | Phases 2, 4 | Separate PR |
-| 9. Accessibility security gate | NOT STARTED | Phase 3; external evidence | Separate PR |
+| 9. Accessibility security gate | DONE (promotion DEFERRED) | Phase 3; external evidence | Separate PR |
 | 10. SEO/performance/docs/release | NOT STARTED | Phases 5–9 dispositions | Separate PR |
 
 ## Phase 0 — Audit, governance, and tracking
@@ -150,13 +150,13 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P9.01 | Keep route unlinked and `noindex` | NOT STARTED | Phase 3 | — | Default even if later work blocks |
-| P9.02 | Add strict local request/response/model schemas and limits | NOT STARTED | P9.01 | — | Cover failure paths |
-| P9.03 | Add protocol/credential/private-target checks and sanitized errors | NOT STARTED | P9.02 | — | Test all target classes |
-| P9.04 | Replace random progress with honest state | NOT STARTED | P9.01 | — | UI state tests |
-| P9.05 | Verify external SSRF/redirect/DNS/concurrency controls | NOT STARTED | External microservice evidence | — | Defer promotion if missing |
-| P9.06 | Verify durable rate limit, privacy logging, and cost ceilings | NOT STARTED | Deployment capability | — | In-memory limiter is insufficient |
-| P9.07 | Decide promotion from evidence | NOT STARTED | P9.02–P9.06 | — | Default outcome is DEFERRED/unpromoted |
+| P9.01 | Keep route unlinked and `noindex` | DONE | Phase 3 | Server `layout.tsx` metadata; navigation has no checker link; browser noindex test | Keep default even if later work blocks |
+| P9.02 | Add strict local request/response/model schemas and limits | DONE | P9.01 | `accessibility-checker.ts`; unit tests for malformed JSON, oversized request/response, invalid payload | AI enrichment removed, so no untrusted model output is accepted; revisit only with a reviewed model feature |
+| P9.03 | Add protocol/credential/private-target checks and sanitized errors | DONE | P9.02 | URL parser, DNS lookup block, `redirect: 'error'` for proxy call, API/browser tests | Proxy DNS lookup reduces risk but cannot guarantee target-side redirect/DNS safety |
+| P9.04 | Replace random progress with honest state | DONE | P9.01 | New checker page and browser test | Keep states tied to actual request lifecycle |
+| P9.05 | Verify external SSRF/redirect/DNS/concurrency controls | DEFERRED | External microservice evidence | No reviewed evidence for the scanner service’s target fetching, redirect validation, DNS rebinding handling, or global concurrency limits | Revisit only with an audited microservice design/test evidence |
+| P9.06 | Verify durable rate limit, privacy logging, and cost ceilings | DEFERRED | Deployment capability | No durable deployment-level rate limiter or privacy/logging evidence is available; AI enrichment is disabled locally | Revisit only with deployment configuration and retention/cost evidence |
+| P9.07 | Decide promotion from evidence | DEFERRED | P9.02–P9.06 | P9.05 and P9.06 remain unresolved; route is deliberately unlinked and `noindex` | Promote only after both external evidence items are accepted |
 
 ## Phase 10 — SEO, performance, docs, and release
 

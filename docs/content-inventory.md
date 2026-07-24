@@ -86,7 +86,7 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | `/cv` | Legacy route | DONE in Phase 7 | Permanent redirect to `/experience` |
 | `/blog` | Legacy route | DONE in Phase 8 | Permanent redirect to `/writing` |
 | `/blog/[slug]` | Legacy article routes | DONE in Phase 8 | Permanent redirect to `/writing/[slug]`; slugs preserved |
-| `/accessibility-checker` | Public form and AI-enhanced results UI | Defer | Keep unlinked and `noindex` |
+| `/accessibility-checker` | Experimental public-URL automated scan with bounded proxy | DONE locally in Phase 9; promotion DEFERRED | Keep unlinked and `noindex` until external microservice and rate-limit evidence exists |
 | `/api/check-accessibility` | Proxy plus Gemini explanations | Defer | Security-gated API |
 | `/api/generate-audio-summary` | Gemini summary generation endpoint | Verify | Retain only if feature/privacy/cost review passes |
 | not-found/error UI | Animated template-style error surfaces | Rewrite | Shared design foundation |
