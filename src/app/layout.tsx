@@ -1,59 +1,70 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Source_Sans_3, Source_Serif_4 } from 'next/font/google';
+import { portfolioContent } from '@/content/portfolio';
 import "./globals.css";
 
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SiteFooter } from '@/components/site/SiteFooter';
+import { SiteHeader } from '@/components/site/SiteHeader';
+import { ThemeProvider } from '@/components/site/ThemeProvider';
+import { JsonLd } from '@/components/seo/JsonLd';
+
+const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'optional', preload: false });
+const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'optional', preload: false });
 
 // Moved viewport and themeColor to their own exports as per Next.js 14+ recommendations
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#111827' },
   ],
 };
 
+const { profile } = portfolioContent;
+const siteUrl = 'https://ssohail.com';
+
 export const metadata: Metadata = {
-  title: "Saqib Sohail - Full Stack Developer",
-  description: "Full stack developer and software engineer specializing in modern web technologies. Experienced in React, TypeScript, Node.js, and more.",
-  keywords: ["Full Stack Developer", "React", "TypeScript", "Node.js", "Next.js", "Web Development", "Software Engineer"],
-  authors: [{ name: "Saqib Sohail" }],
-  creator: "Saqib Sohail",
-  publisher: "Saqib Sohail",
+  title: {
+    default: `${profile.name} — ${profile.positioning}`,
+    template: `%s | ${profile.name}`,
+  },
+  description: profile.proposition,
+  keywords: [
+    'Senior Frontend Engineer',
+    'Senior Full-Stack Engineer',
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Django',
+    'FastAPI',
+    'Accessibility',
+    'Performance',
+  ],
+  authors: [{ name: profile.name }],
+  creator: profile.name,
+  publisher: profile.name,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://ssohail.com'),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "Saqib Sohail - Full Stack Developer",
-    description: "Full stack developer and software engineer specializing in modern web technologies.",
-    url: 'https://saqibroy.vercel.app',
-    siteName: "Saqib Sohail Portfolio",
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Saqib Sohail - Full Stack Developer',
-      },
-    ],
+    title: `${profile.name} — ${profile.positioning}`,
+    description: profile.proposition,
+    url: siteUrl,
+    siteName: `${profile.name} Portfolio`,
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
-    title: "Saqib Sohail - Full Stack Developer",
-    description: "Full stack developer and software engineer specializing in modern web technologies.",
-    images: ['/og-image.png'],
+    card: 'summary',
+    title: `${profile.name} — ${profile.positioning}`,
+    description: profile.proposition,
   },
   robots: {
     index: true,
@@ -88,17 +99,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.className} ${GeistMono.className}`}>
+    <html lang="en" suppressHydrationWarning className={`${sourceSans.variable} ${sourceSerif.variable}`}>
       <head>
         <link rel="preconnect" href="https://github.com" />
         <link rel="preconnect" href="https://linkedin.com" />
       </head>
-      <body className="bg-gray-900 text-white antialiased">
-        {children}
-        <Analytics />
-        <SpeedInsights />
+      <body>
+        <ThemeProvider>
+          <JsonLd data={[
+            {
+              '@context': 'https://schema.org', '@type': 'Person', name: profile.name, url: siteUrl,
+              jobTitle: profile.positioning, email: profile.email, address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
+              sameAs: [profile.githubUrl, profile.linkedinUrl],
+            },
+            { '@context': 'https://schema.org', '@type': 'WebSite', name: `${profile.name} Portfolio`, url: siteUrl, inLanguage: 'en' },
+          ]} />
+          <a className="skip-link" href="#main-content">Skip to main content</a>
+          <SiteHeader />
+          <main id="main-content">{children}</main>
+          <SiteFooter />
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-

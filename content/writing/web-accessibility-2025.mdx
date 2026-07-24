@@ -1,0 +1,86 @@
+---
+title: "A practical accessibility baseline for frontend teams"
+date: "2025-06-25"
+description: "A delivery-focused guide to semantic HTML, keyboard access, contrast, and testing against WCAG 2.2."
+author: "Saqib Sohail"
+tags:
+  - Accessibility
+  - WCAG 2.2
+  - Frontend engineering
+  - Inclusive design
+reviewStatus: "publicly-verified"
+image: "/images/web-accessibility-2025.png"
+---
+
+## Accessibility is part of the interface
+
+Accessibility is not a final audit step. It is how an interface remains usable
+across input methods, assistive technologies, display settings, and temporary
+or permanent impairments. The World Health Organization estimates that about
+1.3 billion people experience significant disability; a robust web interface
+also helps people using a phone one-handed, a slow connection, browser zoom, or
+a keyboard.
+
+WCAG 2.2 organises guidance around content being perceivable, operable,
+understandable, and robust (POUR). The success criteria are useful acceptance
+criteria, not a replacement for testing with people.
+
+## Start with semantic HTML
+
+Use the element that already expresses the behaviour: a `button` for an action,
+an `a` for navigation, a `label` for an input, and landmarks for page regions.
+This gives browsers and assistive technologies a dependable starting point and
+usually removes the need for custom keyboard handling or ARIA.
+
+When a custom component is necessary, document its keyboard behaviour and
+state. A menu, dialog, tab set, or combobox needs more than attributes: it also
+needs focus management, Escape handling where appropriate, a visible selected
+state, and a route back to the trigger.
+
+## Make keyboard operation a release requirement
+
+Use a keyboard-only pass on every route:
+
+- Tab order follows the visual and reading order.
+- Every control has a visible focus indicator.
+- Native buttons respond to Enter and Space without extra handlers.
+- Menus and dialogs expose their state and return focus when closed.
+- Skip navigation reaches the main content.
+
+Do not add `tabIndex` or key handlers to imitate a button when a real button is
+available. That workaround often creates incomplete behaviour for keyboard and
+screen-reader users.
+
+## Design contrast, content alternatives, and motion together
+
+WCAG 2.2 AA requires a contrast ratio of at least 4.5:1 for normal text and
+3:1 for large text. Test the actual foreground/background pairs in every theme,
+including focus indicators and disabled-looking controls that remain
+interactive.
+
+Provide text alternatives according to an image’s purpose: decorative images
+can have empty alternative text; informative images need an equivalent
+description; complex charts need their data or conclusion in nearby text.
+Respect reduced-motion preferences and ensure that information is not available
+only through motion, colour, or hover.
+
+## Test in layers
+
+Automated checks are valuable regression guards, but they cannot determine
+whether an interaction makes sense. Combine them with:
+
+1. component and route-level automated checks;
+2. keyboard-only testing and 200% browser zoom;
+3. a light and dark contrast review;
+4. a screen-reader smoke test on the changed interaction; and
+5. feedback from people who use assistive technology when the product permits.
+
+Record what was tested and what remains uncertain. That is more useful than
+claiming a blanket compliance result.
+
+## Sources
+
+- [W3C: Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/)
+- [W3C: introduction to web accessibility](https://www.w3.org/WAI/fundamentals/accessibility-intro/)
+- [W3C: understanding contrast minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
+- [World Health Organization: disability fact sheet](https://www.who.int/news-room/fact-sheets/detail/disability)

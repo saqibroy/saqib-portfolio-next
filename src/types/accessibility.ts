@@ -40,7 +40,7 @@ export interface BaseAccessibilityViolation {
     id: string;
     impact: string;
     message: string;
-    data: any;
+    data: unknown;
     relatedNodes?: AccessibilityRelatedNode[];
   }
   
@@ -85,8 +85,8 @@ export interface BaseAccessibilityViolation {
     summary: AccessibilitySummary;
     violations: BaseAccessibilityViolation[];
     passes: number;
-    incomplete: any[];
-    inapplicable?: any[];
+    incomplete: unknown[];
+    inapplicable?: unknown[];
   }
   
   /**
@@ -116,7 +116,7 @@ export interface BaseAccessibilityViolation {
     data?: AccessibilityReport;
     error?: string;
     details?: string;
-    microserviceError?: any;
+    microserviceError?: unknown;
   }
   
   /**
@@ -144,7 +144,7 @@ export interface BaseAccessibilityViolation {
   export interface AccessibilityRule {
     id: string;
     enabled: boolean;
-    options?: Record<string, any>;
+    options?: Record<string, unknown>;
   }
   
   /**
@@ -305,22 +305,25 @@ export interface BaseAccessibilityViolation {
   /**
    * Type guards for runtime type checking
    */
-  export const isAccessibilityViolation = (obj: any): obj is AccessibilityViolation => {
-    return obj && 
-      typeof obj.id === 'string' &&
-      typeof obj.impact === 'string' &&
-      ['minor', 'moderate', 'serious', 'critical'].includes(obj.impact) &&
-      typeof obj.description === 'string' &&
-      Array.isArray(obj.nodes);
+  export const isAccessibilityViolation = (obj: unknown): obj is AccessibilityViolation => {
+    if (typeof obj !== 'object' || obj === null) return false;
+    const candidate = obj as Record<string, unknown>;
+    return typeof candidate.id === 'string' &&
+      typeof candidate.impact === 'string' &&
+      ['minor', 'moderate', 'serious', 'critical'].includes(candidate.impact) &&
+      typeof candidate.description === 'string' &&
+      Array.isArray(candidate.nodes);
   };
   
-  export const isAccessibilityReport = (obj: any): obj is AccessibilityReport => {
-    return obj &&
-      typeof obj.url === 'string' &&
-      typeof obj.timestamp === 'string' &&
-      typeof obj.processingTimeMs === 'number' &&
-      obj.summary &&
-      Array.isArray(obj.violations);
+  export const isAccessibilityReport = (obj: unknown): obj is AccessibilityReport => {
+    if (typeof obj !== 'object' || obj === null) return false;
+    const candidate = obj as Record<string, unknown>;
+    return typeof candidate.url === 'string' &&
+      typeof candidate.timestamp === 'string' &&
+      typeof candidate.processingTimeMs === 'number' &&
+      typeof candidate.summary === 'object' &&
+      candidate.summary !== null &&
+      Array.isArray(candidate.violations);
   };
   
   export const hasAIExplanation = (violation: AccessibilityViolation): violation is AccessibilityViolation & { aiExplanation: AIExplanation } => {

@@ -1,0 +1,68 @@
+---
+title: "A practical SEO baseline for engineering teams"
+date: "2025-03-27"
+description: "A conservative checklist for making web content discoverable without treating rankings as a product feature."
+author: "Saqib Sohail"
+tags:
+  - Search quality
+  - Technical SEO
+  - Web performance
+reviewStatus: "publicly-verified"
+image: "/images/seo-trends-2025.png"
+---
+
+## Start with people, not ranking theories
+
+Search optimisation is useful when it helps people and search engines understand
+the same content. It is not a promise of ranking, traffic, or rich-result
+appearance. Google recommends people-first content with clear authorship,
+original value, and accurate sourcing rather than pages made primarily to
+attract search traffic.
+
+For a product team, that makes the first question practical: can a visitor
+understand what this page is for, who it is for, and what they can do next?
+
+## Build a dependable technical baseline
+
+Before adding tactics, make the rendered page available and understandable:
+
+- give each meaningful page a descriptive title, heading, and summary;
+- use stable, crawlable URLs and internal links;
+- render essential content and navigation as HTML, including when JavaScript is
+  slow or unavailable;
+- use canonical URLs when equivalent pages could otherwise compete; and
+- monitor indexing and page issues with the search tools for the target engine.
+
+These are engineering constraints, not a substitute for useful content.
+
+## Treat structured data as a description, not a growth hack
+
+Structured data can help a search engine interpret eligible content when the
+markup matches the visible page and follows its documented requirements. It
+does not guarantee a rich result or a particular position. Add it where a
+supported type accurately describes the page; validate it in development and
+keep it in step with the rendered content.
+
+## Keep AI-search advice deliberately boring
+
+There is no separate technical shortcut for appearing in AI-powered search
+features. Google’s current guidance is to follow the same foundation used for
+regular Search: allow crawling, keep pages indexable, and provide helpful,
+reliable content. A sensible implementation plan is therefore to improve page
+quality, source claims, and make important information easy to find—not to
+write for an assumed model behaviour.
+
+## A release checklist
+
+1. Confirm the page has one clear purpose and an accurate title.
+2. Check that primary content and links are present in the server response.
+3. Verify canonical metadata and internal links.
+4. Add structured data only when it truthfully describes visible content.
+5. Review Search Console after release for indexing or enhancement issues.
+6. Revisit the page when the product, evidence, or source guidance changes.
+
+## Sources
+
+- [Google: creating helpful, reliable, people-first content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
+- [Google: AI features and your website](https://developers.google.com/search/docs/appearance/ai-features)
+- [Google: how structured data markup works](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
