@@ -26,3 +26,16 @@ test('mobile navigation exposes the primary routes', async ({ page }, testInfo) 
   await expect(page.getByRole('navigation', { name: 'Mobile navigation' })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('homepage-mobile.png'), fullPage: true });
 });
+
+test('system flow lenses expose selected evidence with keyboard controls', async ({ page }, testInfo) => {
+  await page.goto('/');
+  const appliedAi = page.getByRole('tab', { name: 'Applied AI' });
+
+  await appliedAi.focus();
+  await page.keyboard.press('Enter');
+  await expect(appliedAi).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tabpanel')).toContainText('Applied-AI lens');
+  await page.getByRole('button', { name: /Data\/AI/i }).click();
+  await expect(page.getByRole('tabpanel')).toContainText('Selected focus: Data/AI.');
+  await page.screenshot({ path: testInfo.outputPath('homepage-desktop.png'), fullPage: true });
+});

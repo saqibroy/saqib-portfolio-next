@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 4 — Design foundations and theme
+**Current phase:** Phase 5 — Senior homepage
 
-**Current branch:** `phase-4-design-foundations` (stacked on Phase 3)
+**Current branch:** `phase-5-senior-homepage` (stacked on Phase 4)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE with one deferred route-level cleanup
+**Overall state:** DONE with one deferred performance measurement
 
 ## Status rules
 
@@ -32,7 +32,7 @@ whose status changes.
 | 2. Writing pipeline migration | DONE | Phase 1 commit `6c16e40` | Stacked PR; merge after Phases 0–1 |
 | 3. Framework/dependencies/quality | DONE | Phase 2 commit `169a6df` | Stacked PR; merge after Phases 0–2 |
 | 4. Design foundations/theme | DONE | Phase 3 commit `9ce7b49` | Stacked PR; merge after Phases 0–3 |
-| 5. Senior homepage | NOT STARTED | Phase 4 merged | Separate PR |
+| 5. Senior homepage | DONE | Phase 4 commit `53c7165` | Stacked PR; merge after Phases 0–4 |
 | 6. Work/case studies | NOT STARTED | Phases 1, 4, 5 | Separate PR |
 | 7. Experience/legacy CV route | NOT STARTED | Phases 1, 4 | Separate PR |
 | 8. Writing experience/review | NOT STARTED | Phases 2, 4 | Separate PR |
@@ -105,12 +105,12 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P5.01 | Server-render approved headline, proposition, proof, work, capabilities, writing, and CTAs | NOT STARTED | Phase 4 merged | — | Use typed content only |
-| P5.02 | Build semantic system-flow node controls and decorative SVG | NOT STARTED | P5.01 | — | No WebGL |
-| P5.03 | Add three accessible work-lens tabs and details region | NOT STARTED | P5.02 | — | Keyboard/touch/focus tests |
-| P5.04 | Provide text/no-JS and reduced-motion equivalents | NOT STARTED | P5.02 | — | Disable JS/motion in tests |
-| P5.05 | Feature approved work with Velsa fallback rule | NOT STARTED | P5.01; content review | — | Use Web Crawler if Velsa blocked |
-| P5.06 | Meet homepage accessibility and JS budget | NOT STARTED | P5.01–P5.05 | — | Record build/Lighthouse evidence |
+| P5.01 | Server-render approved headline, proposition, proof, work, capabilities, writing, and CTAs | DONE | Phase 4 commit `53c7165` | `src/app/page.tsx` consumes only `portfolioContent` | Recheck facts with any content-model changes |
+| P5.02 | Build semantic system-flow node controls and decorative SVG | DONE | P5.01 | `SystemFlow`; semantic buttons and decorative SVG connection | No WebGL/Three Fiber introduced |
+| P5.03 | Add three accessible work-lens tabs and details region | DONE | P5.02 | Playwright keyboard/click test; named tabpanel | Include touch/manual check in release checklist |
+| P5.04 | Provide text/no-JS and reduced-motion equivalents | DONE | P5.02 | Server-rendered labels/text flow and Phase 4 global motion policy | Add no-JS manual evidence in Phase 10 |
+| P5.05 | Feature approved work with Velsa fallback rule | DONE | P5.01; content review | Approved Velsa, Jobs Tracker Bot, and Tactical Tech summaries; Velsa labelled private/redacted | Replace Velsa with Web Crawler only if factual review changes |
+| P5.06 | Meet homepage accessibility and JS budget | DEFERRED | P5.01–P5.05 | Homepage axe assertions pass in both themes; production build passes | Capture agreed Lighthouse and first-load JS measurement in Phase 10 |
 
 ## Phase 6 — Work and case studies
 

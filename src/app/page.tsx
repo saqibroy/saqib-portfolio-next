@@ -1,225 +1,110 @@
-'use client'
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import Layout from '@/components/Layout'; // Keep Layout import
-import Link from 'next/link'; // Keep Link for Next.js environment
-import { Sparkles, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-// Enhanced Background Elements Component
-interface BackgroundElement {
-  id: number;
-  x: number;
-  y: number;
-  char: string;
-  delay: number;
-  duration: number;
-  color: string;
-  size: number; // Added size to interface
-}
+import { SystemFlow } from '@/components/home/SystemFlow';
+import { portfolioContent } from '@/content/portfolio';
 
-const BackgroundElements: React.FC<{ elements: BackgroundElement[] }> = React.memo(({ elements }) => {
-  const shouldReduceMotion = useReducedMotion();
-  
+const featuredProjectIds = ['ai-assisted-contract-workflow', 'jobs-tracker-bot', 'tactical-tech-modernisation'];
+
+export default function HomePage() {
+  const { profile, metrics, capabilities, projects, writing } = portfolioContent;
+  const featuredProjects = projects.filter((project) => featuredProjectIds.includes(project.id));
+
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      {/* Gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }} />
-      
-      {/* Code elements */}
-      {elements.map((element) => (
-        <motion.div
-          key={element.id}
-          className="absolute font-mono font-bold"
-          style={{
-            left: `${element.x}%`,
-            top: `${element.y}%`,
-            color: element.color,
-            fontSize: `${element.size}px`
-          }}
-          initial={{ opacity: 0, y: -50, rotate: -10 }}
-          animate={{ 
-            opacity: shouldReduceMotion ? [0, 0.4, 0] : [0, 0.8, 0],
-            y: shouldReduceMotion ? [0, 30, 60] : [0, 60, 120],
-            rotate: shouldReduceMotion ? [-10, 0, 10] : [-10, 5, 20]
-          }}
-          transition={{
-            duration: shouldReduceMotion ? element.duration * 0.8 : element.duration, // Slower duration
-            delay: element.delay,
-            repeat: Infinity,
-            repeatType: 'loop',
-            ease: "easeInOut"
-          }}
-          aria-hidden="true"
-        >
-          {element.char}
-        </motion.div>
-      ))}
+    <div className="homepage">
+      <section className="homepage-hero" aria-labelledby="homepage-title">
+        <p className="eyebrow">Berlin, Germany · {profile.positioning}</p>
+        <h1 id="homepage-title">{profile.headline}</h1>
+        <p className="homepage-proposition">{profile.proposition}</p>
+        <div className="homepage-actions">
+          <a className="button button-primary" href={profile.downloads.ats}>Download ATS CV</a>
+          <Link className="button button-secondary" href="/cv">View experience</Link>
+        </div>
+      </section>
+
+      <section className="proof-strip" aria-label="Selected evidence">
+        {metrics.map((metric) => (
+          <div key={metric.id}>
+            <strong>{metric.value}</strong>
+            <span>{metric.label}</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="homepage-section" aria-labelledby="systems-title">
+        <div className="section-intro">
+          <p className="eyebrow">How I work</p>
+          <h2 id="systems-title">Product systems, from interface to production</h2>
+          <p>{profile.summary}</p>
+        </div>
+        <SystemFlow capabilities={capabilities.slice(0, 5)} />
+      </section>
+
+      <section className="homepage-section" aria-labelledby="work-title">
+        <div className="section-intro section-intro-row">
+          <div>
+            <p className="eyebrow">Selected work</p>
+            <h2 id="work-title">Evidence before adjectives</h2>
+          </div>
+          <p>Concise project summaries now; full, reviewed case studies follow in the work phase.</p>
+        </div>
+        <div className="project-grid">
+          {featuredProjects.map((project) => (
+            <article key={project.id} className="project-card">
+              <p className="project-card-label">{project.visibility === 'private-redacted' ? 'Private / redacted' : 'Public project'}</p>
+              <h3>{project.title}</h3>
+              <p>{project.summary}</p>
+              <ul aria-label={`${project.title} technologies`}>
+                {project.technologies.slice(0, 5).map((technology) => <li key={technology}>{technology}</li>)}
+              </ul>
+              {project.repositoryUrl ? <a href={project.repositoryUrl} rel="noreferrer">View repository</a> : <span>Case study in preparation</span>}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="homepage-section homepage-section-muted" aria-labelledby="capabilities-title">
+        <div className="section-intro">
+          <p className="eyebrow">Capabilities</p>
+          <h2 id="capabilities-title">Grounded in delivery</h2>
+        </div>
+        <div className="capability-grid">
+          {capabilities.slice(0, 4).map((capability) => (
+            <article key={capability.id}>
+              <h3>{capability.title}</h3>
+              <p>{capability.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="homepage-section writing-preview" aria-labelledby="writing-title">
+        <div className="section-intro section-intro-row">
+          <div>
+            <p className="eyebrow">Writing</p>
+            <h2 id="writing-title">Technical notes under review</h2>
+          </div>
+          <Link href="/blog">Browse writing</Link>
+        </div>
+        <div className="writing-preview-list">
+          {writing.map((article) => (
+            <Link key={article.id} href={`/blog/${article.slug}`}>
+              <span>{article.categories[0]}</span>
+              <strong>{article.title}</strong>
+              <span>Read note →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="contact-panel" aria-labelledby="contact-title">
+        <p className="eyebrow">Let&apos;s talk</p>
+        <h2 id="contact-title">Have a product problem worth untangling?</h2>
+        <p>I&apos;m open to senior frontend and full-stack engineering conversations in Germany and across Europe.</p>
+        <div className="homepage-actions">
+          <a className="button button-primary" href={`mailto:${profile.email}`}>Email Saqib</a>
+          <a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a>
+        </div>
+      </section>
     </div>
   );
-});
-
-BackgroundElements.displayName = 'BackgroundElements';
-
-// Enhanced AI Badge for CTA buttons - Now directly on the button without a separate icon
-const EnhancedAIBadge = () => {
-  const shouldReduceMotion = useReducedMotion();
-  
-  return (
-    <motion.div 
-      className="absolute -top-3 -right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-xs font-bold shadow-lg border border-violet-400/40"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
-      animate={shouldReduceMotion ? {} : { 
-        boxShadow: [
-          '0 4px 15px rgba(139, 92, 246, 0.3)',
-          '0 4px 25px rgba(139, 92, 246, 0.5)',
-          '0 4px 15px rgba(139, 92, 246, 0.3)'
-        ]
-      }}
-      transition={{ duration: 2, repeat: Infinity }}
-    >
-      <motion.div
-        animate={shouldReduceMotion ? {} : { rotate: [0, 360] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      >
-        <Sparkles className="w-3 h-3" />
-      </motion.div>
-    </motion.div>
-  );
-};
-
-// Deterministic background elements generation
-const generateBackgroundElements = (count: number): BackgroundElement[] => {
-  const chars = ['0', '1', '>=', '<', '>', ',', '/', '{', '}', '()', '.', 'i', 'AI']; 
-  const colors = ['hsl(180, 70%, 50%)', 'hsl(240, 70%, 60%)', 'hsl(300, 70%, 70%)']; 
-  const sizes = [12, 16, 20, 24]; 
-
-  const elements: BackgroundElement[] = [];
-  
-  for (let i = 0; i < count; i++) {
-    const seed = i * 16807 % 2147483647;
-    const x = (seed % 100) / 100;
-    const y = ((seed * 16807) % 2147483647 % 100) / 100;
-    const charIndex = ((seed * 16807) % 2147483647) % chars.length;
-    const delay = (seed % 2000) / 1000;
-    const duration = 5 + (seed % 6000) / 1000; // Increased base duration for slower movement
-    const colorIndex = ((seed * 16807 * 2) % 2147483647) % colors.length;
-    const sizeIndex = ((seed * 16807 * 3) % 2147483647) % sizes.length;
-
-    elements.push({
-      id: i,
-      x: x * 100,
-      y: y * 100,
-      char: chars[charIndex],
-      delay,
-      duration,
-      color: colors[colorIndex],
-      size: sizes[sizeIndex]
-    });
-  }
-  
-  return elements;
-};
-
-const Home: React.FC = () => {
-  const [stage, setStage] = useState<number>(0);
-  const shouldReduceMotion = useReducedMotion();
-  const backgroundElements = useMemo(() => generateBackgroundElements(70), []); 
-
-  useEffect(() => {
-    const stages = [
-      () => {
-        setStage(1);
-        return () => {};
-      },
-      () => {
-        return () => {};
-      }
-    ];
-
-    const cleanup = stages[stage]();
-    return cleanup;
-  }, [stage]);
-
-  return (
-    <Layout>
-      <div className="relative bg-gray-950 text-white font-sans">
-        <Suspense fallback={<div className="fixed inset-0 bg-gray-900" />}>
-          <BackgroundElements elements={backgroundElements} />
-        </Suspense>
-
-        <div className="relative z-10 px-4 py-8 sm:py-16 pt-28 sm:pt-32">
-          <div className="w-full max-w-6xl mx-auto min-h-[calc(100vh-200px)] flex flex-col justify-center">
-            <motion.div 
-              className="text-center mb-8 sm:mb-12" 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: shouldReduceMotion ? 0.5 : 1 }}
-            >
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: shouldReduceMotion ? 0.25 : 0.5 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-300 via-green-300 to-purple-400 bg-clip-text text-transparent leading-tight px-2 sm:px-0 drop-shadow-lg" 
-              >
-                Full-Stack Engineer & Tech Enthusiast
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.2 }}
-                className="text-base sm:text-lg md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto px-2 sm:px-0 opacity-90 leading-relaxed" 
-              >
-                Building performant, accessible, and scalable web applications using modern technologies.
-                I also explore the exciting world of AI on my <a href="https://ssohail.com/blog" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">blog</a>.
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: shouldReduceMotion ? 0.25 : 0.5, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center text-center px-2 sm:px-0" 
-            >
-              <Link 
-                href="/cv"
-                className="w-full sm:w-auto inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium hover:from-blue-600 hover:to-green-600 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 relative overflow-hidden group" 
-              >
-                <motion.span 
-                  className="relative z-10 flex items-center justify-center gap-2"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                >
-                  Explore My Work
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
-                </motion.span>
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-              </Link>
-              
-              <Link 
-                href="/blog"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 transition-all duration-300 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 relative overflow-hidden border border-purple-400/20 group" 
-              >
-                <motion.div 
-                  className="relative flex items-center gap-3"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                >
-                  <EnhancedAIBadge />
-                </motion.div>
-                {/* Changed the text content */}
-                <span className="leading-none">See my Blog</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-fuchsia-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-    </Layout>
-  );
-};
-
-export default Home;
+}
