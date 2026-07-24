@@ -2,7 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: true,
+  // Next dev occasionally corrupts an in-flight RSC payload under parallel cold
+  // compilation. Serial execution keeps the browser suite deterministic.
+  workers: 1,
   reporter: 'list',
   use: {
     baseURL: 'http://127.0.0.1:3000',

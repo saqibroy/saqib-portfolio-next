@@ -85,7 +85,7 @@ whose status changes.
 | P3.03 | Align React 19.2, types, ESLint, and TypeScript | DONE | P3.02 | React/DOM 19.2.8, matching types, ESLint 9.39.5, Next 16 flat config | Keep aligned during dependency updates |
 | P3.04 | Add Node engine and Node 22 CI runtime | DONE | P3.02 | `package.json` engines; `.github/workflows/quality.yml` | Verify CI run after PR opens |
 | P3.05 | Replace `next lint`; add all approved scripts | DONE | P3.03 | `package.json` direct `eslint`, typecheck, test, e2e, a11y, build commands | Keep commands non-interactive |
-| P3.06 | Add Vitest, Testing Library, Playwright, axe, and CI | DONE | P3.05 | `vitest.config.ts`, tests, `playwright.config.ts`, workflow | Expand coverage in phases 4–9 |
+| P3.06 | Add Vitest, Testing Library, Playwright, axe, and CI | DONE | P3.05 | `vitest.config.ts`, tests, serial Playwright execution to avoid Next dev cold-compilation races, workflow | Expand coverage in phases 4–9 |
 | P3.07 | Resolve Motion warning and remove obsolete/undeclared packages | DONE | P3.03 | Next 16 build has no Motion warning; unused Contentlayer-era packages/components removed | Recheck after design migration |
 | P3.08 | Pass clean install, lint, typecheck, tests, build, and production audit | DONE | P3.01–P3.07 | `npm ci`, CI-compatible `npm@10.9.2 ci`, all six quality scripts, and `npm audit --omit=dev --audit-level=high` pass | Re-run before every merge and retain npm 10 lockfile compatibility while CI uses Node 22 |
 
@@ -97,7 +97,7 @@ whose status changes.
 | P4.02 | Add approved font pairing with measured loading | DONE | P4.01 | `next/font` Source Sans 3/Source Serif 4 use non-preloaded optional loading; mobile H1s retain a stable Georgia fallback | Recheck page-level impact if typography or font weights change |
 | P4.03 | Add no-flash system-default theme and accessible toggle | DONE | P4.01 | `next-themes`, hydration-safe `ThemeToggle`, browser persistence test | Cover both themes with axe assertions after route redesign |
 | P4.04 | Split server layout and client navigation/theme/contact islands | DONE | P4.03 | Server `SiteHeader`/`SiteFooter`; theme/mobile client islands; server compatibility layout | Remove compatibility wrapper as routes are redesigned |
-| P4.05 | Add skip link, focus system, zoom, landmarks, and dialog/menu behavior | DONE | P4.04 | Skip link, visible focus, unrestricted zoom, one shared `main`, mobile-menu keyboard test | Add dialog focus management if a future dialog returns |
+| P4.05 | Add skip link, focus system, zoom, landmarks, and dialog/menu behavior | DONE | P4.04 | Skip link and its programmatic-focus target, visible focus, unrestricted zoom, one shared `main`, mobile-menu keyboard test | Add dialog focus management if a future dialog returns |
 | P4.06 | Add application-level reduced motion | DONE | P4.04 | Global `prefers-reduced-motion` policy | Remove legacy continuous motion in Phase 5 homepage redesign |
 | P4.07 | Remove template decorations and deprecated navigation/clipboard code | DEFERRED | P4.04–P4.06 | Shared layout decorations and clipboard fallback removed | Homepage remains Phase 5; CV Phase 7; writing Phase 8; checker Phase 9. Each route replacement must remove its legacy styling. |
 
@@ -168,7 +168,7 @@ whose status changes.
 | P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local Lighthouse 12.8.2 JSON reports under `/tmp` | Repeat against deployment preview when available |
 | P10.06 | Pass performance and accessibility release budgets | DONE | P10.05 | Three-run local medians meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0); user approved the documented 161 kB shared-runtime exception on 2026-07-25 | Re-measure and revisit the exception if framework, global client islands, or first-load script composition changes materially |
-| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | IN PROGRESS | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; P10.06 exception approved; Vercel and GitHub Actions quality both passed for `9827e73`, but the protected preview redirects unauthenticated requests to Vercel SSO; user approved controlled production verification on 2026-07-25 | After current PR checks pass, merge PR #11 through review (not a direct push), verify `ssohail.com`, and use a revert commit—not history rewriting—if a production defect appears |
+| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | IN PROGRESS | P10.01–P10.06 | Production checks passed for routes, redirects, downloads, metadata, theme, mobile navigation, and Lighthouse; they also surfaced a skip-link focus defect, repaired on `phase-10-production-verification` | Merge the focused repair through review, repeat production checks, then complete remaining human assistive-technology checks in `release-checklist.md` |
 
 ## Blockers
 

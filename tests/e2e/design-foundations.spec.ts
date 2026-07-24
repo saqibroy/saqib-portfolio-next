@@ -6,7 +6,10 @@ test('theme toggle persists and shared navigation is keyboard reachable', async 
 
   await expect(themeToggle).toBeVisible();
   await page.keyboard.press('Tab');
-  await expect(page.getByText('Skip to main content')).toBeFocused();
+  const skipLink = page.getByText('Skip to main content');
+  await expect(skipLink).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main-content')).toBeFocused();
 
   await themeToggle.click();
   await expect(page.locator('html')).toHaveClass(/(light|dark)/);
