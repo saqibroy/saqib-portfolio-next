@@ -8,8 +8,8 @@ import { SiteHeader } from '@/components/site/SiteHeader';
 import { ThemeProvider } from '@/components/site/ThemeProvider';
 import { JsonLd } from '@/components/seo/JsonLd';
 
-const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' });
-const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'swap' });
+const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'optional', preload: false });
+const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'optional', preload: false });
 
 // Moved viewport and themeColor to their own exports as per Next.js 14+ recommendations
 export const viewport = {

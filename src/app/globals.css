@@ -201,6 +201,8 @@ a { color: inherit; }
 }
 
 @media (max-width: 600px) {
+  /* Keep the primary mobile heading stable while optional display fonts load. */
+  h1 { font-family: Georgia, serif; }
   .homepage-hero, .homepage-section, .contact-panel { width: min(100% - 1.25rem, 72rem); }
   .section-intro-row { display: block; }
   .section-intro-row > p { margin-top: 1rem; }

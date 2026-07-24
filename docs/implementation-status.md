@@ -94,7 +94,7 @@ whose status changes.
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
 | P4.01 | Add semantic light/dark design tokens and AA contrast evidence | DONE | Phase 3 commit `9ce7b49` | `globals.css` token pairs and light/dark browser screenshots | Recheck any new token pair before use |
-| P4.02 | Add approved font pairing with measured loading | DONE | P4.01 | `next/font` Source Sans 3/Source Serif 4 with swap loading | Measure page-level impact in Phase 10 |
+| P4.02 | Add approved font pairing with measured loading | DONE | P4.01 | `next/font` Source Sans 3/Source Serif 4 use non-preloaded optional loading; mobile H1s retain a stable Georgia fallback | Recheck page-level impact if typography or font weights change |
 | P4.03 | Add no-flash system-default theme and accessible toggle | DONE | P4.01 | `next-themes`, hydration-safe `ThemeToggle`, browser persistence test | Cover both themes with axe assertions after route redesign |
 | P4.04 | Split server layout and client navigation/theme/contact islands | DONE | P4.03 | Server `SiteHeader`/`SiteFooter`; theme/mobile client islands; server compatibility layout | Remove compatibility wrapper as routes are redesigned |
 | P4.05 | Add skip link, focus system, zoom, landmarks, and dialog/menu behavior | DONE | P4.04 | Skip link, visible focus, unrestricted zoom, one shared `main`, mobile-menu keyboard test | Add dialog focus management if a future dialog returns |
@@ -167,7 +167,7 @@ whose status changes.
 | P10.03 | Rewrite README and add architecture/setup/quality/deploy docs | DONE | Phases 1–9 | `README.md`, `docs/release-checklist.md` | Keep commands and deployment notes current |
 | P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local Lighthouse 12.8.2 JSON reports under `/tmp` | Repeat against deployment preview when available |
-| P10.06 | Pass performance and accessibility release budgets | DEFERRED | P10.05 | After removing telemetry and an unused 58 kB mono font: accessibility/SEO 100, CLS 0; LCP median 2.60–2.84 s and script transfer 161 kB | Revisit after performance work brings LCP ≤2.5 s and homepage scripts <130 kB, or approve documented exception |
+| P10.06 | Pass performance and accessibility release budgets | DEFERRED | P10.05 | Three-run local medians now meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0) on all release routes; script transfer remains 161 kB (157 KiB) | Revisit only after homepage script transfer is below 130 kB, or an explicit exception is approved; framework/runtime payload is the remaining gap |
 | P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DEFERRED | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; `release-checklist.md` records remaining manual/preview items | Revisit when a Vercel preview and approved performance disposition are available |
 
 ## Blockers

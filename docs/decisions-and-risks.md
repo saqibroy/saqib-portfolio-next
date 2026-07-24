@@ -17,7 +17,7 @@
 | D-007 | Move content-pipeline/framework remediation before redesign | Keep upgrade late | Current clean install is blocked and production dependencies are vulnerable | Accepted |
 | D-008 | Use `upgrade` only for Phase 0 | Long-lived integration branch; one rebuild PR | Keeps the first delivery reviewable and follows the approved branch strategy | Accepted |
 | D-009 | Keep Accessibility Checker unlinked and `noindex` after local hardening | Promote after local proxy changes; remove route | Local checks cannot prove target-side SSRF, redirect, DNS rebinding, concurrency, deployment rate limits, or privacy controls | Accepted; promotion deferred |
-| R-010 | Local Lighthouse mobile LCP and script-transfer targets are not met | Declare release ready from scores alone; remove measurements | After removing telemetry and an unused mono font, median LCP is 2.60–2.84 s and transferred scripts are 161 kB; accessibility/SEO/CLS are within target | Revisit with performance reduction or an approved exception before release |
+| D-020 | Keep release gated on the strict shared-runtime JavaScript budget | Declare release ready from scores alone; remove measurements | Font loading remediation brings local LCP medians to 1.71–1.83 s with accessibility/SEO 100 and CLS 0, but transferred scripts remain 161 kB | Revisit with a payload reduction or an approved exception before release |
 | D-009 | Use Server Components by default | Keep client-rendered page shells | Reduces JavaScript and separates interaction from content | Accepted |
 | D-010 | Use semantic HTML nodes plus decorative SVG for the hero flow | SVG-only controls; canvas/WebGL | Stronger keyboard/no-JS behavior and lower performance risk | Accepted |
 | D-011 | Do not add React Three Fiber/WebGL | Desktop-only enhancement | No evidence it improves the story enough to justify the cost | Accepted |
@@ -29,6 +29,7 @@
 | D-017 | Remove unverified AI/audio/comments/sharing from article rendering | Keep isolated controls visible while reviewing | The features are not verified for availability, privacy, accessibility, or cost, and must not be advertised | Accepted |
 | D-018 | Retain ESLint 9 with Next 16 | Use ESLint 10 immediately | The Next 16 React plugin configuration crashes under ESLint 10; ESLint 9 satisfies Next 16's peer range and runs the full ruleset | Accepted |
 | D-019 | Use secure stable nested overrides for Next's PostCSS and Sharp paths | Wait for an upstream Next release; force npm audit remediation | Current stable PostCSS 8.5.22 and Sharp 0.35.3 resolve the production audit without downgrading or preview software | Accepted |
+| D-021 | Make selected web fonts optional and keep mobile H1s on a stable local serif fallback | Preload fonts with `swap`; remove the serif identity | Prevents late font application from becoming the mobile LCP while preserving the CV-inspired pairing when the fonts are available | Accepted |
 
 ## Risk register
 
@@ -50,7 +51,7 @@
 | R-014 | CI Lighthouse thresholds are flaky | Medium / Medium | Use controlled preview, three-run medians, hard budgets plus documented tolerance | Phase 10 | First CI baseline | Open |
 | R-015 | Untracked user artifacts are accidentally removed | Low / High | Never clean them implicitly; track ignore/disposition separately | All | Before cleanup/ignore change | Monitoring |
 | R-016 | CV files drift from website facts | Medium / Medium | Stable downloads and shared release checklist comparing dates/title/languages | Phases 1/10 | Every CV replacement | Open |
-| R-017 | Source Sans/Serif loading harms LCP or privacy | Low / Medium | Use `next/font`, subset, preload only required weights, measure | Phase 4 | Font implementation | Open |
+| R-017 | Source Sans/Serif loading harms LCP or privacy | Low / Medium | Use local `next/font` assets, optional non-preloaded loading, stable mobile H1 fallback, and repeatable Lighthouse evidence | Phases 4/10 | Any typography or font-weight change | Mitigated |
 | R-018 | Locked Next 16.2.11 carries nested high advisories | High / High | Stable `postcss`/`sharp` overrides resolve the nested paths; re-run production audit before merge | Phase 3 | Any Next or override update | Mitigated |
 
 ## Deferred decisions with defaults
