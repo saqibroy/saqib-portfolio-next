@@ -6,7 +6,7 @@
 
 **Last updated:** 2026-07-24
 
-**Overall state:** IN PROGRESS; local release work is complete, performance and preview gates remain DEFERRED
+**Overall state:** IN PROGRESS; the local performance gate is complete with an approved runtime exception, and preview/manual release verification remains
 
 ## Status rules
 
@@ -167,8 +167,8 @@ whose status changes.
 | P10.03 | Rewrite README and add architecture/setup/quality/deploy docs | DONE | Phases 1–9 | `README.md`, `docs/release-checklist.md` | Keep commands and deployment notes current |
 | P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local Lighthouse 12.8.2 JSON reports under `/tmp` | Repeat against deployment preview when available |
-| P10.06 | Pass performance and accessibility release budgets | DEFERRED | P10.05 | Three-run local medians now meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0) on all release routes; script transfer remains 161 kB (157 KiB) | Revisit only after homepage script transfer is below 130 kB, or an explicit exception is approved; framework/runtime payload is the remaining gap |
-| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DEFERRED | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; `release-checklist.md` records remaining manual/preview items | Revisit when a Vercel preview and approved performance disposition are available |
+| P10.06 | Pass performance and accessibility release budgets | DONE | P10.05 | Three-run local medians meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0); user approved the documented 161 kB shared-runtime exception on 2026-07-25 | Re-measure and revisit the exception if framework, global client islands, or first-load script composition changes materially |
+| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | IN PROGRESS | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; P10.06 exception approved | Create a Vercel preview, then execute and record every applicable item in `release-checklist.md` |
 
 ## Blockers
 

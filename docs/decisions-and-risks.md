@@ -17,7 +17,7 @@
 | D-007 | Move content-pipeline/framework remediation before redesign | Keep upgrade late | Current clean install is blocked and production dependencies are vulnerable | Accepted |
 | D-008 | Use `upgrade` only for Phase 0 | Long-lived integration branch; one rebuild PR | Keeps the first delivery reviewable and follows the approved branch strategy | Accepted |
 | D-009 | Keep Accessibility Checker unlinked and `noindex` after local hardening | Promote after local proxy changes; remove route | Local checks cannot prove target-side SSRF, redirect, DNS rebinding, concurrency, deployment rate limits, or privacy controls | Accepted; promotion deferred |
-| D-020 | Keep release gated on the strict shared-runtime JavaScript budget | Declare release ready from scores alone; remove measurements | Font loading remediation brings local LCP medians to 1.71–1.83 s with accessibility/SEO 100 and CLS 0, but transferred scripts remain 161 kB | Revisit with a payload reduction or an approved exception before release |
+| D-020 | Keep release gated on the strict shared-runtime JavaScript budget | Declare release ready from scores alone; remove measurements | Font loading remediation brings local LCP medians to 1.71–1.83 s with accessibility/SEO 100 and CLS 0, but transferred scripts remain 161 kB | Superseded by the bounded exception in D-022 |
 | D-009 | Use Server Components by default | Keep client-rendered page shells | Reduces JavaScript and separates interaction from content | Accepted |
 | D-010 | Use semantic HTML nodes plus decorative SVG for the hero flow | SVG-only controls; canvas/WebGL | Stronger keyboard/no-JS behavior and lower performance risk | Accepted |
 | D-011 | Do not add React Three Fiber/WebGL | Desktop-only enhancement | No evidence it improves the story enough to justify the cost | Accepted |
@@ -30,6 +30,7 @@
 | D-018 | Retain ESLint 9 with Next 16 | Use ESLint 10 immediately | The Next 16 React plugin configuration crashes under ESLint 10; ESLint 9 satisfies Next 16's peer range and runs the full ruleset | Accepted |
 | D-019 | Use secure stable nested overrides for Next's PostCSS and Sharp paths | Wait for an upstream Next release; force npm audit remediation | Current stable PostCSS 8.5.22 and Sharp 0.35.3 resolve the production audit without downgrading or preview software | Accepted |
 | D-021 | Make selected web fonts optional and keep mobile H1s on a stable local serif fallback | Preload fonts with `swap`; remove the serif identity | Prevents late font application from becoming the mobile LCP while preserving the CV-inspired pairing when the fonts are available | Accepted |
+| D-022 | Accept a bounded 161 kB shared-runtime JavaScript exception for this release | Rework the approved Next App Router architecture; block release indefinitely | The user approved the 31 kB difference after local measurements confirmed all user-facing LCP, accessibility, SEO, and CLS targets pass | Accepted 2026-07-25; re-measure after material framework or client-island changes |
 
 ## Risk register
 
