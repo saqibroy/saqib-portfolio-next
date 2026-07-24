@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 9 — Accessibility checker security gate
+**Current phase:** Phase 10 — SEO, performance, documentation, and release
 
-**Current branch:** `phase-9-accessibility-security` (stacked on Phase 8)
+**Current branch:** `phase-10-release-readiness` (stacked on Phase 9)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE; Phase 10 is next; checker promotion is DEFERRED
+**Overall state:** IN PROGRESS; local release work is complete, performance and preview gates remain DEFERRED
 
 ## Status rules
 
@@ -37,7 +37,7 @@ whose status changes.
 | 7. Experience/legacy CV route | DONE | Phases 1, 4 | Separate PR |
 | 8. Writing experience/review | DONE | Phases 2, 4 | Separate PR |
 | 9. Accessibility security gate | DONE (promotion DEFERRED) | Phase 3; external evidence | Separate PR |
-| 10. SEO/performance/docs/release | NOT STARTED | Phases 5–9 dispositions | Separate PR |
+| 10. SEO/performance/docs/release | IN PROGRESS | Phases 5–9 dispositions | Separate PR; preview and performance follow-up required |
 
 ## Phase 0 — Audit, governance, and tracking
 
@@ -162,13 +162,13 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P10.01 | Add sitemap, robots, canonical metadata, OG image, and JSON-LD | NOT STARTED | Public routes stable | — | Validate generated output |
-| P10.02 | Standardize all public URLs on `ssohail.com` | NOT STARTED | P10.01 | — | Search obsolete hosts |
-| P10.03 | Rewrite README and add architecture/setup/quality/deploy docs | NOT STARTED | Phases 1–9 | — | Remove template claims |
-| P10.04 | Add light/dark desktop/mobile screenshots | NOT STARTED | UI stable | — | Store approved release captures |
-| P10.05 | Capture three-run median Lighthouse results | NOT STARTED | Preview deploy | — | Compare post-upgrade baseline |
-| P10.06 | Pass performance and accessibility release budgets | NOT STARTED | P10.05 | — | Document exceptions |
-| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | NOT STARTED | P10.01–P10.06 | — | Final release report |
+| P10.01 | Add sitemap, robots, canonical metadata, OG image, and JSON-LD | DONE | Public routes stable | Generated routes; `release-metadata.spec.ts`; production build | Recheck as public routes change |
+| P10.02 | Standardize all public URLs on `ssohail.com` | DONE | P10.01 | Metadata/sitemap/robots tests; obsolete public Vercel host removed | Recheck deployment configuration before release |
+| P10.03 | Rewrite README and add architecture/setup/quality/deploy docs | DONE | Phases 1–9 | `README.md`, `docs/release-checklist.md` | Keep commands and deployment notes current |
+| P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
+| P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local Lighthouse 12.8.2 JSON reports under `/tmp` | Repeat against deployment preview when available |
+| P10.06 | Pass performance and accessibility release budgets | DEFERRED | P10.05 | Lighthouse scores: accessibility/SEO 100, CLS 0; median mobile LCP ~3.02–3.03 s and script transfer 164 kB | Revisit after performance work brings LCP ≤2.5 s and homepage scripts <130 kB, or approve documented exception |
+| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DEFERRED | P10.01–P10.06 | Local automated redirects/downloads/metadata pass; `release-checklist.md` records manual/preview items | Revisit when a Vercel preview and approved performance disposition are available |
 
 ## Blockers
 

@@ -211,9 +211,9 @@ positioning. It is **Rewrite** to the approved engineering positioning.
 | Current item | Issue | Disposition |
 | --- | --- | --- |
 | Root title “Full Stack Developer” | Generic | Rewrite |
-| Open Graph URL `saqibroy.vercel.app` | Outdated | Replace with `ssohail.com` |
-| Referenced `/og-image.png` | File is absent | Generate in Phase 10 |
-| Static `public/sitemap.xml` | Incomplete and contains legacy `/cv` only | Replace with `sitemap.ts` |
+| Open Graph URL `saqibroy.vercel.app` | Outdated | DONE in Phase 10: canonical metadata uses `ssohail.com` |
+| Referenced `/og-image.png` | File is absent | DONE in Phase 10: generated `opengraph-image.tsx` |
+| Static `public/sitemap.xml` | Incomplete and contains legacy `/cv` only | DONE in Phase 10: removed in favour of `sitemap.ts` |
 | `lib/seo.ts` | Duplicated, generic, and apparently unused | Remove after metadata consolidation |
 | Twitter placeholder handle | Unsupported placeholder | Remove |
 | `maximumScale: 1` | Prevents expected zoom behavior | Remove in design foundation |
@@ -226,7 +226,7 @@ positioning. It is **Rewrite** to the approved engineering positioning.
 | Article originals | Two PNG files under `public/images/` | Preserve through writing review |
 | Article derivatives | Six WebP variants per article under `public/optimized-images/` | Preserve until image-pipeline decision |
 | Framework placeholders | `next.svg`, `vercel.svg`, `file.svg`, `globe.svg`, `window.svg` | Remove if confirmed unused |
-| Static sitemap | `public/sitemap.xml` | Replace in Phase 10 |
+| Static sitemap | `public/sitemap.xml` | Removed in Phase 10; dynamic sitemap route is authoritative |
 | TTS worker | `public/tts-worker.js` | Verify with the audio feature; remove if unused |
 | CV downloads | `public/downloads/saqib-sohail-cv-ats.pdf` and `public/downloads/saqib-sohail-cv-visual.pdf` | Added in Phase 1; ATS is primary |
 | OG image | Referenced but absent | Generate in Phase 10 |

@@ -9,6 +9,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { ThemeProvider } from '@/components/site/ThemeProvider';
+import { JsonLd } from '@/components/seo/JsonLd';
 
 const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' });
 const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'swap' });
@@ -24,6 +25,7 @@ export const viewport = {
 };
 
 const { profile } = portfolioContent;
+const siteUrl = 'https://ssohail.com';
 
 export const metadata: Metadata = {
   title: {
@@ -50,14 +52,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(profile.website),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: `${profile.name} — ${profile.positioning}`,
     description: profile.proposition,
-    url: profile.website,
+    url: siteUrl,
     siteName: `${profile.name} Portfolio`,
     locale: 'en_US',
     type: 'website',
@@ -107,6 +109,14 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
+          <JsonLd data={[
+            {
+              '@context': 'https://schema.org', '@type': 'Person', name: profile.name, url: siteUrl,
+              jobTitle: profile.positioning, email: profile.email, address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
+              sameAs: [profile.githubUrl, profile.linkedinUrl],
+            },
+            { '@context': 'https://schema.org', '@type': 'WebSite', name: `${profile.name} Portfolio`, url: siteUrl, inLanguage: 'en' },
+          ]} />
           <a className="skip-link" href="#main-content">Skip to main content</a>
           <SiteHeader />
           <main id="main-content">{children}</main>

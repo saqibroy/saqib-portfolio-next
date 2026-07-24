@@ -17,6 +17,7 @@
 | D-007 | Move content-pipeline/framework remediation before redesign | Keep upgrade late | Current clean install is blocked and production dependencies are vulnerable | Accepted |
 | D-008 | Use `upgrade` only for Phase 0 | Long-lived integration branch; one rebuild PR | Keeps the first delivery reviewable and follows the approved branch strategy | Accepted |
 | D-009 | Keep Accessibility Checker unlinked and `noindex` after local hardening | Promote after local proxy changes; remove route | Local checks cannot prove target-side SSRF, redirect, DNS rebinding, concurrency, deployment rate limits, or privacy controls | Accepted; promotion deferred |
+| R-010 | Local Lighthouse mobile LCP and script-transfer targets are not met | Declare release ready from scores alone; remove measurements | Median LCP is approximately 3.02–3.03 s and transferred scripts are 164 kB; accessibility/SEO/CLS are within target | Revisit with performance reduction or an approved exception before release |
 | D-009 | Use Server Components by default | Keep client-rendered page shells | Reduces JavaScript and separates interaction from content | Accepted |
 | D-010 | Use semantic HTML nodes plus decorative SVG for the hero flow | SVG-only controls; canvas/WebGL | Stronger keyboard/no-JS behavior and lower performance risk | Accepted |
 | D-011 | Do not add React Three Fiber/WebGL | Desktop-only enhancement | No evidence it improves the story enough to justify the cost | Accepted |

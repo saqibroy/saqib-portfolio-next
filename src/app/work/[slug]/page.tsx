@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { caseStudies, caseStudySectionKeys } from '@/content/caseStudies';
+import { JsonLd } from '@/components/seo/JsonLd';
 
 type Props = { params: Promise<{ slug: string }> };
 const labels = { context:'Context', problem:'Problem', constraints:'Constraints', role:'Role', architecture:'Architecture', requestDataFlow:'Request and data flow', decisions:'Decisions', alternatives:'Alternatives considered', tradeOffs:'Trade-offs', reliabilitySecurityAccessibility:'Reliability, security, and accessibility', testingDelivery:'Testing and delivery', outcome:'Outcome', nextImprovements:'Next improvements', evidence:'Evidence' } as const;
@@ -12,6 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> { c
 export default async function CaseStudyPage({ params }: Props) {
   const { slug } = await params; const item = caseStudies.find((entry) => entry.slug === slug); if (!item) notFound();
   return <article className="case-study">
+    <JsonLd data={{ '@context': 'https://schema.org', '@type': 'CreativeWork', name: item.title, description: item.summary, url: `https://ssohail.com/work/${item.slug}`, author: { '@type': 'Person', name: 'Saqib Sohail' }, keywords: item.capabilities.join(', ') }} />
     <nav aria-label="Breadcrumb"><Link href="/work">Work</Link><span aria-hidden="true"> / </span><span>{item.title}</span></nav>
     <header><p className="eyebrow">{item.visibility === 'private-redacted' ? 'Private / redacted case study' : 'Public case study'}</p><h1>{item.title}</h1><p>{item.summary}</p></header>
     <dl className="case-study-facts"><div><dt>Capabilities</dt><dd>{item.capabilities.join(' · ')}</dd></div><div><dt>Stack</dt><dd>{item.stack.join(' · ')}</dd></div></dl>
