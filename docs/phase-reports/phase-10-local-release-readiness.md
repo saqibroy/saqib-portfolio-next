@@ -65,3 +65,14 @@ On 2026-07-25, `npx --yes vercel@latest --yes` was attempted from this branch.
 The Vercel CLI rejected the configured token as invalid before project linking or
 deployment. No preview was created. Refresh Vercel authentication before
 retrying; do not replace or expose credentials in the repository.
+
+## Git-integrated preview
+
+The `phase-10-release-readiness` branch was pushed to GitHub on 2026-07-25.
+Vercel reported the deployment for commit `45fe260` as successful. Its generated
+preview is
+`https://ssohail-git-phase-10-release-readiness-saqibs-projects-99eb8124.vercel.app`.
+Vercel Authentication protects that URL and redirects unauthenticated requests
+to SSO, so automated external verification cannot proceed from this environment
+yet. Open it while signed in to Vercel, or grant a secure automation bypass
+outside the repository; never commit a token or bypass secret.

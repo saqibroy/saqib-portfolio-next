@@ -168,7 +168,7 @@ whose status changes.
 | P10.04 | Add light/dark desktop/mobile screenshots | DONE | UI stable | `release-visual.spec.ts`; inspected generated four-viewport capture set | Re-capture from a deployment preview before final merge |
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local Lighthouse 12.8.2 JSON reports under `/tmp` | Repeat against deployment preview when available |
 | P10.06 | Pass performance and accessibility release budgets | DONE | P10.05 | Three-run local medians meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0); user approved the documented 161 kB shared-runtime exception on 2026-07-25 | Re-measure and revisit the exception if framework, global client islands, or first-load script composition changes materially |
-| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | IN PROGRESS | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; P10.06 exception approved; 2026-07-25 one-off Vercel CLI preview attempt rejected an invalid configured token | Refresh Vercel authentication, then create a preview and execute every applicable item in `release-checklist.md` |
+| P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | IN PROGRESS | P10.01–P10.06 | Local automated redirects/downloads/metadata and no-JavaScript comprehension pass; P10.06 exception approved; Vercel completed the `45fe260` preview deployment, but its protected URL redirects unauthenticated requests to Vercel SSO | Grant automated preview access or provide a Vercel protection-bypass mechanism outside the repository, then execute every applicable item in `release-checklist.md` |
 
 ## Blockers
 
