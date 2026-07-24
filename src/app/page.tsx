@@ -83,11 +83,11 @@ export default function HomePage() {
             <p className="eyebrow">Writing</p>
             <h2 id="writing-title">Technical notes under review</h2>
           </div>
-          <Link href="/blog">Browse writing</Link>
+          <Link href="/writing">Browse writing</Link>
         </div>
         <div className="writing-preview-list">
           {writing.map((article) => (
-            <Link key={article.id} href={`/blog/${article.slug}`}>
+            <Link key={article.id} href={`/writing/${article.slug}`}>
               <span>{article.categories[0]}</span>
               <strong>{article.title}</strong>
               <span>Read note →</span>

@@ -7,7 +7,7 @@ const links = [
   { href: '/', label: 'Home' },
   { href: '/work', label: 'Work' },
   { href: '/experience', label: 'Experience' },
-  { href: '/blog', label: 'Writing' },
+  { href: '/writing', label: 'Writing' },
 ];
 
 export function SiteHeader() {

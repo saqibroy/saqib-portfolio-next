@@ -364,20 +364,20 @@ const writing: WritingMeta[] = [
   {
     id: 'seo-trends-2025',
     slug: 'seo-trends-2025',
-    title: 'SEO in 2025: 10 Game-Changing Trends That Actually Matter',
-    description: 'Existing article retained for a later editorial and source review.',
+    title: 'A practical SEO baseline for engineering teams',
+    description: 'A conservative checklist for making web content discoverable without treating rankings as a product feature.',
     date: '2025-03-27',
-    categories: ['SEO', 'needs-review'],
-    reviewStatus: 'needs-review',
+    categories: ['Search quality', 'Technical SEO'],
+    reviewStatus: 'publicly-verified',
   },
   {
     id: 'web-accessibility-2025',
     slug: 'web-accessibility-2025',
-    title: "Web Accessibility in 2025: A Frontend Developer's Complete Guide to WCAG and Beyond",
-    description: 'Existing article retained for a later editorial and source review.',
+    title: 'A practical accessibility baseline for frontend teams',
+    description: 'A delivery-focused guide to semantic HTML, keyboard access, contrast, and testing against WCAG 2.2.',
     date: '2025-06-25',
-    categories: ['Accessibility', 'needs-review'],
-    reviewStatus: 'needs-review',
+    categories: ['Accessibility', 'Frontend engineering'],
+    reviewStatus: 'publicly-verified',
   },
 ];
 

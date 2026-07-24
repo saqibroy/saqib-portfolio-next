@@ -48,6 +48,7 @@ function parsePost(fileName: string, source: string): WritingPost {
   const description = requiredString(data.description, 'description', fileName);
   const author = optionalString(data.author, 'author', fileName);
   const image = optionalString(data.image, 'image', fileName);
+  const reviewStatus = requiredString(data.reviewStatus, 'reviewStatus', fileName) as WritingReviewStatus;
 
   if (!isoDatePattern.test(date) || Number.isNaN(Date.parse(`${date}T00:00:00.000Z`))) {
     throw new Error(`Writing frontmatter in ${fileName} must use a valid YYYY-MM-DD date.`);
@@ -55,6 +56,10 @@ function parsePost(fileName: string, source: string): WritingPost {
 
   if (image && !image.startsWith('/')) {
     throw new Error(`Writing frontmatter image in ${fileName} must be a local absolute path.`);
+  }
+
+  if (!['approved', 'publicly-verified', 'needs-review'].includes(reviewStatus)) {
+    throw new Error(`Writing frontmatter in ${fileName} has an invalid reviewStatus.`);
   }
 
   if (!Array.isArray(data.tags) || data.tags.some((tag) => typeof tag !== 'string' || tag.trim().length === 0)) {
@@ -73,8 +78,7 @@ function parsePost(fileName: string, source: string): WritingPost {
     image,
     body: content,
     readingTimeMinutes: Math.max(1, Math.ceil(words.length / 220)),
-    // Both migrated articles need their factual claims reviewed in Phase 8.
-    reviewStatus: 'needs-review',
+    reviewStatus,
   };
 }
 

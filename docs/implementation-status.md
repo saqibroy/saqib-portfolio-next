@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 7 — Experience and legacy CV route
+**Current phase:** Phase 8 — Writing experience and review
 
-**Current branch:** `phase-7-experience-redirect` (stacked on Phase 6)
+**Current branch:** `phase-8-writing-experience` (stacked on Phase 7)
 
 **Last updated:** 2026-07-24
 
-**Overall state:** DONE; Phase 8 is next
+**Overall state:** DONE; Phase 9 is next
 
 ## Status rules
 
@@ -35,7 +35,7 @@ whose status changes.
 | 5. Senior homepage | DONE | Phase 4 commit `53c7165` | Stacked PR; merge after Phases 0–4 |
 | 6. Work/case studies | DONE | Phase 5 commit `40eeb41` | Stacked PR; merge after Phases 0–5 |
 | 7. Experience/legacy CV route | DONE | Phases 1, 4 | Separate PR |
-| 8. Writing experience/review | NOT STARTED | Phases 2, 4 | Separate PR |
+| 8. Writing experience/review | DONE | Phases 2, 4 | Separate PR |
 | 9. Accessibility security gate | NOT STARTED | Phase 3; external evidence | Separate PR |
 | 10. SEO/performance/docs/release | NOT STARTED | Phases 5–9 dispositions | Separate PR |
 
@@ -138,13 +138,13 @@ whose status changes.
 
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
-| P8.01 | Add `/writing` and `/writing/[slug]` | NOT STARTED | Phases 2/4 | — | Use server MDX |
-| P8.02 | Permanently redirect `/blog` and both slugs | NOT STARTED | P8.01 | — | Redirect/canonical tests |
-| P8.03 | Review/source/correct SEO article | NOT STARTED | P8.01 | — | Preserve original in Git |
-| P8.04 | Review/source/correct accessibility article | NOT STARTED | P8.01 | — | Use primary sources |
-| P8.05 | Remove generic AI/audio marketing | NOT STARTED | P8.01 | — | Retain only reviewed features |
-| P8.06 | Add system-design category without new top-level route | NOT STARTED | P8.01 | — | Revisit at three reviewed notes |
-| P8.07 | Meet article accessibility and JS budget | NOT STARTED | P8.01–P8.06 | — | Record build/Lighthouse evidence |
+| P8.01 | Add `/writing` and `/writing/[slug]` | DONE | Phases 2/4 | Server routes, static params, metadata, and browser route tests | Keep rendering in server components |
+| P8.02 | Permanently redirect `/blog` and both slugs | DONE | P8.01 | `writing.spec.ts` asserts 308 and target for index and both existing slugs | Include redirects in Phase 10 sitemap/canonical review |
+| P8.03 | Review/source/correct SEO article | DONE | P8.01 | `seo-trends-2025.mdx`; Google primary-source links; content inventory entry | Re-review when the cited guidance materially changes |
+| P8.04 | Review/source/correct accessibility article | DONE | P8.01 | `web-accessibility-2025.mdx`; W3C and WHO source links; content inventory entry | Re-review when WCAG/source guidance materially changes |
+| P8.05 | Remove generic AI/audio marketing | DONE | P8.01 | New server pages omit audio, comments, sharing, and AI-promotional UI; source review removes AI-search promises | Add a feature only after privacy, accessibility, and cost review |
+| P8.06 | Add system-design category without new top-level route | DEFERRED | P8.01 | No approved system-design note exists to publish; no empty category is advertised | Revisit when an approved system-design note is ready for `/writing` |
+| P8.07 | Meet article accessibility and JS budget | DEFERRED | P8.01–P8.06 | Axe checks pass for index/article in both themes; production build passes | Capture route JavaScript and Lighthouse measurements in Phase 10 |
 
 ## Phase 9 — Accessibility checker security gate
 

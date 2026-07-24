@@ -84,8 +84,8 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | --- | --- | --- | --- |
 | `/` | Generic animated hero, technology copy, CV/blog CTAs | Rewrite | Senior homepage |
 | `/cv` | Legacy route | DONE in Phase 7 | Permanent redirect to `/experience` |
-| `/blog` | Server-rendered two-post writing index; articles remain `needs-review` | Rewrite | `/writing`; permanent redirect |
-| `/blog/[slug]` | Server-rendered MDX article; source preserved, no promoted audio/AI/comments/sharing | Rewrite | `/writing/[slug]`; preserve slugs |
+| `/blog` | Legacy route | DONE in Phase 8 | Permanent redirect to `/writing` |
+| `/blog/[slug]` | Legacy article routes | DONE in Phase 8 | Permanent redirect to `/writing/[slug]`; slugs preserved |
 | `/accessibility-checker` | Public form and AI-enhanced results UI | Defer | Keep unlinked and `noindex` |
 | `/api/check-accessibility` | Proxy plus Gemini explanations | Defer | Security-gated API |
 | `/api/generate-audio-summary` | Gemini summary generation endpoint | Verify | Retain only if feature/privacy/cost review passes |
@@ -169,8 +169,8 @@ No article source will be deleted during migration.
 
 | Article | Current route | Disposition | Required review |
 | --- | --- | --- | --- |
-| SEO in 2025: 10 Game-Changing Trends That Actually Matter | `/blog/seo-trends-2025` | Preserve, then rewrite/verify | Dated predictions, search-intent percentages, ranking claims, “dominate” language, and authority claims |
-| Web Accessibility in 2025: A Frontend Developer's Complete Guide to WCAG and Beyond | `/blog/web-accessibility-2025` | Preserve, then rewrite/verify | Disability/statistics, legal-standard claims, “90%”, automated-testing percentages, lawsuit/revenue statistics, and code-pattern accuracy |
+| SEO in 2025: 10 Game-Changing Trends That Actually Matter | `/writing/seo-trends-2025` | DONE in Phase 8: revised as “A practical SEO baseline for engineering teams” | Removed dated predictions, percentages, ranking guarantees, and promotional language; retained source-linked engineering guidance |
+| Web Accessibility in 2025: A Frontend Developer's Complete Guide to WCAG and Beyond | `/writing/web-accessibility-2025` | DONE in Phase 8: revised as “A practical accessibility baseline for frontend teams” | Removed legal, lawsuit, revenue, and unsupported testing claims; retained WCAG/WHO source-linked engineering guidance |
 
 The current index says every post has AI-generated audio. That statement is
 **Remove** until the feature, privacy behavior, availability, and cost controls
