@@ -17,7 +17,9 @@ Phase 11 is split into the planned four-part stack:
 3. PR #16 applies the engineering-dossier experience and deferred architecture
    maps to every case study.
 4. The final QA PR records visual, accessibility, performance, and release
-   evidence. It remains a draft until review is complete.
+   evidence as
+   [PR #17](https://github.com/saqibroy/saqib-portfolio-next/pull/17). It
+   remains a draft until review is complete.
 
 ## Delivered
 
@@ -61,6 +63,13 @@ The normal all-dependency install still reports one high-severity development
 advisory in a transitive tool path. The required production audit is clean; no
 forced audit rewrite was used.
 
+PR #17 initially exposed an npm 10 lockfile compatibility failure for four
+optional `@emnapi` entries. The lockfile was regenerated with npm 10.9.2 and
+then passed clean installs with both npm 10.9.2 and npm 11.6.2. The repaired
+GitHub Actions `quality` job passed its complete install, Playwright, lint,
+typecheck, unit, browser, axe, and build sequence in 2m31s. The Vercel
+deployment check also passed.
+
 ## Local performance evidence
 
 Environment: local production `next start`, Lighthouse 12.8.2 default mobile
@@ -103,6 +112,14 @@ final median LCP range is 2.23–2.39 s.
 `tests/e2e/release-visual.spec.ts` produces 14 temporary captures under
 `test-results/`. Generated screenshots and Playwright reports stay untracked
 by repository policy.
+
+The final protected Vercel preview is
+`https://ssohail-git-agent-phase-11-qa-saqibs-projects-99eb8124.vercel.app`.
+Unauthenticated requests redirect to Vercel SSO, so external automation cannot
+inspect that deployment without a separately managed bypass. The local
+production candidate and generated captures provide the automated and visual
+evidence; the user must open the preview while signed in for final interaction
+approval.
 
 Before release:
 
