@@ -112,14 +112,14 @@ export function SystemsLab({ capabilities }: { capabilities: readonly Capability
         setVisible(entry.isIntersecting);
         if (entry.isIntersecting && canRenderWebGL()) setCanvasReady(true);
       },
-      { rootMargin: '320px 0px' },
+      { rootMargin: '160px 0px' },
     );
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!canvasReady || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let cleanup = () => {};
     let cancelled = false;
 
@@ -148,7 +148,7 @@ export function SystemsLab({ capabilities }: { capabilities: readonly Capability
       cancelled = true;
       cleanup();
     };
-  }, []);
+  }, [canvasReady]);
 
   const moveLens = (current: Lens, direction: 1 | -1) => {
     const index = (lenses.indexOf(current) + direction + lenses.length) % lenses.length;

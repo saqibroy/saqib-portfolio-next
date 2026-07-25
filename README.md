@@ -15,8 +15,8 @@ reviewed MDX writing, accessible interaction islands, and a small test suite.
   publicly.
 - **Small client islands** for theme preference, mobile navigation, the home
   system-flow interaction, and the deliberately unlinked checker form.
-- **Semantic design system** in `src/app/globals.css`: light/dark tokens,
-  Source Sans 3, Source Serif 4, visible focus, skip navigation, and
+- **Semantic design system** in `src/app/globals.css`: light/dark tokens, a
+  measured platform Arial/Georgia pairing, visible focus, skip navigation, and
   reduced-motion support.
 
 ## Public routes

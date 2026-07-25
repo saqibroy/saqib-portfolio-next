@@ -35,6 +35,7 @@
 | D-024 | Use “Senior full-stack engineer” as the prominent title and “Frontend-leaning full-stack engineer” as descriptive positioning | Repeat the longer positioning in every title surface | Removes duplicated hero language while retaining the approved frontend emphasis in summaries | Accepted 2026-07-25 |
 | D-025 | Use `8+ years` and `7+ products & platforms` as homepage proof | Keep Tactical Tech’s 30% and 50% outcomes in the global proof strip | Keeps role-specific outcomes in their evidence context and uses the user-approved cross-portfolio count on the homepage | Accepted 2026-07-25 |
 | D-026 | Add progressive focused graphics for Phase 11 | Keep the Phase 5 SVG-only flow; make WebGL a blocking page dependency | The user approved richer animation; server-rendered content, semantic controls, fallbacks, and performance gates remain mandatory | Accepted 2026-07-25 |
+| D-027 | Use platform Arial/Georgia fallbacks instead of delivering the Source font files | Keep optional Source webfonts; inline critical CSS; preload font files | Final-design tests showed the two local font files in the mobile critical chain and 2.68 s median LCP. The platform pairing preserves the restrained sans/serif direction while removing about 80 kB from that chain; final medians are 2.23–2.39 s | Accepted 2026-07-25; supersedes D-021 for web delivery and revisit only with a measured subset or delivery strategy |
 
 ## Risk register
 
@@ -56,10 +57,10 @@
 | R-014 | CI Lighthouse thresholds are flaky | Medium / Medium | Use controlled preview, three-run medians, hard budgets plus documented tolerance | Phase 10 | First CI baseline | Open |
 | R-015 | Untracked user artifacts are accidentally removed | Low / High | Never clean them implicitly; track ignore/disposition separately | All | Before cleanup/ignore change | Monitoring |
 | R-016 | CV files drift from website facts | Medium / Medium | Stable downloads and shared release checklist comparing dates/title/languages | Phases 1/10 | Every CV replacement | Open |
-| R-017 | Source Sans/Serif loading harms LCP or privacy | Low / Medium | Use local `next/font` assets, optional non-preloaded loading, stable mobile H1 fallback, and repeatable Lighthouse evidence | Phases 4/10 | Any typography or font-weight change | Mitigated |
+| R-017 | Source Sans/Serif loading harms LCP or privacy | Low / Medium | Use the platform Arial/Georgia pairing with no font request; retain repeatable Lighthouse evidence | Phases 4/10/11 | Any typography or font-delivery change | Mitigated by D-027 |
 | R-018 | Locked Next 16.2.11 carries nested high advisories | High / High | Stable `postcss`/`sharp` overrides resolve the nested paths; re-run production audit before merge | Phase 3 | Any Next or override update | Mitigated |
-| R-019 | Phase 11 animation increases first-load cost, motion burden, or input latency | Medium / High | Defer animation islands, pause them off-screen, lower mobile DPR, respect reduced motion/save-data, and measure core/deferred chunks separately | Phase 11 | Homepage preview and every animation dependency change | Open |
-| R-020 | Interactive architecture diagrams hide information from keyboard or assistive-technology users | Medium / High | Keep DOM controls and complete ordered-text equivalents; test keyboard, touch, no-JS, and reduced-motion states | Phase 11 | Case-study preview | Open |
+| R-019 | Phase 11 animation increases first-load cost, motion burden, or input latency | Medium / High | Defer animation islands, pause them off-screen, lower mobile DPR, respect reduced motion/save-data, and measure core/deferred chunks separately | Phase 11 | Homepage preview and every animation dependency change | Mitigated: strict LCP passes and deferred chunks are isolated |
+| R-020 | Interactive architecture diagrams hide information from keyboard or assistive-technology users | Medium / High | Keep DOM controls and complete ordered-text equivalents; test keyboard, touch, no-JS, and reduced-motion states | Phase 11 | Case-study preview | Mitigated: keyboard/no-JS/text-equivalent and two-theme axe coverage pass |
 
 ## Deferred decisions with defaults
 

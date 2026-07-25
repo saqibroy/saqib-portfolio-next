@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Source_Serif_4 } from 'next/font/google';
 import { portfolioContent } from '@/content/portfolio';
 import "./globals.css";
 
@@ -7,9 +6,6 @@ import { SiteFooter } from '@/components/site/SiteFooter';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { ThemeProvider } from '@/components/site/ThemeProvider';
 import { JsonLd } from '@/components/seo/JsonLd';
-
-const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'optional', preload: false });
-const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'optional', preload: false });
 
 // Moved viewport and themeColor to their own exports as per Next.js 14+ recommendations
 export const viewport = {
@@ -99,11 +95,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${sourceSans.variable} ${sourceSerif.variable}`}>
-      <head>
-        <link rel="preconnect" href="https://github.com" />
-        <link rel="preconnect" href="https://linkedin.com" />
-      </head>
+    <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider>
           <JsonLd data={[
