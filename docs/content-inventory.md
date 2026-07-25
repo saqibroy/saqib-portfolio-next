@@ -67,6 +67,17 @@ These facts may enter the Phase 1 claim registry as `approved`.
 
 Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 
+### Tactical Tech system-audit boundaries, Phase 13
+
+- Local repository evidence verifies a Git-backed editorial workflow that
+  transforms content for a REST Content API consumed by Next.js and Vue
+  project sites. A central search interface queries the same API across
+  configured project namespaces.
+- The audit does not prove deployment ownership, organisation-wide operations,
+  individual authorship of every repository, or production performance beyond
+  the approved metrics above. See `docs/tactical-tech-system-audit.md` for
+  repository paths and implementation references.
+
 ### Approved public-project summaries
 
 - **Jobs Tracker Bot:** async Python job aggregation; direct ATS/provider

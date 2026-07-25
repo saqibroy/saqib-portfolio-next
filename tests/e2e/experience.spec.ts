@@ -22,6 +22,7 @@ test('experience exposes both CV downloads', async ({ page, request }, testInfo)
 test('experience remains readable on mobile', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/experience');
-  await expect(page.getByRole('heading', { name: 'Roles and contributions' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Selected roles' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Education & languages' })).toHaveCount(0);
   await page.screenshot({ path: testInfo.outputPath('experience-mobile.png'), fullPage: true });
 });

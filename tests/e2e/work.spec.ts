@@ -20,18 +20,16 @@ test('redacted case study keeps its boundary and collapsed text equivalent', asy
   await page.screenshot({ path: testInfo.outputPath('case-study-mobile.png'), fullPage: true });
 });
 
-test('Jobs Tracker exposes its compact outcomes, evidence, decisions, and architecture controls', async ({ page }, testInfo) => {
+test('Jobs Tracker exposes its compact outcomes, evidence, decisions, and project-specific architecture', async ({ page }, testInfo) => {
   await page.goto('/work/jobs-tracker-bot');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Jobs Tracker Bot');
   await expect(page.getByText('520+', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /Public repository/i })).toHaveAttribute('href', 'https://github.com/saqibroy/jobs-tracker-bot');
   await expect(page.locator('.case-study-decisions article')).toHaveCount(3);
   await page.getByText('Jobs Tracker Bot architecture and workflow').scrollIntoViewIfNeeded();
-  await expect(page.getByRole('group', { name: 'Jobs Tracker Bot interactive architecture map' })).toBeVisible();
-  const eligibilityNode = page.locator('.react-flow__node[data-id="filters"]');
-  await eligibilityNode.focus();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('.architecture-selection').getByRole('heading')).toHaveText('Eligibility rules');
+  await expect(page.locator('.architecture-map .project-system-visual--jobs svg')).toBeVisible();
+  const textEquivalent = page.getByText('Read the system as text');
+  await expect(textEquivalent.locator('xpath=..')).not.toHaveAttribute('open', '');
   await page.screenshot({ path: testInfo.outputPath('jobs-case-study-desktop.png'), fullPage: true });
 });
 

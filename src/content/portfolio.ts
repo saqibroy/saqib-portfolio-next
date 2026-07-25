@@ -88,6 +88,12 @@ const evidence: EvidenceRef[] = [
     description: 'Tactical Tech title, modernisation work, outcomes, and contribution wording.',
   },
   {
+    id: 'publicly-verified-tactical-content-system',
+    status: 'publicly-verified',
+    source: 'Phase 13 Tactical Tech local repository audit',
+    description: 'Git-backed editorial content is transformed for a REST Content API consumed by project sites; the central search interface queries configured API namespaces.',
+  },
+  {
     id: 'approved-earlier-roles',
     status: 'approved',
     source: 'Approved ATS CV',
