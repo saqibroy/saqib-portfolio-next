@@ -20,9 +20,18 @@ for (const [source, destination] of legacyPaths) {
 test('writing index exposes only reviewed notes', async ({ page }, testInfo) => {
   await page.goto('/writing');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Notes for building dependable web products');
+  await expect(page.getByRole('link', { name: 'Designing a URL Shortener: From Requirements to Production Trade-offs' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'A practical SEO baseline for engineering teams' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'A practical accessibility baseline for frontend teams' })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('writing-desktop.png'), fullPage: true });
+});
+
+test('URL-shortener article exposes its system-design visuals accessibly', async ({ page }) => {
+  await page.goto('/writing/designing-a-url-shortener');
+  await expect(page.getByText('URL shortener paths')).toBeVisible();
+  await expect(page.getByText('Async analytics')).toBeVisible();
+  await expect(page.getByRole('table', { name: 'Short-code strategy trade-offs' })).toBeVisible();
+  await expect(page.getByRole('rowheader', { name: 'Random Base62' })).toBeVisible();
 });
 
 test('reviewed article retains source links and readable content on mobile', async ({ page }, testInfo) => {

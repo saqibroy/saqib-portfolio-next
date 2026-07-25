@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 test('public metadata uses the canonical domain and structured data', async ({ page }) => {
-  await page.goto('/writing/web-accessibility-2025');
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://ssohail.com/writing/web-accessibility-2025');
-  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://ssohail.com/writing/web-accessibility-2025');
+  await page.goto('/writing/designing-a-url-shortener');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://ssohail.com/writing/designing-a-url-shortener');
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://ssohail.com/writing/designing-a-url-shortener');
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(2);
   expect(await page.locator('.writing-post > script[type="application/ld+json"]').evaluate((element) => element.textContent)).toContain('Article');
 
@@ -22,7 +22,7 @@ test('robots, sitemap, and generated Open Graph image expose only intended publi
   await expect(sitemap).toBeOK();
   const sitemapText = await sitemap.text();
   expect(sitemapText).toContain('https://ssohail.com/experience');
-  expect(sitemapText).toContain('https://ssohail.com/writing/web-accessibility-2025');
+  expect(sitemapText).toContain('https://ssohail.com/writing/designing-a-url-shortener');
   expect(sitemapText).not.toContain('accessibility-checker');
   expect(sitemapText).not.toContain('https://ssohail.com/cv');
   expect(sitemapText).not.toContain('https://ssohail.com/blog');

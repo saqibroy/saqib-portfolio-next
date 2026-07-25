@@ -62,16 +62,6 @@ export type ProjectSummary = {
   evidenceIds: string[];
 };
 
-export type WritingMeta = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  categories: string[];
-  reviewStatus: ClaimStatus;
-};
-
 const evidence: EvidenceRef[] = [
   {
     id: 'approved-profile',
@@ -373,27 +363,6 @@ const capabilities: Capability[] = [
   },
 ];
 
-const writing: WritingMeta[] = [
-  {
-    id: 'seo-trends-2025',
-    slug: 'seo-trends-2025',
-    title: 'A practical SEO baseline for engineering teams',
-    description: 'A conservative checklist for making web content discoverable without treating rankings as a product feature.',
-    date: '2025-03-27',
-    categories: ['Search quality', 'Technical SEO'],
-    reviewStatus: 'publicly-verified',
-  },
-  {
-    id: 'web-accessibility-2025',
-    slug: 'web-accessibility-2025',
-    title: 'A practical accessibility baseline for frontend teams',
-    description: 'A delivery-focused guide to semantic HTML, keyboard access, contrast, and testing against WCAG 2.2.',
-    date: '2025-06-25',
-    categories: ['Accessibility', 'Frontend engineering'],
-    reviewStatus: 'publicly-verified',
-  },
-];
-
 export const portfolioContent = {
   profile: {
     name: 'Saqib Sohail',
@@ -416,20 +385,17 @@ export const portfolioContent = {
       visual: '/downloads/saqib-sohail-cv-visual.pdf',
     },
   },
-  homepageMetricIds: ['experience-years', 'products-platforms'],
   evidence,
   metrics,
   roles,
   education,
   capabilities,
   projects,
-  writing,
 } as const;
 
 type PortfolioContent = typeof portfolioContent;
 
 const monthPattern = /^\d{4}-(0[1-9]|1[0-2])$/;
-const dayPattern = /^\d{4}-(0[1-9]|1[0-2])-[0-3]\d$/;
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -477,11 +443,9 @@ export function validatePortfolioContent(content: PortfolioContent = portfolioCo
   assertUnique(content.education, 'education');
   assertUnique(content.capabilities, 'capabilities');
   assertUnique(content.projects, 'projects');
-  assertUnique(content.writing, 'writing');
 
   const evidenceById = new Map(content.evidence.map((item) => [item.id, item]));
   const evidenceIds = new Set(evidenceById.keys());
-  const metricsById = new Map(content.metrics.map((item) => [item.id, item]));
   const roleIds = new Set(content.roles.map((item) => item.id));
   const projectSlugs = new Set(content.projects.map((item) => item.slug));
 
@@ -537,18 +501,8 @@ export function validatePortfolioContent(content: PortfolioContent = portfolioCo
     }
   }
 
-  for (const item of content.writing) {
-    assert(slugPattern.test(item.slug), `writing "${item.id}" has an invalid slug`);
-    assert(dayPattern.test(item.date), `writing "${item.id}" has an invalid date`);
-    assert(item.categories.length > 0, `writing "${item.id}" has no categories`);
-  }
-
   assert(content.profile.title === 'Senior full-stack engineer', 'profile title must use the approved prominent title');
   assert(content.profile.positioning === 'Frontend-leaning full-stack engineer', 'profile positioning must use the approved descriptive wording');
-  for (const metricId of content.homepageMetricIds) {
-    assert(metricsById.has(metricId), `homepage metric "${metricId}" does not exist`);
-  }
-  assert(new Set(content.homepageMetricIds).size === content.homepageMetricIds.length, 'homepage metrics contain a duplicate');
   assert(content.profile.downloads.ats.startsWith('/downloads/'), 'ATS download path is invalid');
   assert(content.profile.downloads.visual.startsWith('/downloads/'), 'visual download path is invalid');
 }

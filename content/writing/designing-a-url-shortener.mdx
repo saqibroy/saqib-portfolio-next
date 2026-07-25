@@ -1,0 +1,290 @@
+---
+title: "Designing a URL Shortener: From Requirements to Production Trade-offs"
+date: "2026-07-25"
+description: "A practical walkthrough of how I would structure a URL-shortener system-design discussion, from requirements and data modelling to redirects, caching and abuse controls."
+author: "Saqib Sohail"
+tags:
+  - System design
+  - API design
+  - PostgreSQL
+  - Caching
+reviewStatus: "approved"
+---
+
+A URL shortener sounds simple: accept a long URL, return a short one, and redirect visitors later.
+
+That simplicity makes it a useful system-design exercise. The difficult part is not writing the redirect endpoint. It is deciding what the first version must guarantee, where correctness matters, and which complexity should wait until there is evidence that it is needed.
+
+This is how I would approach the problem in a system-design discussion.
+
+## 1. Clarify the product before drawing the architecture
+
+I would start by confirming the smallest useful scope.
+
+### Required for the first version
+
+- A user submits a valid HTTP or HTTPS URL.
+- The system generates a unique short code.
+- Visiting the short URL redirects to the original URL.
+- The mapping remains available after a restart or deployment.
+- Duplicate short codes are never allowed.
+
+### Questions that change the design
+
+- Can users choose a custom alias?
+- Can links expire?
+- Can a destination be edited later?
+- Is authentication required?
+- Do we need click analytics?
+- What traffic should the system support?
+- Are links private, public, or both?
+
+For an interview-sized first version, I would support creation and redirection, then describe custom aliases, expiry and analytics as extensions.
+
+## 2. Keep the critical path small
+
+<UrlShortenerArchitecture />
+
+There are two different workloads:
+
+1. **Create path** — validates a URL, generates a code and writes a mapping.
+2. **Redirect path** — reads a mapping and returns a redirect as quickly as possible.
+
+The redirect path is normally more sensitive because every extra dependency adds latency and another failure point. Analytics should therefore happen asynchronously rather than blocking the redirect.
+
+## 3. Define the API contract
+
+A minimal create endpoint could be:
+
+```http
+POST /api/links
+Content-Type: application/json
+
+{
+  "url": "https://example.com/a/very/long/path"
+}
+```
+
+Successful response:
+
+```json
+{
+  "code": "aZ91kQ",
+  "shortUrl": "https://sho.rt/aZ91kQ"
+}
+```
+
+The redirect endpoint is public:
+
+```http
+GET /aZ91kQ
+```
+
+Possible responses:
+
+- `302 Found` with a `Location` header when destinations may change;
+- `301 Moved Permanently` when mappings are immutable and long-term caching is desirable;
+- `404 Not Found` when the code does not exist;
+- `410 Gone` when the link existed but has expired.
+
+I would begin with `302` unless the product explicitly guarantees immutable destinations. It gives the system more control if links need to be corrected, disabled or moderated later.
+
+## 4. Use a small, explicit data model
+
+A PostgreSQL table could begin with:
+
+```sql
+CREATE TABLE links (
+  id BIGSERIAL PRIMARY KEY,
+  code VARCHAR(16) NOT NULL UNIQUE,
+  original_url TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NULL,
+  created_by BIGINT NULL
+);
+
+CREATE UNIQUE INDEX links_code_unique ON links (code);
+```
+
+The most important constraint is the unique index on `code`. Application-level checks alone are not sufficient because two requests may generate the same candidate at the same time.
+
+The redirect query stays simple:
+
+```sql
+SELECT original_url, expires_at
+FROM links
+WHERE code = $1;
+```
+
+## 5. Choose the short-code strategy deliberately
+
+<ShortCodeTradeoffMatrix />
+
+For the first version, I would use a random Base62 code and let the database unique constraint protect against collisions.
+
+Base62 uses:
+
+- `a-z`
+- `A-Z`
+- `0-9`
+
+A six-character code provides a large namespace while remaining easy to type and share. The exact length should depend on expected volume and acceptable collision retries.
+
+Creation flow:
+
+1. Generate a random code.
+2. Attempt to insert it.
+3. If the unique constraint fails, generate a new code and retry.
+4. Limit retries and return an internal error if the unlikely collision loop cannot complete.
+
+A database sequence encoded as Base62 is also practical, but sequential codes make enumeration easier. A hash of the original URL appears deterministic, but truncation still creates collisions and identical destinations do not always need identical short links.
+
+## 6. Separate validation from fetching
+
+The service should validate that the submitted destination:
+
+- parses as a URL;
+- uses `http` or `https`;
+- stays within the maximum accepted length;
+- does not use unsupported schemes such as `javascript:` or `data:`.
+
+A basic URL shortener does not need to fetch the destination during creation. Avoiding that network call keeps the create path smaller and avoids introducing unnecessary server-side request risks.
+
+A production service would still need abuse controls because short links can hide phishing, malware or spam destinations.
+
+## 7. Add caching only where it helps
+
+The redirect workload is read-heavy, so a cache can reduce repeated database reads.
+
+A simple read-through flow:
+
+1. Look up `code` in Redis.
+2. On a cache hit, redirect immediately.
+3. On a miss, query PostgreSQL.
+4. Cache the result with a suitable TTL.
+5. Return the redirect.
+
+The database remains the source of truth.
+
+I would not add Redis automatically for a small internal product. A unique index and a healthy PostgreSQL instance may already be enough. The cache becomes valuable when measurements show that redirect traffic or database load justifies another operational dependency.
+
+Negative caching can also help with repeated requests for unknown codes, but the TTL should be short so a newly created code does not remain incorrectly cached as missing.
+
+## 8. Keep analytics off the redirect path
+
+Click analytics are useful, but recording them synchronously can slow every redirect.
+
+A better design is:
+
+1. Resolve the destination.
+2. Publish a lightweight click event.
+3. Return the redirect.
+4. Process analytics separately.
+
+The event might contain:
+
+- short code;
+- timestamp;
+- coarse referrer information;
+- privacy-safe location or device categories when permitted.
+
+The redirect should still succeed when the analytics consumer is delayed. Analytics are valuable, but they are not more important than the redirect itself.
+
+## 9. Plan for failure and abuse
+
+The first production review should cover:
+
+### Reliability
+
+- database connection failures;
+- cache outages;
+- retry behaviour;
+- timeouts;
+- expired links;
+- safe deployment and migration strategy;
+- health checks and monitoring.
+
+### Abuse controls
+
+- rate limiting on link creation;
+- maximum URL length;
+- reserved custom aliases;
+- disabling malicious links;
+- reporting and moderation workflow;
+- protection against automated enumeration;
+- logs that avoid unnecessary personal data.
+
+### Security
+
+- validate schemes;
+- encode output correctly;
+- avoid open administration endpoints;
+- protect authenticated link-management routes;
+- keep secrets outside the repository;
+- apply least-privilege database access.
+
+## 10. Scale in measured steps
+
+I would explain scaling as a sequence rather than designing the largest possible system on day one.
+
+### Stage 1 — Simple application
+
+- one application service;
+- PostgreSQL;
+- indexed code lookup;
+- basic monitoring.
+
+### Stage 2 — Read optimisation
+
+- Redis read-through cache;
+- connection pooling;
+- separate create and redirect metrics;
+- rate limiting.
+
+### Stage 3 — Higher traffic
+
+- multiple stateless service instances;
+- load balancer;
+- asynchronous analytics queue;
+- cache replication or managed cache;
+- database read strategy based on measured load.
+
+### Stage 4 — Global redirect traffic
+
+- regional or edge caching;
+- careful cache invalidation;
+- globally unique code generation;
+- operational tooling for abuse and link takedowns.
+
+The important interview point is not to predict every future component. It is to show which measurement or product requirement would justify each one.
+
+## 11. State the trade-offs clearly
+
+My first-version decision would be:
+
+- PostgreSQL as the source of truth;
+- random Base62 codes;
+- a database unique constraint with collision retry;
+- `302` redirects while destinations remain changeable;
+- no cache until traffic justifies it;
+- asynchronous analytics;
+- explicit validation and creation rate limits.
+
+This is intentionally simple. It gives the product a correct and maintainable base while leaving clear extension points for caching, analytics, expiry, custom aliases and global delivery.
+
+## 12. How I would present it in an interview
+
+I would use this order:
+
+1. Restate the goal.
+2. Confirm functional requirements.
+3. Ask about traffic, mutability, expiry and analytics.
+4. Draw create and redirect paths separately.
+5. Define the API and data model.
+6. Choose a code-generation strategy.
+7. Explain correctness through the unique constraint.
+8. Discuss caching only after the basic design.
+9. Cover failure, abuse and security.
+10. End with trade-offs and the next scaling step.
+
+That structure matters as much as the final diagram. It helps the interviewer follow the reasoning and makes it easier to recover when a requirement changes.

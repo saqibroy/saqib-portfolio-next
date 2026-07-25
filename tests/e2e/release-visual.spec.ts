@@ -14,17 +14,17 @@ async function resetScroll(page: Page) {
 }
 
 async function prepareHomepage(page: Page) {
-  await page.locator('.systems-lab').scrollIntoViewIfNeeded();
-  await expect(page.locator('.systems-lab')).toHaveAttribute('data-canvas', 'ready');
+  await page.locator('.selected-systems-visual').scrollIntoViewIfNeeded();
+  await expect(page.locator('.selected-systems-visual')).toBeVisible();
   await resetScroll(page);
   await expect(page.getByRole('heading', { level: 1 })).toBeInViewport();
 }
 
 async function prepareDossier(page: Page) {
-  await page.getByText('Interactive system map').scrollIntoViewIfNeeded();
+  await page.locator('.case-study-architecture').scrollIntoViewIfNeeded();
   await expect(page.locator('.architecture-map')).toHaveAttribute('data-loaded', 'true');
   await resetScroll(page);
-  await expect(page.locator('.dossier-breadcrumb')).toBeInViewport();
+  await expect(page.locator('.case-study-breadcrumb')).toBeInViewport();
 }
 
 async function captureModes({

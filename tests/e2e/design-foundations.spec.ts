@@ -30,39 +30,30 @@ test('mobile navigation exposes the primary routes', async ({ page }, testInfo) 
   await page.screenshot({ path: testInfo.outputPath('homepage-mobile.png'), fullPage: true });
 });
 
-test('system flow lenses expose selected evidence with keyboard controls', async ({ page }, testInfo) => {
+test('Jobs Tracker pipeline exposes selected evidence with keyboard controls', async ({ page }, testInfo) => {
   await page.goto('/');
-  const frontend = page.getByRole('tab', { name: 'Frontend' });
-  const fullStack = page.getByRole('tab', { name: 'Full-stack' });
-  const appliedAi = page.getByRole('tab', { name: 'Applied AI' });
-
-  await frontend.focus();
-  await page.keyboard.press('ArrowRight');
-  await expect(fullStack).toBeFocused();
-  await page.keyboard.press('ArrowRight');
-  await expect(appliedAi).toBeFocused();
-  await expect(appliedAi).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('Applied-AI lens');
-  await page.locator('.systems-lab-stage-controls').getByRole('button', { name: /Data\/AI/i }).click();
-  await expect(page.getByRole('tabpanel').getByRole('heading')).toHaveText('Data/AI');
+  const normalisation = page.getByRole('button', { name: /Normalisation/i });
+  await normalisation.focus();
+  await expect(normalisation).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.jobs-pipeline-preview > p')).toContainText('consistent job model');
   await page.screenshot({ path: testInfo.outputPath('homepage-desktop.png'), fullPage: true });
 });
 
-test('homepage uses approved copy and proof without role-specific Tactical metrics', async ({ page }) => {
+test('homepage uses approved copy, compact proof, and no generic Systems Lab', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByText('Berlin, Germany', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
-  await expect(page.getByText('Frontend-leaning engineer building accessible product interfaces, dependable service boundaries, and applied-AI workflows.')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'years in software engineering' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'products & platforms' })).toBeVisible();
-  await expect(page.getByText('30%', { exact: true })).toHaveCount(0);
-  await expect(page.getByText('50%+', { exact: true })).toHaveCount(0);
-  await expect(page.getByText('Technical notes under review')).toHaveCount(0);
-  await expect(page.getByText(/full, reviewed case studies follow/i)).toHaveCount(0);
+  await expect(page.getByText('I build accessible product interfaces and connect them to reliable backend and AI services.')).toBeVisible();
+  await expect(page.getByText('8+', { exact: true })).toBeVisible();
+  await expect(page.getByText('5+', { exact: true })).toBeVisible();
+  await expect(page.getByText('30%', { exact: true })).toBeVisible();
+  await expect(page.getByText('50%+', { exact: true })).toBeVisible();
+  await expect(page.locator('.systems-lab')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Designing a URL Shortener: From Requirements to Production Trade-offs' })).toBeVisible();
 });
 
-test('systems lab stage controls support touch and retain semantic evidence', async ({ browser }) => {
+test('Jobs Tracker pipeline supports touch', async ({ browser }) => {
   const context = await browser.newContext({
     hasTouch: true,
     isMobile: true,
@@ -71,26 +62,16 @@ test('systems lab stage controls support touch and retain semantic evidence', as
   const page = await context.newPage();
   await page.goto('/');
 
-  await page.locator('.systems-lab-stage-controls').getByRole('button', { name: /Production/i }).tap();
-  await expect(page.getByRole('tabpanel').getByRole('heading')).toHaveText('Production');
-  await expect(page.getByText('Product problem → Interface → API boundary → Service → Data/AI → Production')).toBeAttached();
+  await page.getByRole('button', { name: /^Alerts/ }).tap();
+  await expect(page.locator('.jobs-pipeline-preview > p')).toContainText('immediate or digest notifications');
   await context.close();
 });
 
-test('motion and capability fallbacks keep the systems lab static', async ({ browser }) => {
+test('reduced motion retains complete static homepage content', async ({ browser }) => {
   const reducedContext = await browser.newContext({ reducedMotion: 'reduce' });
   const reducedPage = await reducedContext.newPage();
   await reducedPage.goto('/');
-  await expect(reducedPage.locator('.hero-signal')).toHaveAttribute('data-rendering', 'static');
-  await expect(reducedPage.locator('.systems-lab')).toHaveAttribute('data-canvas', 'fallback');
+  await expect(reducedPage.getByText('Decap CMS', { exact: true }).first()).toBeVisible();
+  await expect(reducedPage.locator('.jobs-pipeline-preview')).toBeVisible();
   await reducedContext.close();
-
-  const constrainedContext = await browser.newContext();
-  await constrainedContext.addInitScript(() => {
-    Object.defineProperty(navigator, 'connection', { configurable: true, value: { saveData: true } });
-  });
-  const constrainedPage = await constrainedContext.newPage();
-  await constrainedPage.goto('/');
-  await expect(constrainedPage.locator('.systems-lab')).toHaveAttribute('data-canvas', 'fallback');
-  await constrainedContext.close();
 });
