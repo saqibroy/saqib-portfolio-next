@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 11 — Visual systems and case-study redesign
+**Current phase:** Phase 13 — Visual systems and evidence
 
-**Current branch:** `agent/phase-11-qa` (stacked on case-study PR #16)
+**Current branch:** `feature/phase-13-visual-systems`
 
 **Last updated:** 2026-07-25
 
-**Overall state:** IN PROGRESS; implementation and automated release gates pass, with preview screenshot and interaction approval still required before merge
+**Overall state:** IN PROGRESS; focused implementation and local quality gates pass; draft PR review remains
 
 ## Status rules
 
@@ -195,6 +195,15 @@ whose status changes.
 | P12.02 | Compact case-study model and four-section page template | DONE | P12.01 | `src/content/caseStudies.ts`, `/work/[slug]`, 4 case-study route and axe checks | Keep the 180-word and 2–4-decision validation limits |
 | P12.03 | Publish URL-shortener system-design article and MDX visuals | DONE | P12.01 | `content/writing/designing-a-url-shortener.mdx`, writing routes, metadata, sitemap, and axe checks | Re-review if article sources or product framing change |
 | P12.04 | Remove retired WebGL and animation dependencies; complete quality gate and report | DONE | P12.01–P12.03 | `package.json`, lockfile, `docs/phase-reports/phase-12-home-and-case-study-simplification.md`; lint, typecheck, 19 unit, 38 browser, 11 axe, and build checks | Open and review the focused PR before merge |
+
+## Phase 13 — Visual systems and evidence
+
+| ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
+| --- | --- | --- | --- | --- | --- |
+| P13.01 | Verify production and audit Tactical Tech implementation evidence | DONE | Phase 12 | `docs/phase-reports/phase-13-visual-systems.md`; `docs/tactical-tech-system-audit.md` | Keep public system claims bounded by the audit |
+| P13.02 | Replace homepage text diagrams with purposeful project system visuals | DONE | P13.01 | `SystemShowcase`, `ProjectSystemVisuals`, keyboard/touch/no-JS/reduced-motion browser checks | Recheck when visual facts change |
+| P13.03 | Redesign experience evidence hierarchy and project-specific case-study visuals | DONE | P13.01 | `/experience`, custom SVG case-study maps, browser and two-theme axe checks | Recheck concise role wording against future CV updates |
+| P13.04 | Upgrade URL-shortener diagram and complete quality/reporting gate | DONE | P13.02–P13.03 | MDX SVG component, `docs/screenshots/phase-13/`, six local quality commands | Review the draft PR before merge |
 
 ## Blockers
 

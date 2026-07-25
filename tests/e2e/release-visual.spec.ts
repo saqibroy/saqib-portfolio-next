@@ -14,15 +14,15 @@ async function resetScroll(page: Page) {
 }
 
 async function prepareHomepage(page: Page) {
-  await page.locator('.selected-systems-visual').scrollIntoViewIfNeeded();
-  await expect(page.locator('.selected-systems-visual')).toBeVisible();
+  await page.locator('.system-showcase').scrollIntoViewIfNeeded();
+  await expect(page.locator('.system-showcase')).toBeVisible();
   await resetScroll(page);
   await expect(page.getByRole('heading', { level: 1 })).toBeInViewport();
 }
 
 async function prepareDossier(page: Page) {
   await page.locator('.case-study-architecture').scrollIntoViewIfNeeded();
-  await expect(page.locator('.architecture-map')).toHaveAttribute('data-loaded', 'true');
+  await expect(page.locator('.architecture-map svg')).toBeVisible();
   await resetScroll(page);
   await expect(page.locator('.case-study-breadcrumb')).toBeInViewport();
 }

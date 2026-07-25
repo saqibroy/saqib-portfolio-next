@@ -7,7 +7,7 @@ test('primary content remains understandable without JavaScript', async ({ brows
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
   await expect(page.getByText('React editor', { exact: true }).first()).toBeVisible();
-  await expect(page.getByText('ATS adapters', { exact: true }).first()).toBeVisible();
+  await expect(page.locator('.system-showcase-all-flows').getByText(/ATS and provider adapters/)).toBeVisible();
 
   await page.goto('/work/jobs-tracker-bot');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Jobs Tracker Bot');

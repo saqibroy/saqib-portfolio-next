@@ -1,20 +1,17 @@
 import Link from 'next/link';
 
-import { JobsPipelinePreview } from '@/components/home/JobsPipelinePreview';
-import { ProjectStoryVisual } from '@/components/home/ProjectStoryVisual';
-import { SelectedSystemsVisual } from '@/components/home/SelectedSystemsVisual';
+import { ProjectSystemVisual } from '@/components/home/ProjectSystemVisuals';
+import { SystemShowcase } from '@/components/home/SystemShowcase';
 import { caseStudies } from '@/content/caseStudies';
 import { portfolioContent } from '@/content/portfolio';
 import { getWritingPosts } from '@/lib/writing';
 
-const featuredProjectIds = ['ai-assisted-contract-workflow', 'jobs-tracker-bot', 'tactical-tech-modernisation'];
-const proofMetricIds = ['experience-years', 'tactical-platforms', 'initial-load-improvement', 'editorial-workflow-improvement'];
+const featuredProjectIds = ['tactical-tech-modernisation', 'ai-assisted-contract-workflow', 'jobs-tracker-bot'];
 
 export default async function HomePage() {
-  const { profile, metrics, projects, roles } = portfolioContent;
-  const featuredProjects = projects.filter((project) => featuredProjectIds.includes(project.id));
+  const { profile, projects, roles } = portfolioContent;
+  const featuredProjects = featuredProjectIds.map((id) => projects.find((project) => project.id === id)).filter((project): project is NonNullable<typeof project> => Boolean(project));
   const featuredCaseStudies = new Map(caseStudies.map((caseStudy) => [caseStudy.slug, caseStudy]));
-  const homepageMetrics = proofMetricIds.map((id) => metrics.find((metric) => metric.id === id)!);
   const posts = (await getWritingPosts()).filter((post) => post.reviewStatus !== 'needs-review').slice(0, 3);
 
   return (
@@ -25,21 +22,13 @@ export default async function HomePage() {
           <h1 id="homepage-title">{profile.title}</h1>
           <p className="homepage-proposition">I build accessible product interfaces and connect them to reliable backend and AI services.</p>
           <p className="homepage-supporting-copy">Eight years of experience across React, Next.js, TypeScript, Django and FastAPI—modernising platforms, designing product workflows and shipping features end to end.</p>
+          <p className="homepage-signature"><strong>8+ years</strong><span aria-hidden="true">·</span><strong>5+ public-facing platforms</strong><span aria-hidden="true">·</span>{profile.location}</p>
           <div className="homepage-actions">
             <Link className="button button-primary" href="/work">View selected work</Link>
             <a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a>
           </div>
         </div>
-        <SelectedSystemsVisual />
-      </section>
-
-      <section className="proof-strip" aria-label="Selected evidence">
-        {homepageMetrics.map((metric) => (
-          <article key={metric.id}>
-            <strong>{metric.value}</strong>
-            <span>{metric.label}</span>
-          </article>
-        ))}
+        <SystemShowcase />
       </section>
 
       <section className="homepage-section selected-work-section" aria-labelledby="work-title">
@@ -54,8 +43,8 @@ export default async function HomePage() {
             const facts = project.id === 'jobs-tracker-bot'
               ? ['520+ tests', 'Docker', 'GitHub Actions', 'Public repository']
               : project.id === 'tactical-tech-modernisation'
-                ? ['3 legacy applications', '30% faster initial loads', '50%+ faster editorial workflows']
-                : ['React editor', 'Django APIs', 'FastAPI service'];
+                ? ['Git-backed CMS', 'REST Content API', 'Central search']
+                : ['FastAPI AI service', 'Vector retrieval / RAG', 'Structured updates'];
             return (
               <article key={project.id} className={`visual-work-story visual-work-story--${project.id}`}>
                 <div className="visual-work-story-copy">
@@ -66,7 +55,7 @@ export default async function HomePage() {
                   <Link href={`/work/${project.slug}`}>Read case study <span aria-hidden="true">→</span></Link>
                 </div>
                 <div className="visual-work-story-diagram">
-                  {project.id === 'jobs-tracker-bot' ? <JobsPipelinePreview /> : <ProjectStoryVisual variant={project.id === 'tactical-tech-modernisation' ? 'modernisation' : 'contract'} />}
+                  <ProjectSystemVisual variant={project.id === 'tactical-tech-modernisation' ? 'content' : project.id === 'jobs-tracker-bot' ? 'jobs' : 'ai'} />
                 </div>
               </article>
             );

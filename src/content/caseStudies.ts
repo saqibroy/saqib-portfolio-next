@@ -36,6 +36,7 @@ export type CaseStudyDecision = {
 export type CaseStudyEvidence = {
   evidenceId: string;
   label: string;
+  relatedEvidenceIds?: string[];
 };
 
 export type CaseStudy = {
@@ -168,22 +169,22 @@ export const caseStudies: CaseStudy[] = [
     stack: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS'],
     visual: {
       nodes: [
-        { id: 'editorial-content', label: 'Editorial content', kind: 'source' },
-        { id: 'decap-cms', label: 'Decap CMS', kind: 'interface', detail: 'Structured editorial workflows.' },
-        { id: 'content-model', label: 'Refactored content model', kind: 'data', detail: 'Content structures shared by frontend applications.' },
-        { id: 'applications', label: 'Next.js / Nuxt.js apps', kind: 'service', detail: 'Modernised frontend applications.' },
-        { id: 'optimised-delivery', label: 'Accessible delivery', kind: 'boundary', detail: 'Code splitting, lazy loading, and frontend optimisation.' },
-        { id: 'public-audiences', label: 'Public audiences', kind: 'delivery' },
+        { id: 'cms-editors', label: 'Editors / Git-backed CMS', kind: 'interface', detail: 'Editorial changes are stored in the content repository.' },
+        { id: 'git-content', label: 'Content files', kind: 'data', detail: 'Markdown and frontmatter form the shared source material.' },
+        { id: 'content-api', label: 'REST Content API', kind: 'boundary', detail: 'Project namespaces expose content and search queries.' },
+        { id: 'next-consumers', label: 'Next.js consumers', kind: 'service', detail: 'Public project sites read the shared content API.' },
+        { id: 'central-search', label: 'Central search interface', kind: 'interface', detail: 'Queries selected API namespaces.' },
+        { id: 'project-results', label: 'Project results', kind: 'delivery', detail: 'Results point visitors back to project content.' },
       ],
       edges: [
-        { source: 'editorial-content', target: 'decap-cms' },
-        { source: 'decap-cms', target: 'content-model' },
-        { source: 'content-model', target: 'applications' },
-        { source: 'applications', target: 'optimised-delivery' },
-        { source: 'optimised-delivery', target: 'public-audiences' },
+        { source: 'cms-editors', target: 'git-content' },
+        { source: 'git-content', target: 'content-api', label: 'transformed content' },
+        { source: 'content-api', target: 'next-consumers', label: 'content queries' },
+        { source: 'content-api', target: 'central-search', label: 'search queries' },
+        { source: 'central-search', target: 'project-results' },
       ],
     },
-    system: 'Editors worked through Decap CMS and a refactored content model, while legacy applications moved incrementally to Next.js and Nuxt.js. Code splitting, lazy loading, and frontend optimisation improved delivery without interrupting publishing. The public account describes Saqib’s approved contribution scope, not organisation-wide reach or sole ownership.',
+    system: 'The audited repositories show an editorial workflow where Git-backed CMS changes become content files for a REST Content API. Next.js consumers read those project namespaces, while a central search interface queries the same API and returns visitors to project content. This diagram shows an implementation pattern found in the repositories; it does not assign ownership of every system component or make operational claims.',
     decisions: [
       {
         title: 'Migrate incrementally',
@@ -206,7 +207,7 @@ export const caseStudies: CaseStudy[] = [
       { value: '30%', label: 'Faster initial loads', context: 'Code splitting, lazy loading, and frontend optimisation.' },
       { value: '50%+', label: 'Faster editorial workflows', context: 'Refactored Decap CMS content architecture.' },
     ],
-    evidence: { evidenceId: 'approved-tactical-tech', label: 'Approved portfolio brief' },
+    evidence: { evidenceId: 'approved-tactical-tech', label: 'Approved portfolio brief', relatedEvidenceIds: ['publicly-verified-tactical-content-system'] },
     evidenceBoundary: 'Approved contribution scope only; it does not attribute organisation-wide reach or sole ownership.',
   },
   {
@@ -284,7 +285,7 @@ export function validateCaseStudies(items: readonly CaseStudy[] = caseStudies) {
     if (item.decisions.length < 2 || item.decisions.length > 4 || item.decisions.some(({ title, reason, tradeoff }) => !title || !reason || !tradeoff)) {
       throw new Error(`Case study must have 2–4 complete decisions: ${item.slug}`);
     }
-    if (item.outcomes.length === 0 || !evidence.has(item.evidence.evidenceId) || !item.evidence.label) {
+    if (item.outcomes.length === 0 || !evidence.has(item.evidence.evidenceId) || !item.evidence.label || item.evidence.relatedEvidenceIds?.some((evidenceId) => !evidence.has(evidenceId))) {
       throw new Error(`Invalid outcome or evidence in ${item.slug}`);
     }
     if (item.nextImprovement !== undefined && !item.nextImprovement.trim()) {

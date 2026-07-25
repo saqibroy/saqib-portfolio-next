@@ -30,30 +30,35 @@ test('mobile navigation exposes the primary routes', async ({ page }, testInfo) 
   await page.screenshot({ path: testInfo.outputPath('homepage-mobile.png'), fullPage: true });
 });
 
-test('Jobs Tracker pipeline exposes selected evidence with keyboard controls', async ({ page }, testInfo) => {
+test('Selected systems tabs expose the Jobs Tracker flow with keyboard controls', async ({ page }, testInfo) => {
   await page.goto('/');
-  const normalisation = page.getByRole('button', { name: /Normalisation/i });
-  await normalisation.focus();
-  await expect(normalisation).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('.jobs-pipeline-preview > p')).toContainText('consistent job model');
+  const appliedAi = page.getByRole('tab', { name: 'Applied AI' });
+  await appliedAi.focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  const automation = page.getByRole('tab', { name: 'Automation pipeline' });
+  await expect(automation).toBeFocused();
+  await expect(automation).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tabpanel')).toContainText('deduplication, and persistence');
   await page.screenshot({ path: testInfo.outputPath('homepage-desktop.png'), fullPage: true });
 });
 
-test('homepage uses approved copy, compact proof, and no generic Systems Lab', async ({ page }) => {
+test('homepage uses approved copy, compact credibility signature, and no generic Systems Lab', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByText('Berlin, Germany', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
   await expect(page.getByText('I build accessible product interfaces and connect them to reliable backend and AI services.')).toBeVisible();
-  await expect(page.getByText('8+', { exact: true })).toBeVisible();
-  await expect(page.getByText('5+', { exact: true })).toBeVisible();
-  await expect(page.getByText('30%', { exact: true })).toBeVisible();
-  await expect(page.getByText('50%+', { exact: true })).toBeVisible();
+  await expect(page.locator('.homepage-signature')).toContainText('8+ years');
+  await expect(page.locator('.homepage-signature')).toContainText('5+ public-facing platforms');
+  await expect(page.getByText('30%', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('50%+', { exact: true })).toHaveCount(0);
   await expect(page.locator('.systems-lab')).toHaveCount(0);
+  await expect(page.locator('.proof-strip')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Designing a URL Shortener: From Requirements to Production Trade-offs' })).toBeVisible();
 });
 
-test('Jobs Tracker pipeline supports touch', async ({ browser }) => {
+test('Selected systems supports touch tab selection', async ({ browser }) => {
   const context = await browser.newContext({
     hasTouch: true,
     isMobile: true,
@@ -62,8 +67,8 @@ test('Jobs Tracker pipeline supports touch', async ({ browser }) => {
   const page = await context.newPage();
   await page.goto('/');
 
-  await page.getByRole('button', { name: /^Alerts/ }).tap();
-  await expect(page.locator('.jobs-pipeline-preview > p')).toContainText('immediate or digest notifications');
+  await page.getByRole('tab', { name: 'Automation pipeline' }).tap();
+  await expect(page.getByRole('tabpanel')).toContainText('immediate or digest alert routing');
   await context.close();
 });
 
@@ -71,7 +76,7 @@ test('reduced motion retains complete static homepage content', async ({ browser
   const reducedContext = await browser.newContext({ reducedMotion: 'reduce' });
   const reducedPage = await reducedContext.newPage();
   await reducedPage.goto('/');
-  await expect(reducedPage.getByText('Decap CMS', { exact: true }).first()).toBeVisible();
-  await expect(reducedPage.locator('.jobs-pipeline-preview')).toBeVisible();
+  await expect(reducedPage.getByRole('tab', { name: 'Content & search' })).toBeVisible();
+  await expect(reducedPage.locator('.system-showcase')).toBeVisible();
   await reducedContext.close();
 });

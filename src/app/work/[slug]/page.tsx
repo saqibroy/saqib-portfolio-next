@@ -50,7 +50,7 @@ export default async function CaseStudyPage({ params }: Props) {
 
     <section className="case-study-system" aria-labelledby="system-title">
       <div className="case-study-section-heading"><p className="eyebrow">System</p><h2 id="system-title">The workflow in view</h2></div>
-      <figure className="case-study-architecture"><figcaption>{item.title} architecture and workflow</figcaption><ArchitectureMap nodes={item.visual.nodes} edges={item.visual.edges} title={item.title} /><ArchitectureText item={item} /></figure>
+      <figure className="case-study-architecture"><figcaption>{item.title} architecture and workflow</figcaption><ArchitectureMap title={item.title as Parameters<typeof ArchitectureMap>[0]['title']} /><ArchitectureText item={item} /></figure>
       <p>{item.system}</p>
     </section>
 
