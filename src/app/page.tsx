@@ -1,145 +1,103 @@
 import Link from 'next/link';
 
-import { HeroSignalCanvas } from '@/components/home/HeroSignalCanvas';
-import { SystemsLab } from '@/components/home/SystemsLab';
+import { JobsPipelinePreview } from '@/components/home/JobsPipelinePreview';
+import { ProjectStoryVisual } from '@/components/home/ProjectStoryVisual';
+import { SelectedSystemsVisual } from '@/components/home/SelectedSystemsVisual';
 import { caseStudies } from '@/content/caseStudies';
 import { portfolioContent } from '@/content/portfolio';
+import { getWritingPosts } from '@/lib/writing';
 
 const featuredProjectIds = ['ai-assisted-contract-workflow', 'jobs-tracker-bot', 'tactical-tech-modernisation'];
+const proofMetricIds = ['experience-years', 'tactical-platforms', 'initial-load-improvement', 'editorial-workflow-improvement'];
 
-export default function HomePage() {
-  const { profile, metrics, homepageMetricIds, capabilities, projects, writing } = portfolioContent;
+export default async function HomePage() {
+  const { profile, metrics, projects, roles } = portfolioContent;
   const featuredProjects = projects.filter((project) => featuredProjectIds.includes(project.id));
   const featuredCaseStudies = new Map(caseStudies.map((caseStudy) => [caseStudy.slug, caseStudy]));
-  const homepageMetrics = homepageMetricIds.map((id) => metrics.find((metric) => metric.id === id)!);
+  const homepageMetrics = proofMetricIds.map((id) => metrics.find((metric) => metric.id === id)!);
+  const posts = (await getWritingPosts()).filter((post) => post.reviewStatus !== 'needs-review').slice(0, 3);
 
   return (
     <div className="homepage">
       <section className="homepage-hero" aria-labelledby="homepage-title">
-        <HeroSignalCanvas />
-        <div className="homepage-hero-grid">
-          <div className="homepage-hero-copy">
-            <p className="eyebrow">{profile.location}</p>
-            <h1 id="homepage-title">{profile.title}</h1>
-            <p className="homepage-proposition">{profile.proposition}</p>
-            <div className="homepage-actions">
-              <a className="button button-primary" href={profile.downloads.ats}>Download ATS CV</a>
-              <Link className="button button-secondary" href="/work">Explore selected work</Link>
-            </div>
-          </div>
-          <div className="homepage-hero-index" aria-label="Engineering focus">
-            <span>Product systems</span>
-            <strong>Interface</strong>
-            <strong>Services</strong>
-            <strong>Applied AI</strong>
-            <small>Accessible by default · Built for production</small>
+        <div className="homepage-hero-copy">
+          <p className="eyebrow">{profile.location}</p>
+          <h1 id="homepage-title">{profile.title}</h1>
+          <p className="homepage-proposition">I build accessible product interfaces and connect them to reliable backend and AI services.</p>
+          <p className="homepage-supporting-copy">Eight years of experience across React, Next.js, TypeScript, Django and FastAPI—modernising platforms, designing product workflows and shipping features end to end.</p>
+          <div className="homepage-actions">
+            <Link className="button button-primary" href="/work">View selected work</Link>
+            <a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a>
           </div>
         </div>
+        <SelectedSystemsVisual />
       </section>
 
-      <section className="proof-field" aria-label="Selected evidence">
-        {homepageMetrics.map((metric, index) => (
-          <article key={metric.id} className="proof-card">
-            <span className="proof-card-index" aria-hidden="true">0{index + 1}</span>
-            <div>
-              <strong>{metric.value}</strong>
-              <h2>{metric.label}</h2>
-              <p>{metric.context}</p>
-            </div>
+      <section className="proof-strip" aria-label="Selected evidence">
+        {homepageMetrics.map((metric) => (
+          <article key={metric.id}>
+            <strong>{metric.value}</strong>
+            <span>{metric.label}</span>
           </article>
         ))}
       </section>
 
-      <section className="homepage-section systems-section" aria-labelledby="systems-title">
-        <div className="section-intro">
-          <p className="eyebrow">How I work</p>
-          <h2 id="systems-title">From product problem to production system</h2>
-          <p>Move through the system as a product decision travels from interface architecture to service boundaries, data, and delivery.</p>
-        </div>
-        <SystemsLab capabilities={capabilities} />
-      </section>
-
-      <section className="homepage-section" aria-labelledby="work-title">
+      <section className="homepage-section selected-work-section" aria-labelledby="work-title">
         <div className="section-intro section-intro-row">
-          <div>
-            <p className="eyebrow">Selected work</p>
-            <h2 id="work-title">Systems, decisions, and outcomes</h2>
-          </div>
-          <p>Case studies show the boundaries, trade-offs, and evidence behind each implementation.</p>
+          <div><p className="eyebrow">Selected work</p><h2 id="work-title">Real systems, concise stories</h2></div>
+          <p>Three projects show the product boundaries, decisions, and outcomes behind the work.</p>
         </div>
-        <div className="selected-work">
-          {featuredProjects.map((project, index) => {
+        <div className="visual-work-stories">
+          {featuredProjects.map((project) => {
             const caseStudy = featuredCaseStudies.get(project.slug);
+            if (!caseStudy) return null;
+            const facts = project.id === 'jobs-tracker-bot'
+              ? ['520+ tests', 'Docker', 'GitHub Actions', 'Public repository']
+              : project.id === 'tactical-tech-modernisation'
+                ? ['3 legacy applications', '30% faster initial loads', '50%+ faster editorial workflows']
+                : ['React editor', 'Django APIs', 'FastAPI service'];
             return (
-              <article key={project.id} className="selected-work-card">
-                <div className="selected-work-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>
-                <div className="selected-work-main">
+              <article key={project.id} className={`visual-work-story visual-work-story--${project.id}`}>
+                <div className="visual-work-story-copy">
                   <p className="project-card-label">{project.visibility === 'private-redacted' ? 'Private / redacted' : 'Public project'}</p>
                   <h3>{project.title}</h3>
                   <p>{project.summary}</p>
-                  <Link href={`/work/${project.slug}`}>Open engineering dossier <span aria-hidden="true">↗</span></Link>
+                  <ul aria-label={`${project.title} facts`}>{facts.map((fact) => <li key={fact}>{fact}</li>)}</ul>
+                  <Link href={`/work/${project.slug}`}>Read case study <span aria-hidden="true">→</span></Link>
                 </div>
-                <div className="selected-work-evidence">
-                  <p>{caseStudy ? `${caseStudy.outcomes[0]?.value} ${caseStudy.outcomes[0]?.label}` : null}</p>
-                  <ul aria-label={`${project.title} technologies`}>
-                    {project.technologies.slice(0, 5).map((technology) => <li key={technology}>{technology}</li>)}
-                  </ul>
-                  <span className="selected-work-flow" aria-hidden="true">
-                    {caseStudy?.architecture.nodes.slice(0, 4).map((node) => <i key={node.id} title={node.label} />)}
-                  </span>
+                <div className="visual-work-story-diagram">
+                  {project.id === 'jobs-tracker-bot' ? <JobsPipelinePreview /> : <ProjectStoryVisual variant={project.id === 'tactical-tech-modernisation' ? 'modernisation' : 'contract'} />}
                 </div>
               </article>
             );
           })}
         </div>
-        <Link className="section-link" href="/work">View all case studies <span aria-hidden="true">→</span></Link>
       </section>
 
-      <section className="homepage-section homepage-section-muted" aria-labelledby="capabilities-title">
-        <div className="section-intro">
-          <p className="eyebrow">Capabilities</p>
-          <h2 id="capabilities-title">Engineering range, grounded in delivery</h2>
+      <section className="homepage-section experience-snapshot" aria-labelledby="experience-snapshot-title">
+        <div className="section-intro section-intro-row">
+          <div><p className="eyebrow">Experience</p><h2 id="experience-snapshot-title">A concise delivery history</h2></div>
+          <Link href="/experience">View experience <span aria-hidden="true">→</span></Link>
         </div>
-        <div className="capability-grid">
-          {capabilities.slice(0, 4).map((capability) => (
-            <article key={capability.id}>
-              <span aria-hidden="true">{String(capabilities.indexOf(capability) + 1).padStart(2, '0')}</span>
-              <h3>{capability.title}</h3>
-              <p>{capability.description}</p>
-            </article>
-          ))}
-        </div>
+        <ol>
+          {roles.slice(0, 2).map((role) => <li key={role.id}><strong>{role.company}</strong><span>{role.title}</span><time>{role.startDate.slice(0, 4)}–{role.endDate.slice(0, 4)}</time></li>)}
+          <li><strong>Earlier full-stack roles</strong><span>Ruby on Rails, PHP, and full-stack development</span><time>2016–2019</time></li>
+        </ol>
       </section>
 
       <section className="homepage-section writing-preview" aria-labelledby="writing-title">
         <div className="section-intro section-intro-row">
-          <div>
-            <p className="eyebrow">Writing</p>
-            <h2 id="writing-title">Notes on frontend systems, accessibility, and delivery</h2>
-          </div>
-          <Link href="/writing">Browse writing</Link>
+          <div><p className="eyebrow">Writing</p><h2 id="writing-title">System design and product engineering notes</h2></div>
+          <Link href="/writing">Browse writing <span aria-hidden="true">→</span></Link>
         </div>
         <div className="writing-preview-list">
-          {writing.map((article) => (
-            <Link key={article.id} href={`/writing/${article.slug}`}>
-              <span>{article.categories[0]}</span>
-              <strong>{article.title}</strong>
-              <span>Read note →</span>
-            </Link>
-          ))}
+          {posts.map((article) => <Link key={article.slug} href={`/writing/${article.slug}`}><span>{article.tags[0]}</span><strong>{article.title}</strong><span>Read note →</span></Link>)}
         </div>
       </section>
 
       <section className="contact-panel" aria-labelledby="contact-title">
-        <div>
-          <p className="eyebrow">Let&apos;s talk</p>
-          <h2 id="contact-title">Have a product system worth untangling?</h2>
-          <p>I&apos;m open to senior frontend and full-stack engineering conversations in Germany and across Europe.</p>
-        </div>
-        <div className="homepage-actions">
-          <a className="button button-primary" href={`mailto:${profile.email}`}>Email Saqib</a>
-          <a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a>
-        </div>
+        <div><p className="eyebrow">Let&apos;s talk</p><h2 id="contact-title">Have a product workflow worth simplifying?</h2><p>I&apos;m open to senior frontend and full-stack engineering conversations in Germany and across Europe.</p></div>
+        <div className="homepage-actions"><a className="button button-primary" href={`mailto:${profile.email}`}>Email Saqib</a><a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a></div>
       </section>
     </div>
   );

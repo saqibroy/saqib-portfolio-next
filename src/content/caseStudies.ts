@@ -1,36 +1,5 @@
 import { portfolioContent } from './portfolio';
 
-export const caseStudySectionKeys = [
-  'context',
-  'problem',
-  'constraints',
-  'role',
-  'architecture',
-  'requestDataFlow',
-  'decisions',
-  'alternatives',
-  'tradeOffs',
-  'reliabilitySecurityAccessibility',
-  'testingDelivery',
-  'outcome',
-  'nextImprovements',
-  'evidence',
-] as const;
-
-export const requiredCaseStudySectionKeys = [
-  'context',
-  'problem',
-  'constraints',
-  'role',
-  'architecture',
-  'requestDataFlow',
-  'decisions',
-  'tradeOffs',
-  'outcome',
-  'evidence',
-] as const;
-
-export type CaseStudySectionKey = (typeof caseStudySectionKeys)[number];
 export type CaseStudyVisibility = 'public' | 'private-redacted';
 export type ArchitectureNodeKind = 'source' | 'interface' | 'boundary' | 'service' | 'decision' | 'data' | 'delivery';
 
@@ -53,153 +22,157 @@ export type ArchitectureEdge = {
   label?: string;
 };
 
+export type ArchitectureDefinition = {
+  nodes: ArchitectureNode[];
+  edges: ArchitectureEdge[];
+};
+
+export type CaseStudyDecision = {
+  title: string;
+  reason: string;
+  tradeoff: string;
+};
+
+export type CaseStudyEvidence = {
+  evidenceId: string;
+  label: string;
+};
+
 export type CaseStudy = {
   slug: string;
   title: string;
   summary: string;
   visibility: CaseStudyVisibility;
-  status: 'published';
-  capabilities: string[];
+  role: string;
+  result: string;
   stack: string[];
+  visual: ArchitectureDefinition;
+  system: string;
+  decisions: CaseStudyDecision[];
   outcomes: CaseStudyOutcome[];
-  evidenceRefs: string[];
-  architecture: {
-    nodes: ArchitectureNode[];
-    edges: ArchitectureEdge[];
-  };
+  evidence: CaseStudyEvidence;
   evidenceBoundary?: string;
-  sections: Partial<Record<CaseStudySectionKey, string>>;
+  nextImprovement?: string;
 };
 
 export const caseStudies: CaseStudy[] = [
   {
     slug: 'ai-assisted-contract-workflow',
     title: 'AI-Assisted Contract Workflow',
-    summary: 'A redacted workflow connecting a React/TypeScript contract editor, Django application backend, FastAPI AI service, and Stripe purchase flow.',
+    summary: 'A redacted product workflow connecting a React and TypeScript contract editor, Django application APIs, a FastAPI AI service, and Stripe purchase controls.',
     visibility: 'private-redacted',
-    status: 'published',
-    capabilities: ['Frontend architecture', 'Service integration', 'Applied AI'],
+    role: 'Designed the application flow and service integration; delivered across the editor, Django backend, FastAPI service, and production integration.',
+    result: 'Connected structured input, contract editing, AI-assisted content population, payment, and controlled document access.',
     stack: ['React', 'TypeScript', 'Django', 'FastAPI', 'RAG', 'Stripe'],
-    outcomes: [
-      {
-        value: 'End to end',
-        label: 'Product workflow',
-        context: 'Editor, backend, AI service, payment, and controlled document access.',
-      },
-    ],
-    evidenceRefs: ['approved-velsa'],
-    evidenceBoundary: 'This private case study describes approved system boundaries only. Company, customer, prompt, model, infrastructure, and document material remain confidential.',
-    architecture: {
+    visual: {
       nodes: [
         { id: 'structured-input', label: 'Structured input', kind: 'source', detail: 'Values collected through the conversational workflow.' },
         { id: 'react-editor', label: 'React editor', kind: 'interface', detail: 'Merge fields, inline options, and conditional clauses.' },
         { id: 'django-api', label: 'Django APIs', kind: 'boundary', detail: 'Application state and integration boundary.' },
         { id: 'fastapi-ai', label: 'FastAPI AI service', kind: 'service', detail: 'LLM inference and vector retrieval.' },
-        { id: 'contract-content', label: 'Contract content', kind: 'data', detail: 'Structured values populate controlled document content.' },
-        { id: 'stripe-webhooks', label: 'Stripe webhooks', kind: 'service', detail: 'Purchasing lifecycle integration.' },
-        { id: 'document-access', label: 'Controlled access', kind: 'delivery', detail: 'Purchase state controls document access.' },
+        { id: 'contract-content', label: 'Structured document update', kind: 'data', detail: 'Controlled contract content is populated from structured values.' },
+        { id: 'stripe-webhooks', label: 'Stripe', kind: 'service', detail: 'Purchasing lifecycle integration.' },
+        { id: 'document-access', label: 'Document access', kind: 'delivery', detail: 'Purchase state controls document access.' },
       ],
       edges: [
         { source: 'structured-input', target: 'react-editor' },
         { source: 'react-editor', target: 'django-api', label: 'validated request' },
         { source: 'django-api', target: 'fastapi-ai', label: 'service request' },
-        { source: 'fastapi-ai', target: 'contract-content', label: 'retrieved and generated content' },
+        { source: 'fastapi-ai', target: 'contract-content', label: 'structured update' },
         { source: 'contract-content', target: 'react-editor', label: 'populate editor' },
         { source: 'django-api', target: 'stripe-webhooks', label: 'purchase state' },
         { source: 'stripe-webhooks', target: 'document-access' },
       ],
     },
-    sections: {
-      context: 'The product needed a browser-based workflow for collecting structured input and producing contract content while keeping purchase and document access inside the application.',
-      problem: 'The interface, application backend, AI capability, and payment lifecycle needed to work as one understandable product flow.',
-      constraints: 'Confidential product and customer material sets the public evidence boundary for this account.',
-      role: 'Designed the application flow and service integration and owned delivery across the editor, Django backend, FastAPI service, and production integration.',
-      architecture: 'A React/TypeScript editor communicated through Django APIs. Django integrated with a separate FastAPI service for LLM inference and vector retrieval, while Stripe webhooks controlled purchasing and document access.',
-      requestDataFlow: 'The conversational interface collected structured values, sent them through backend APIs, and populated merge fields, inline options, and conditional clauses in contract content.',
-      decisions: 'The AI capability was separated behind a FastAPI service and integrated through the application backend instead of being coupled directly to the browser editor.',
-      tradeOffs: 'Separating the AI service added an integration boundary but kept the editor and application backend responsible for predictable product state.',
-      reliabilitySecurityAccessibility: 'Stripe webhooks and controlled document access kept purchase state inside the application workflow.',
-      outcome: 'The delivered workflow connected structured conversation, contract editing, AI-assisted content population, payment, and controlled document access.',
-      evidence: 'Approved portfolio brief for the Velsa Technologies role.',
-    },
+    system: 'Structured values move from the browser editor through Django APIs to a separate FastAPI service for LLM inference and vector retrieval. The resulting document update returns to the editor as controlled product state. Stripe webhooks remain a secondary application branch for purchasing and document access, rather than becoming part of the editor interaction.',
+    decisions: [
+      {
+        title: 'Separate the AI service',
+        reason: 'Kept inference and retrieval behind an explicit service boundary instead of coupling them to the editor.',
+        tradeoff: 'Added an integration boundary to maintain.',
+      },
+      {
+        title: 'Keep application state in Django',
+        reason: 'Made the browser workflow and payment lifecycle accountable to the application backend.',
+        tradeoff: 'The service call must be coordinated through the backend.',
+      },
+    ],
+    outcomes: [{ value: 'End to end', label: 'Product workflow', context: 'Editor, backend, AI service, payment, and controlled access.' }],
+    evidence: { evidenceId: 'approved-velsa', label: 'Approved portfolio brief' },
+    evidenceBoundary: 'Private system boundaries only; customer, document, prompt, model, and infrastructure details remain confidential.',
   },
   {
     slug: 'jobs-tracker-bot',
     title: 'Jobs Tracker Bot',
-    summary: 'An async Python job aggregation pipeline with provider adapters, deterministic eligibility rules, scoring, deduplication, persistence, and alert routing.',
+    summary: 'An async Python job-aggregation pipeline with provider adapters, deterministic eligibility rules, scoring, deduplication, persistence, and alert routing.',
     visibility: 'public',
-    status: 'published',
-    capabilities: ['Backend pipeline', 'Automation', 'Testing and delivery'],
+    role: 'Designed and implemented the aggregation, filtering, scoring, persistence, notification, scheduling, health, concurrency, and delivery pipeline.',
+    result: 'Turns heterogeneous provider data into deterministic, deduplicated immediate and digest alerts.',
     stack: ['Python', 'Docker', 'GitHub Actions', 'Discord', 'Telegram'],
-    outcomes: [
-      { value: '520+', label: 'Automated tests', context: 'Deterministic pipeline and adapter coverage.' },
-      { value: 'GitHub Actions → Oracle Cloud', label: 'Scheduled delivery', context: 'Containerised deployment and recurring execution.' },
-    ],
-    evidenceRefs: ['approved-jobs-tracker'],
-    architecture: {
+    visual: {
       nodes: [
         { id: 'ats-adapters', label: 'ATS adapters', kind: 'source', detail: 'Async source-specific acquisition.' },
         { id: 'provider-adapters', label: 'Provider adapters', kind: 'source', detail: 'Source behaviour remains behind adapter boundaries.' },
         { id: 'normalisation', label: 'Normalisation', kind: 'boundary', detail: 'Provider payloads become a consistent job model.' },
-        { id: 'filters', label: 'Deterministic filters', kind: 'decision', detail: 'Explicit rules run before scoring.' },
-        { id: 'eligibility', label: 'Eligibility score', kind: 'decision', detail: 'Germany and Berlin suitability remains independent.' },
-        { id: 'cv-fit', label: 'CV-fit score', kind: 'decision', detail: 'Role relevance remains a separate dimension.' },
+        { id: 'filters', label: 'Eligibility rules', kind: 'decision', detail: 'Explicit rules run before scoring.' },
+        { id: 'cv-fit', label: 'Fit score', kind: 'decision', detail: 'Role relevance remains a separate dimension.' },
         { id: 'deduplication', label: 'Deduplication', kind: 'service', detail: 'Previously processed roles are identified.' },
         { id: 'persistence', label: 'Persistence', kind: 'data', detail: 'Decisions and notification state survive scheduled runs.' },
-        { id: 'immediate-alerts', label: 'Immediate Discord / Telegram', kind: 'delivery', detail: 'New high-priority matches route immediately.' },
-        { id: 'digest-alerts', label: 'Digest Discord / Telegram', kind: 'delivery', detail: 'Eligible matches can be grouped for digest delivery.' },
+        { id: 'immediate-alerts', label: 'Immediate alerts', kind: 'delivery', detail: 'New high-priority matches route immediately.' },
+        { id: 'digest-alerts', label: 'Digest alerts', kind: 'delivery', detail: 'Eligible matches can be grouped for digest delivery.' },
       ],
       edges: [
         { source: 'ats-adapters', target: 'normalisation' },
         { source: 'provider-adapters', target: 'normalisation' },
         { source: 'normalisation', target: 'filters' },
-        { source: 'filters', target: 'eligibility' },
         { source: 'filters', target: 'cv-fit' },
-        { source: 'eligibility', target: 'deduplication' },
         { source: 'cv-fit', target: 'deduplication' },
         { source: 'deduplication', target: 'persistence' },
         { source: 'persistence', target: 'immediate-alerts' },
         { source: 'persistence', target: 'digest-alerts' },
       ],
     },
-    sections: {
-      context: 'Job sources expose different APIs and payloads, while useful alerts require consistent eligibility and relevance decisions.',
-      problem: 'Aggregate suitable roles without turning source-specific behaviour into one fragile scraper or sending repetitive, low-value notifications.',
-      constraints: 'Provider availability and schemas vary. Germany and Berlin eligibility and CV-fit scoring need to remain separate and deterministic.',
-      role: 'Designed and implemented the aggregation, filtering, scoring, persistence, notification, scheduling, health, concurrency, and delivery pipeline.',
-      architecture: 'Async provider adapters fan into a normalised pipeline. Deterministic filters precede separate eligibility and CV-fit scores, followed by deduplication, persistence, and notification routing.',
-      requestDataFlow: 'Scheduled runs fetch provider data concurrently, normalise roles, apply filters and scores, persist decisions, and route new matches to immediate or digest Discord and Telegram adapters.',
-      decisions: 'Direct provider adapters, deterministic filters, separate score dimensions, and persistence make behaviour reviewable and prevent duplicate alerts.',
-      alternatives: 'A single combined score would be simpler, but it would blur location eligibility and role relevance into one opaque decision.',
-      tradeOffs: 'More explicit stages create additional code and tests, but failures and ranking decisions are easier to isolate.',
-      reliabilitySecurityAccessibility: 'Concurrency control, health reporting, deduplication, and persisted state protect scheduled runs. Bot output remains text-based across both notification adapters.',
-      testingDelivery: 'The public project includes 520+ tests, Docker, scheduling, health checks, concurrency control, and GitHub Actions deployment to Oracle Cloud.',
-      outcome: 'The pipeline turns heterogeneous provider data into deterministic, deduplicated alerts with separate immediate and digest delivery paths.',
-      evidence: 'The public Jobs Tracker Bot repository contains the implementation and delivery configuration.',
-    },
+    system: 'Async ATS and provider adapters feed one normalised job model. Deterministic eligibility rules run before a separate fit score, then deduplication and persistence prevent repeated notifications. New matching roles route to immediate or digest Discord and Telegram adapters. The explicit stages make source changes and ranking decisions easier to isolate and test.',
+    decisions: [
+      {
+        title: 'Isolate source adapters',
+        reason: 'Kept provider-specific acquisition behaviour outside the shared pipeline.',
+        tradeoff: 'Each source needs its own adapter maintenance.',
+      },
+      {
+        title: 'Keep eligibility and fit separate',
+        reason: 'Made location suitability and role relevance reviewable as distinct decisions.',
+        tradeoff: 'Requires more pipeline stages than one combined score.',
+      },
+      {
+        title: 'Persist before alerting',
+        reason: 'Prevents duplicate alerts across scheduled runs.',
+        tradeoff: 'Introduces stored notification state to manage.',
+      },
+    ],
+    outcomes: [
+      { value: '520+', label: 'Automated tests', context: 'Pipeline and adapter coverage.' },
+      { value: 'Docker', label: 'Containerised delivery' },
+      { value: 'GitHub Actions', label: 'Scheduled delivery' },
+    ],
+    evidence: { evidenceId: 'approved-jobs-tracker', label: 'Public repository' },
+    nextImprovement: 'Add new providers only when their schemas and alert value justify another maintained adapter.',
   },
   {
     slug: 'tactical-tech-platform-modernisation',
     title: 'Tactical Tech Platform Modernisation',
-    summary: 'Frontend delivery and modernisation across public-facing platforms used by researchers, educators, international users, and civil-society organisations.',
+    summary: 'Frontend delivery and modernisation across public-facing platforms for research, education, and civil-society audiences.',
     visibility: 'private-redacted',
-    status: 'published',
-    capabilities: ['Frontend modernisation', 'Performance', 'Content architecture'],
+    role: 'As Front-End Developer, owned frontend delivery and modernisation decisions across 5+ public-facing platforms and partnered with product, design, research, and editorial teams.',
+    result: 'Migrated three legacy applications while improving initial loads and editorial workflows.',
     stack: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS'],
-    outcomes: [
-      { value: '3', label: 'Legacy applications migrated', context: 'Next.js and Nuxt.js modernisation.' },
-      { value: '30%', label: 'Faster initial loads', context: 'Code splitting, lazy loading, and frontend optimisation.' },
-      { value: '50%+', label: 'Faster editorial workflows', context: 'Refactored Decap CMS content architecture.' },
-    ],
-    evidenceRefs: ['approved-tactical-tech'],
-    evidenceBoundary: 'This account describes Saqib’s approved contribution scope and does not attribute organisation-wide reach or sole ownership.',
-    architecture: {
+    visual: {
       nodes: [
         { id: 'editorial-content', label: 'Editorial content', kind: 'source' },
         { id: 'decap-cms', label: 'Decap CMS', kind: 'interface', detail: 'Structured editorial workflows.' },
-        { id: 'content-model', label: 'Content architecture', kind: 'data', detail: 'Refactored content structures.' },
+        { id: 'content-model', label: 'Refactored content model', kind: 'data', detail: 'Content structures shared by frontend applications.' },
         { id: 'applications', label: 'Next.js / Nuxt.js apps', kind: 'service', detail: 'Modernised frontend applications.' },
-        { id: 'optimised-delivery', label: 'Optimised delivery', kind: 'boundary', detail: 'Code splitting, lazy loading, and frontend optimisation.' },
+        { id: 'optimised-delivery', label: 'Accessible delivery', kind: 'boundary', detail: 'Code splitting, lazy loading, and frontend optimisation.' },
         { id: 'public-audiences', label: 'Public audiences', kind: 'delivery' },
       ],
       edges: [
@@ -210,34 +183,41 @@ export const caseStudies: CaseStudy[] = [
         { source: 'optimised-delivery', target: 'public-audiences' },
       ],
     },
-    sections: {
-      context: 'Multiple public-facing platforms served research, education, and civil-society audiences with different content and product needs.',
-      problem: 'Legacy frontend applications and content structures made delivery, performance, and editorial work harder to sustain.',
-      constraints: 'The work spanned several platforms and cross-functional teams. This account keeps the approved contribution scope explicit.',
-      role: 'As Front-End Developer, owned frontend delivery and modernisation decisions across 5+ public-facing platforms and partnered with product, design, research, and editorial teams.',
-      architecture: 'Three legacy applications were migrated to Next.js or Nuxt.js. Decap CMS content architecture supported editorial workflows across the frontend systems.',
-      requestDataFlow: 'Editors managed structured content through Decap CMS; frontend applications transformed and delivered that content to public users.',
-      decisions: 'Framework migration, code splitting, lazy loading, frontend optimisation, and content-model refactoring addressed maintainability, delivery, and performance together.',
-      tradeOffs: 'Incremental modernisation preserved ongoing publishing while requiring old and new application structures to coexist during migration.',
-      reliabilitySecurityAccessibility: 'The work contributed to WCAG 2.1 AA across the approved frontend contribution scope.',
-      outcome: 'The work migrated three legacy applications, reduced initial load times by 30%, and reduced editorial workflow time by more than 50%.',
-      evidence: 'Approved portfolio brief for the Tactical Tech role and contribution scope.',
-    },
+    system: 'Editors worked through Decap CMS and a refactored content model, while legacy applications moved incrementally to Next.js and Nuxt.js. Code splitting, lazy loading, and frontend optimisation improved delivery without interrupting publishing. The public account describes Saqib’s approved contribution scope, not organisation-wide reach or sole ownership.',
+    decisions: [
+      {
+        title: 'Migrate incrementally',
+        reason: 'Allowed publishing to continue while legacy applications moved to modern frameworks.',
+        tradeoff: 'Old and new application structures coexisted during migration.',
+      },
+      {
+        title: 'Refactor the CMS model',
+        reason: 'Addressed repeated editorial work at the content boundary instead of only in the frontend.',
+        tradeoff: 'Required coordinated changes across content and application structures.',
+      },
+      {
+        title: 'Optimise the delivery path',
+        reason: 'Applied code splitting and lazy loading where they improved initial loading.',
+        tradeoff: 'Introduced more intentional loading boundaries.',
+      },
+    ],
+    outcomes: [
+      { value: '3', label: 'Legacy applications migrated' },
+      { value: '30%', label: 'Faster initial loads', context: 'Code splitting, lazy loading, and frontend optimisation.' },
+      { value: '50%+', label: 'Faster editorial workflows', context: 'Refactored Decap CMS content architecture.' },
+    ],
+    evidence: { evidenceId: 'approved-tactical-tech', label: 'Approved portfolio brief' },
+    evidenceBoundary: 'Approved contribution scope only; it does not attribute organisation-wide reach or sole ownership.',
   },
   {
     slug: 'web-crawler-dashboard',
     title: 'Web Crawler Dashboard',
-    summary: 'A React/TypeScript dashboard backed by Go/Gin and MySQL for URL analysis, crawl lifecycle management, search, filters, and bulk actions.',
+    summary: 'A React and TypeScript dashboard backed by Go, Gin, and MySQL for URL analysis, crawl lifecycle management, search, filters, and bulk actions.',
     visibility: 'public',
-    status: 'published',
-    capabilities: ['Frontend product UI', 'API integration', 'Data lifecycle'],
+    role: 'Implemented the React and TypeScript frontend and Go/Gin backend integration represented in the public project.',
+    result: 'Provides authenticated URL analysis and crawl management with clear lifecycle state.',
     stack: ['React', 'TypeScript', 'Go', 'Gin', 'GORM', 'MySQL', 'Docker'],
-    outcomes: [
-      { value: 'Authenticated', label: 'Crawl-management workflow', context: 'Search, filters, bulk actions, and lifecycle state.' },
-      { value: 'Automated', label: 'Frontend tests', context: 'Public project delivery evidence.' },
-    ],
-    evidenceRefs: ['approved-web-crawler'],
-    architecture: {
+    visual: {
       nodes: [
         { id: 'authenticated-user', label: 'Authenticated user', kind: 'source' },
         { id: 'react-dashboard', label: 'React dashboard', kind: 'interface', detail: 'Search, filters, bulk actions, and lifecycle state.' },
@@ -255,24 +235,33 @@ export const caseStudies: CaseStudy[] = [
         { source: 'crawl-lifecycle', target: 'react-dashboard', label: 'updated status' },
       ],
     },
-    sections: {
-      context: 'URL analysis produces records that need to be searched, filtered, monitored, and managed through a clear lifecycle.',
-      problem: 'Provide an authenticated interface for starting and managing crawl work without losing visibility into record state or bulk operations.',
-      constraints: 'The public evidence supports the application architecture and feature set, not production scale or traffic claims.',
-      role: 'Implemented the React/TypeScript frontend and Go/Gin backend integration represented in the public project.',
-      architecture: 'A React/TypeScript dashboard communicates with a Go/Gin REST API. GORM maps application data to MySQL, with JWT authentication at the API boundary.',
-      requestDataFlow: 'Authenticated actions move from dashboard controls to API handlers and persisted crawl records; updated status is returned to searchable and filterable views.',
-      decisions: 'Explicit crawl states, bulk actions, search, and filters make long-running URL analysis manageable from one dashboard.',
-      tradeOffs: 'A separate Go API and React client require two delivery surfaces but keep UI state and backend persistence responsibilities clear.',
-      reliabilitySecurityAccessibility: 'JWT authentication and a defined crawl-status lifecycle are supported by the public implementation.',
-      testingDelivery: 'The project includes Docker setup and automated frontend tests.',
-      outcome: 'The application supports authenticated URL analysis, search, filters, bulk actions, and crawl lifecycle management.',
-      evidence: 'The public Web Crawler Dashboard repository contains the application implementation.',
-    },
+    system: 'An authenticated React dashboard sends crawl-management actions to a Go and Gin REST API. The API owns URL analysis and an explicit crawl lifecycle, while GORM persists records in MySQL. Updated state returns to the dashboard for searchable, filterable, and bulk-managed views.',
+    decisions: [
+      {
+        title: 'Use explicit crawl states',
+        reason: 'Kept long-running URL analysis visible in the management interface.',
+        tradeoff: 'Lifecycle transitions need clear backend rules.',
+      },
+      {
+        title: 'Separate dashboard and API',
+        reason: 'Kept interface state and persistence responsibilities clear.',
+        tradeoff: 'Created two delivery surfaces to coordinate.',
+      },
+    ],
+    outcomes: [
+      { value: 'Authenticated', label: 'Crawl-management workflow' },
+      { value: 'Automated', label: 'Frontend tests' },
+    ],
+    evidence: { evidenceId: 'approved-web-crawler', label: 'Public repository' },
+    nextImprovement: 'Continue validating new workflow features against the public implementation rather than inferring production-scale claims.',
   },
 ];
 
-const stalePublicCopy = /\b(?:under review|follow later|return later|not publicly documented|details? (?:are|is) (?:omitted|unavailable))\b/i;
+const stalePublicCopy = /\b(?:under review|follow later|return later|not publicly documented|details? (?:are|is) (?:omitted|unavailable)|engineering dossier|published status)\b/i;
+
+function wordCount(value: string) {
+  return value.match(/\b[\p{L}\p{N}][\p{L}\p{N}'’-]*\b/gu)?.length ?? 0;
+}
 
 export function validateCaseStudies(items: readonly CaseStudy[] = caseStudies) {
   const slugs = new Set<string>();
@@ -288,36 +277,36 @@ export function validateCaseStudies(items: readonly CaseStudy[] = caseStudies) {
     }
     slugs.add(item.slug);
 
-    if (!item.title || !item.summary || item.stack.length === 0 || item.capabilities.length === 0) {
+    if (!item.title || !item.summary || !item.role || !item.result || item.stack.length === 0) {
       throw new Error(`Incomplete case study: ${item.slug}`);
     }
-    if (!requiredCaseStudySectionKeys.every((key) => item.sections[key]?.trim())) {
-      throw new Error(`Missing required case-study section in ${item.slug}`);
+    if (wordCount(item.system) > 180) throw new Error(`System description exceeds 180 words: ${item.slug}`);
+    if (item.decisions.length < 2 || item.decisions.length > 4 || item.decisions.some(({ title, reason, tradeoff }) => !title || !reason || !tradeoff)) {
+      throw new Error(`Case study must have 2–4 complete decisions: ${item.slug}`);
     }
-    if (item.sections.nextImprovements !== undefined && !item.sections.nextImprovements.trim()) {
-      throw new Error(`Empty next-improvements section in ${item.slug}`);
+    if (item.outcomes.length === 0 || !evidence.has(item.evidence.evidenceId) || !item.evidence.label) {
+      throw new Error(`Invalid outcome or evidence in ${item.slug}`);
     }
-    if (!item.evidenceRefs.every((id) => evidence.has(id))) {
-      throw new Error(`Unapproved evidence in ${item.slug}`);
+    if (item.nextImprovement !== undefined && !item.nextImprovement.trim()) {
+      throw new Error(`Empty next improvement in ${item.slug}`);
     }
 
     const nodeIds = new Set<string>();
-    for (const node of item.architecture.nodes) {
+    for (const node of item.visual.nodes) {
       if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(node.id) || nodeIds.has(node.id)) {
         throw new Error(`Invalid or duplicate architecture node "${node.id}" in ${item.slug}`);
       }
       nodeIds.add(node.id);
     }
     if (nodeIds.size < 3) throw new Error(`Incomplete architecture in ${item.slug}`);
-    for (const edge of item.architecture.edges) {
+    for (const edge of item.visual.edges) {
       if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) {
         throw new Error(`Dangling architecture edge "${edge.source}" → "${edge.target}" in ${item.slug}`);
       }
     }
 
-    const publicCopy = JSON.stringify(item);
-    if (stalePublicCopy.test(publicCopy)) {
-      throw new Error(`Stale incomplete-work copy in ${item.slug}`);
+    if (stalePublicCopy.test(JSON.stringify(item))) {
+      throw new Error(`Stale template copy in ${item.slug}`);
     }
   }
 

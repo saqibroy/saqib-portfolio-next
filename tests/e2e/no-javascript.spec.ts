@@ -6,16 +6,17 @@ test('primary content remains understandable without JavaScript', async ({ brows
 
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
-  await expect(page.getByText('Product problem → Interface → API boundary → Service → Data/AI → Production')).toBeVisible();
+  await expect(page.getByText('React editor', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('ATS adapters', { exact: true }).first()).toBeVisible();
 
   await page.goto('/work/jobs-tracker-bot');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Jobs Tracker Bot');
-  await expect(page.getByText('Read the architecture as text')).toBeVisible();
+  await page.getByText('Read the system as text').click();
   await expect(page.getByRole('listitem').filter({ hasText: 'ATS adapters' })).toBeVisible();
 
-  await page.goto('/writing/web-accessibility-2025');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('A practical accessibility baseline');
-  await expect(page.getByRole('heading', { level: 2, name: 'Test in layers' })).toBeVisible();
+  await page.goto('/writing/designing-a-url-shortener');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Designing a URL Shortener');
+  await expect(page.getByRole('table', { name: 'Short-code strategy trade-offs' })).toBeVisible();
 
   await context.close();
 });

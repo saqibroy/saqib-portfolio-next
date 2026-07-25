@@ -187,6 +187,15 @@ whose status changes.
 | P11.10 | Pass clean install, lint, typecheck, unit, browser, axe, build, audit, and Lighthouse gates | DONE | P11.04–P11.09 | Local gate: `npm ci`; lint; typecheck; 21 unit tests; 36 browser tests; 10 two-theme axe route checks; build; zero-vulnerability production audit. PR #17 `quality` passed the same CI workflow after npm 10 lockfile validation. Phase 11 report records Lighthouse and chunk measurements. | Re-run against production after the reviewed PR stack merges |
 | P11.11 | Add Phase 11 completion report and release through reviewed PRs | IN PROGRESS | P11.01–P11.10 | Interim `docs/phase-reports/phase-11-visual-systems-and-dossiers.md`; draft PRs #14–#17; PR #17 Vercel and GitHub Actions checks pass | Obtain screenshot/interaction approval, then merge in order and append production verification |
 
+## Phase 12 — Homepage and case-study simplification
+
+| ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
+| --- | --- | --- | --- | --- | --- |
+| P12.01 | Replace generic homepage animation and Systems Lab with real-project visuals | DONE | Phase 11 | `src/app/page.tsx`, homepage visual captures, Chromium keyboard/touch/reduced-motion checks | Recheck only if homepage scope changes |
+| P12.02 | Compact case-study model and four-section page template | DONE | P12.01 | `src/content/caseStudies.ts`, `/work/[slug]`, 4 case-study route and axe checks | Keep the 180-word and 2–4-decision validation limits |
+| P12.03 | Publish URL-shortener system-design article and MDX visuals | DONE | P12.01 | `content/writing/designing-a-url-shortener.mdx`, writing routes, metadata, sitemap, and axe checks | Re-review if article sources or product framing change |
+| P12.04 | Remove retired WebGL and animation dependencies; complete quality gate and report | DONE | P12.01–P12.03 | `package.json`, lockfile, `docs/phase-reports/phase-12-home-and-case-study-simplification.md`; lint, typecheck, 19 unit, 38 browser, 11 axe, and build checks | Open and review the focused PR before merge |
+
 ## Blockers
 
 No blocker prevents completion of Phase 0.
