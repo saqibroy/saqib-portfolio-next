@@ -2,7 +2,7 @@
 
 **Current phase:** Phase 11 — Visual systems and case-study redesign
 
-**Current branch:** `agent/phase-11-content-foundation`
+**Current branch:** `agent/phase-11-homepage` (stacked on content foundation PR #14)
 
 **Last updated:** 2026-07-25
 
@@ -178,8 +178,8 @@ whose status changes.
 | P11.01 | Split prominent title from descriptive positioning across content, metadata, structured data, and experience | DONE | Phase 10 baseline | `src/content/portfolio.ts`, root metadata/JSON-LD, OG image, experience H1, unit tests | Keep title usage covered during homepage redesign |
 | P11.02 | Register the user-approved `7+ products & platforms` proof and homepage proof selection | DONE | P11.01 | Claim registry, metric model, content inventory, unit tests | Render only the two approved proof cards in the homepage PR |
 | P11.03 | Remove stale/incomplete public copy without strengthening claims | IN PROGRESS | P11.01–P11.02 | Content scan and browser tests planned | Complete with homepage and dossier copy changes |
-| P11.04 | Build the progressive homepage hero signal and Systems Lab with semantic fallbacks | NOT STARTED | P11.01–P11.03 | Pending | Start after content-foundation PR |
-| P11.05 | Redesign homepage proof, selected work, capabilities, writing, and contact composition | NOT STARTED | P11.04 | Pending | Implement with homepage systems PR |
+| P11.04 | Build the progressive homepage hero signal and Systems Lab with semantic fallbacks | DONE | P11.01–P11.03 | `HeroSignalCanvas`, `SystemsLab`, deferred R3F topology, GSAP stage sync, keyboard/touch/reduced-motion/save-data/no-JS browser tests | Re-measure animation chunks and LCP in the final QA PR |
+| P11.05 | Redesign homepage proof, selected work, capabilities, writing, and contact composition | DONE | P11.04 | Server homepage composition; inspected light desktop and mobile captures; 32 browser tests and 7 two-theme axe routes pass | Re-capture from the final stacked preview for user approval |
 | P11.06 | Add validated architecture nodes/edges, structured outcomes, and optional dossier sections | NOT STARTED | P11.03 | Pending | Start in case-study data commit |
 | P11.07 | Apply the engineering-dossier template to every published case study | NOT STARTED | P11.06 | Pending | Begin with Jobs Tracker Bot |
 | P11.08 | Add accessible deferred architecture maps and text equivalents | NOT STARTED | P11.06–P11.07 | Pending | Test keyboard, touch, no-JS, and fit-to-view |
