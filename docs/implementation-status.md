@@ -1,12 +1,12 @@
 # Implementation Status
 
-**Current phase:** Phase 10 — SEO, performance, documentation, and release
+**Current phase:** Phase 11 — Visual systems and case-study redesign
 
-**Current branch:** `phase-10-production-evidence` (final evidence PR)
+**Current branch:** `agent/phase-11-content-foundation`
 
 **Last updated:** 2026-07-25
 
-**Overall state:** DONE; deployed production verification and the user-confirmed manual accessibility review are complete
+**Overall state:** IN PROGRESS; factual content direction and tracking are being established before visual work
 
 ## Status rules
 
@@ -38,6 +38,7 @@ whose status changes.
 | 8. Writing experience/review | DONE | Phases 2, 4 | Separate PR |
 | 9. Accessibility security gate | DONE (promotion DEFERRED) | Phase 3; external evidence | Separate PR |
 | 10. SEO/performance/docs/release | DONE | Phases 5–9 dispositions | PRs #11–#13; production verification and manual review complete |
+| 11. Visual systems/case-study redesign | IN PROGRESS | Phase 10 production baseline | Four reviewable PRs; visual work requires screenshot approval |
 
 ## Phase 0 — Audit, governance, and tracking
 
@@ -169,6 +170,22 @@ whose status changes.
 | P10.05 | Capture three-run median Lighthouse results | DONE | Local production build | Phase 10 report; twelve local and twelve live-production Lighthouse 12.8.2 JSON reports under `/tmp` | Re-measure after material framework, global client-island, or delivery changes |
 | P10.06 | Pass performance and accessibility release budgets | DONE | P10.05 | Three-run local medians meet LCP (1.71–1.83 s), accessibility/SEO (100), and CLS (0); user approved the documented 161 kB shared-runtime exception on 2026-07-25 | Re-measure and revisit the exception if framework, global client islands, or first-load script composition changes materially |
 | P10.07 | Verify redirects, downloads, CI, manual checklist, and preview | DONE | P10.01–P10.06 | Production checks pass after repair PR #12: routes/details/downloads, redirects, metadata, screenshots, theme, keyboard skip focus, touch flow, no-JS content, and four three-run Lighthouse medians; user confirmed the remaining manual review on 2026-07-25 | Re-run the release checklist after material route, interaction, accessibility, framework, or delivery changes |
+
+## Phase 11 — Visual systems and case-study redesign
+
+| ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
+| --- | --- | --- | --- | --- | --- |
+| P11.01 | Split prominent title from descriptive positioning across content, metadata, structured data, and experience | DONE | Phase 10 baseline | `src/content/portfolio.ts`, root metadata/JSON-LD, OG image, experience H1, unit tests | Keep title usage covered during homepage redesign |
+| P11.02 | Register the user-approved `7+ products & platforms` proof and homepage proof selection | DONE | P11.01 | Claim registry, metric model, content inventory, unit tests | Render only the two approved proof cards in the homepage PR |
+| P11.03 | Remove stale/incomplete public copy without strengthening claims | IN PROGRESS | P11.01–P11.02 | Content scan and browser tests planned | Complete with homepage and dossier copy changes |
+| P11.04 | Build the progressive homepage hero signal and Systems Lab with semantic fallbacks | NOT STARTED | P11.01–P11.03 | Pending | Start after content-foundation PR |
+| P11.05 | Redesign homepage proof, selected work, capabilities, writing, and contact composition | NOT STARTED | P11.04 | Pending | Implement with homepage systems PR |
+| P11.06 | Add validated architecture nodes/edges, structured outcomes, and optional dossier sections | NOT STARTED | P11.03 | Pending | Start in case-study data commit |
+| P11.07 | Apply the engineering-dossier template to every published case study | NOT STARTED | P11.06 | Pending | Begin with Jobs Tracker Bot |
+| P11.08 | Add accessible deferred architecture maps and text equivalents | NOT STARTED | P11.06–P11.07 | Pending | Test keyboard, touch, no-JS, and fit-to-view |
+| P11.09 | Capture and review light/dark desktop/mobile visuals including 200% zoom | NOT STARTED | P11.04–P11.08 | Pending | User approval required before visual merge |
+| P11.10 | Pass clean install, lint, typecheck, unit, browser, axe, build, audit, and Lighthouse gates | NOT STARTED | P11.04–P11.09 | Pending | Measure core and deferred chunks separately |
+| P11.11 | Add Phase 11 completion report and release through reviewed PRs | NOT STARTED | P11.01–P11.10 | Pending | Do not merge visual work before screenshot review |
 
 ## Blockers
 

@@ -19,7 +19,7 @@ export default function ExperiencePage() {
   return <article className="experience-page">
     <header className="experience-hero">
       <p className="eyebrow">Experience</p>
-      <h1>{profile.positioning}</h1>
+      <h1>{profile.title}</h1>
       <p>{profile.summary}</p>
       <p className="experience-location">{profile.location}</p>
       <div className="homepage-actions">

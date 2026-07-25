@@ -26,7 +26,7 @@ const siteUrl = 'https://ssohail.com';
 
 export const metadata: Metadata = {
   title: {
-    default: `${profile.name} — ${profile.positioning}`,
+    default: `${profile.name} — ${profile.title}`,
     template: `%s | ${profile.name}`,
   },
   description: profile.proposition,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: `${profile.name} — ${profile.positioning}`,
+    title: `${profile.name} — ${profile.title}`,
     description: profile.proposition,
     url: siteUrl,
     siteName: `${profile.name} Portfolio`,
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: `${profile.name} — ${profile.positioning}`,
+    title: `${profile.name} — ${profile.title}`,
     description: profile.proposition,
   },
   robots: {
@@ -109,7 +109,7 @@ export default function RootLayout({
           <JsonLd data={[
             {
               '@context': 'https://schema.org', '@type': 'Person', name: profile.name, url: siteUrl,
-              jobTitle: profile.positioning, email: profile.email, address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
+              jobTitle: profile.title, email: profile.email, address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
               sameAs: [profile.githubUrl, profile.linkedinUrl],
             },
             { '@context': 'https://schema.org', '@type': 'WebSite', name: `${profile.name} Portfolio`, url: siteUrl, inLanguage: 'en' },

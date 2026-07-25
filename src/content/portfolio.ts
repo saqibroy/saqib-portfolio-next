@@ -80,6 +80,12 @@ const evidence: EvidenceRef[] = [
     description: 'Profile, positioning, skills, education, and language facts.',
   },
   {
+    id: 'approved-products-platforms',
+    status: 'approved',
+    source: 'User-approved Phase 11 portfolio brief',
+    description: 'Seven or more products and platforms across verified professional and public-project work.',
+  },
+  {
     id: 'approved-velsa',
     status: 'approved',
     source: 'Approved portfolio brief',
@@ -127,6 +133,13 @@ const metrics: Metric[] = [
     label: 'years in software engineering',
     context: 'Senior frontend-leaning full-stack engineering experience.',
     evidenceIds: ['approved-profile'],
+  },
+  {
+    id: 'products-platforms',
+    value: '7+',
+    label: 'products & platforms',
+    context: 'Verified professional and public-project work.',
+    evidenceIds: ['approved-products-platforms'],
   },
   {
     id: 'tactical-platforms',
@@ -385,9 +398,9 @@ export const portfolioContent = {
   profile: {
     name: 'Saqib Sohail',
     location: 'Berlin, Germany',
-    positioning: 'Senior frontend-leaning full-stack engineer',
-    headline: 'Senior frontend-leaning full-stack engineer',
-    proposition: 'I design and build accessible product systems across React interfaces, Python services and applied AI.',
+    title: 'Senior full-stack engineer',
+    positioning: 'Frontend-leaning full-stack engineer',
+    proposition: 'Frontend-leaning engineer building accessible product interfaces, dependable service boundaries, and applied-AI workflows.',
     summary: 'Eight years of experience turning complex workflows into maintainable web products—from frontend architecture and legacy modernisation to API integration and AI-assisted features.',
     email: 'saqib@ssohail.com',
     website: 'https://ssohail.com',
@@ -403,6 +416,7 @@ export const portfolioContent = {
       visual: '/downloads/saqib-sohail-cv-visual.pdf',
     },
   },
+  homepageMetricIds: ['experience-years', 'products-platforms'],
   evidence,
   metrics,
   roles,
@@ -467,6 +481,7 @@ export function validatePortfolioContent(content: PortfolioContent = portfolioCo
 
   const evidenceById = new Map(content.evidence.map((item) => [item.id, item]));
   const evidenceIds = new Set(evidenceById.keys());
+  const metricsById = new Map(content.metrics.map((item) => [item.id, item]));
   const roleIds = new Set(content.roles.map((item) => item.id));
   const projectSlugs = new Set(content.projects.map((item) => item.slug));
 
@@ -528,6 +543,12 @@ export function validatePortfolioContent(content: PortfolioContent = portfolioCo
     assert(item.categories.length > 0, `writing "${item.id}" has no categories`);
   }
 
+  assert(content.profile.title === 'Senior full-stack engineer', 'profile title must use the approved prominent title');
+  assert(content.profile.positioning === 'Frontend-leaning full-stack engineer', 'profile positioning must use the approved descriptive wording');
+  for (const metricId of content.homepageMetricIds) {
+    assert(metricsById.has(metricId), `homepage metric "${metricId}" does not exist`);
+  }
+  assert(new Set(content.homepageMetricIds).size === content.homepageMetricIds.length, 'homepage metrics contain a duplicate');
   assert(content.profile.downloads.ats.startsWith('/downloads/'), 'ATS download path is invalid');
   assert(content.profile.downloads.visual.startsWith('/downloads/'), 'visual download path is invalid');
 }

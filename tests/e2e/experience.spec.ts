@@ -7,7 +7,7 @@ test('legacy CV redirects permanently to experience', async ({ page, request }) 
 
   await page.goto('/cv');
   await expect(page).toHaveURL(/\/experience$/);
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Senior frontend-leaning full-stack engineer');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
 });
 
 test('experience exposes both CV downloads', async ({ page, request }, testInfo) => {

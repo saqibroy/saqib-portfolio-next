@@ -19,7 +19,11 @@ These facts may enter the Phase 1 claim registry as `approved`.
 ### Profile
 
 - Saqib Sohail; Berlin, Germany.
-- Senior frontend-leaning full-stack engineer with 8+ years of experience.
+- Prominent title: Senior full-stack engineer.
+- Descriptive positioning: Frontend-leaning full-stack engineer.
+- 8+ years of software-engineering experience.
+- 7+ products and platforms across verified professional and public-project
+  work. This is a user-approved Phase 11 claim.
 - Frontend: React, Next.js, TypeScript, JavaScript, Vue.js, Nuxt.js, HTML, CSS.
 - Backend: Python, Django, FastAPI, Node.js, Ruby on Rails, REST APIs.
 - Data/applied AI: PostgreSQL, MySQL, vector databases, RAG, LLM integration.
