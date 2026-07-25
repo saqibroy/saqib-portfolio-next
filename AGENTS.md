@@ -80,8 +80,10 @@ asset scripts outside the phase that authorizes them.
 - Validate content at build time and keep stable IDs for claims, evidence,
   projects, metrics, and tracker items.
 - Preserve existing article source during content-pipeline migrations.
-- Do not introduce WebGL, React Three Fiber, or a heavy animation runtime for
-  decorative effect.
+- Phase 11 may use a focused, progressively loaded WebGL/React Three Fiber
+  client island only when it communicates the approved system flow. It must
+  not block content, replace semantic controls, or run for purely decorative
+  effect.
 - Never expose environment secrets, private URLs, or confidential Velsa
   implementation details.
 
@@ -112,7 +114,9 @@ asset scripts outside the phase that authorizes them.
 
 ## Content and route rules
 
-- The primary position is "Senior frontend-leaning full-stack engineer".
+- Use "Senior full-stack engineer" for H1s, metadata, structured data, and
+  prominent labels. Use "Frontend-leaning full-stack engineer" only in
+  summaries and descriptive positioning.
 - The main CV CTA downloads the ATS PDF; the visual CV is secondary.
 - System-design notes belong under `/writing` until a separate route is
   explicitly approved.

@@ -4,6 +4,32 @@ import { portfolioContent } from '@/content/portfolio';
 import { caseStudies, caseStudySectionKeys, validateCaseStudies } from '@/content/caseStudies';
 
 describe('portfolio content', () => {
+  it('keeps the prominent title distinct from descriptive positioning', () => {
+    expect(portfolioContent.profile.title).toBe('Senior full-stack engineer');
+    expect(portfolioContent.profile.positioning).toBe('Frontend-leaning full-stack engineer');
+    expect(portfolioContent.profile.title).not.toBe(portfolioContent.profile.positioning);
+  });
+
+  it('publishes only the approved homepage proof metrics', () => {
+    const homepageMetrics = portfolioContent.homepageMetricIds.map((id) =>
+      portfolioContent.metrics.find((metric) => metric.id === id),
+    );
+
+    expect(homepageMetrics).toEqual([
+      expect.objectContaining({
+        id: 'experience-years',
+        value: '8+',
+        evidenceIds: ['approved-profile'],
+      }),
+      expect.objectContaining({
+        id: 'products-platforms',
+        value: '7+',
+        evidenceIds: ['approved-products-platforms'],
+      }),
+    ]);
+    expect(homepageMetrics.every(Boolean)).toBe(true);
+  });
+
   it('contains unique project and writing slugs', () => {
     const projectSlugs = portfolioContent.projects.map(({ slug }) => slug);
     const writingSlugs = portfolioContent.writing.map(({ slug }) => slug);

@@ -12,8 +12,8 @@ export default function HomePage() {
   return (
     <div className="homepage">
       <section className="homepage-hero" aria-labelledby="homepage-title">
-        <p className="eyebrow">Berlin, Germany · {profile.positioning}</p>
-        <h1 id="homepage-title">{profile.headline}</h1>
+        <p className="eyebrow">{profile.location}</p>
+        <h1 id="homepage-title">{profile.title}</h1>
         <p className="homepage-proposition">{profile.proposition}</p>
         <div className="homepage-actions">
           <a className="button button-primary" href={profile.downloads.ats}>Download ATS CV</a>
