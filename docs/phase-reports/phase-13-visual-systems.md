@@ -53,5 +53,6 @@
 
 The dark mobile captures use the browser colour-scheme preference. The site’s
 interactive theme toggle is separately covered by Chromium persistence and
-two-theme axe tests. The branch still needs normal draft-PR review before any
-merge.
+two-theme axe tests. Draft PR [#19](https://github.com/saqibroy/saqib-portfolio-next/pull/19)
+targets `master` from `feature/phase-13-visual-systems`; it still needs normal
+review before any merge.
