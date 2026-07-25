@@ -39,6 +39,14 @@
 - `npm run test:a11y` — passed (11 route/theme axe checks).
 - `npm run build` — passed; all intended static routes generated.
 
+## CI lockfile repair
+
+The first draft-PR quality run failed before tests because the npm 11-generated
+lockfile omitted nested optional `@emnapi/core` and `@emnapi/runtime` entries
+required by CI’s npm 10 resolver. The lockfile was regenerated with
+`npm@10.9.2`, then verified with `npm ci`, lint, and typecheck locally. No
+runtime dependency version changed.
+
 ## Captures
 
 - `docs/screenshots/phase-13/home-light-desktop.png`
