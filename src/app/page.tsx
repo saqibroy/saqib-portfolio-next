@@ -80,12 +80,12 @@ export default function HomePage() {
                   <Link href={`/work/${project.slug}`}>Open engineering dossier <span aria-hidden="true">↗</span></Link>
                 </div>
                 <div className="selected-work-evidence">
-                  <p>{caseStudy?.outcomes[0]}</p>
+                  <p>{caseStudy ? `${caseStudy.outcomes[0]?.value} ${caseStudy.outcomes[0]?.label}` : null}</p>
                   <ul aria-label={`${project.title} technologies`}>
                     {project.technologies.slice(0, 5).map((technology) => <li key={technology}>{technology}</li>)}
                   </ul>
                   <span className="selected-work-flow" aria-hidden="true">
-                    {caseStudy?.flow.slice(0, 4).map((step) => <i key={step} title={step} />)}
+                    {caseStudy?.architecture.nodes.slice(0, 4).map((node) => <i key={node.id} title={node.label} />)}
                   </span>
                 </div>
               </article>

@@ -2,7 +2,7 @@
 
 **Current phase:** Phase 11 — Visual systems and case-study redesign
 
-**Current branch:** `agent/phase-11-homepage` (stacked on content foundation PR #14)
+**Current branch:** `agent/phase-11-case-studies` (stacked on homepage PR #15)
 
 **Last updated:** 2026-07-25
 
@@ -177,12 +177,12 @@ whose status changes.
 | --- | --- | --- | --- | --- | --- |
 | P11.01 | Split prominent title from descriptive positioning across content, metadata, structured data, and experience | DONE | Phase 10 baseline | `src/content/portfolio.ts`, root metadata/JSON-LD, OG image, experience H1, unit tests | Keep title usage covered during homepage redesign |
 | P11.02 | Register the user-approved `7+ products & platforms` proof and homepage proof selection | DONE | P11.01 | Claim registry, metric model, content inventory, unit tests | Render only the two approved proof cards in the homepage PR |
-| P11.03 | Remove stale/incomplete public copy without strengthening claims | IN PROGRESS | P11.01–P11.02 | Content scan and browser tests planned | Complete with homepage and dossier copy changes |
+| P11.03 | Remove stale/incomplete public copy without strengthening claims | DONE | P11.01–P11.02 | Homepage/dossier source scan, case-study validator, and browser assertions reject the targeted incomplete-work wording | Keep the validator current if new case-study fields are added |
 | P11.04 | Build the progressive homepage hero signal and Systems Lab with semantic fallbacks | DONE | P11.01–P11.03 | `HeroSignalCanvas`, `SystemsLab`, deferred R3F topology, GSAP stage sync, keyboard/touch/reduced-motion/save-data/no-JS browser tests | Re-measure animation chunks and LCP in the final QA PR |
 | P11.05 | Redesign homepage proof, selected work, capabilities, writing, and contact composition | DONE | P11.04 | Server homepage composition; inspected light desktop and mobile captures; 32 browser tests and 7 two-theme axe routes pass | Re-capture from the final stacked preview for user approval |
-| P11.06 | Add validated architecture nodes/edges, structured outcomes, and optional dossier sections | NOT STARTED | P11.03 | Pending | Start in case-study data commit |
-| P11.07 | Apply the engineering-dossier template to every published case study | NOT STARTED | P11.06 | Pending | Begin with Jobs Tracker Bot |
-| P11.08 | Add accessible deferred architecture maps and text equivalents | NOT STARTED | P11.06–P11.07 | Pending | Test keyboard, touch, no-JS, and fit-to-view |
+| P11.06 | Add validated architecture nodes/edges, structured outcomes, and optional dossier sections | DONE | P11.03 | Typed `CaseStudyOutcome`, `ArchitectureNode`, and `ArchitectureEdge`; required-section and dangling-edge tests; unsupported sections absent | Revalidate when case-study content changes |
+| P11.07 | Apply the engineering-dossier template to every published case study | DONE | P11.06 | Shared full-width hero/outcomes, responsive TOC, grouped chapters, decision cards, private evidence boundary, and inspected Jobs/private captures | Re-capture light/dark desktop/mobile from final preview |
+| P11.08 | Add accessible deferred architecture maps and text equivalents | DONE | P11.06–P11.07 | Deferred React Flow map, keyboard node selection, fit controls, ordered text equivalent, no-JS coverage, and 10 two-theme axe routes passing | Verify touch/zoom and final preview interaction |
 | P11.09 | Capture and review light/dark desktop/mobile visuals including 200% zoom | NOT STARTED | P11.04–P11.08 | Pending | User approval required before visual merge |
 | P11.10 | Pass clean install, lint, typecheck, unit, browser, axe, build, audit, and Lighthouse gates | NOT STARTED | P11.04–P11.09 | Pending | Measure core and deferred chunks separately |
 | P11.11 | Add Phase 11 completion report and release through reviewed PRs | NOT STARTED | P11.01–P11.10 | Pending | Do not merge visual work before screenshot review |
