@@ -2,11 +2,11 @@
 
 **Current phase:** Phase 11 — Visual systems and case-study redesign
 
-**Current branch:** `agent/phase-11-case-studies` (stacked on homepage PR #15)
+**Current branch:** `agent/phase-11-qa` (stacked on case-study PR #16)
 
 **Last updated:** 2026-07-25
 
-**Overall state:** IN PROGRESS; factual content direction and tracking are being established before visual work
+**Overall state:** IN PROGRESS; implementation and automated release gates pass, with preview screenshot and interaction approval still required before merge
 
 ## Status rules
 
@@ -95,7 +95,7 @@ whose status changes.
 | ID | Deliverable / acceptance criterion | Status | Dependency | Evidence | Next action / revisit |
 | --- | --- | --- | --- | --- | --- |
 | P4.01 | Add semantic light/dark design tokens and AA contrast evidence | DONE | Phase 3 commit `9ce7b49` | `globals.css` token pairs and light/dark browser screenshots | Recheck any new token pair before use |
-| P4.02 | Add approved font pairing with measured loading | DONE | P4.01 | `next/font` Source Sans 3/Source Serif 4 use non-preloaded optional loading; mobile H1s retain a stable Georgia fallback | Recheck page-level impact if typography or font weights change |
+| P4.02 | Add approved font pairing with measured loading | DONE | P4.01 | Platform Arial/Georgia pairing removes font downloads while retaining the CV-inspired sans/serif hierarchy; D-027 records the final-design LCP evidence | Recheck page-level impact if typography or font delivery changes |
 | P4.03 | Add no-flash system-default theme and accessible toggle | DONE | P4.01 | `next-themes`, hydration-safe `ThemeToggle`, browser persistence test | Cover both themes with axe assertions after route redesign |
 | P4.04 | Split server layout and client navigation/theme/contact islands | DONE | P4.03 | Server `SiteHeader`/`SiteFooter`; theme/mobile client islands; server compatibility layout | Remove compatibility wrapper as routes are redesigned |
 | P4.05 | Add skip link, focus system, zoom, landmarks, and dialog/menu behavior | DONE | P4.04 | Skip link and its programmatic-focus target, visible focus, unrestricted zoom, one shared `main`, mobile-menu keyboard test | Add dialog focus management if a future dialog returns |
@@ -183,9 +183,9 @@ whose status changes.
 | P11.06 | Add validated architecture nodes/edges, structured outcomes, and optional dossier sections | DONE | P11.03 | Typed `CaseStudyOutcome`, `ArchitectureNode`, and `ArchitectureEdge`; required-section and dangling-edge tests; unsupported sections absent | Revalidate when case-study content changes |
 | P11.07 | Apply the engineering-dossier template to every published case study | DONE | P11.06 | Shared full-width hero/outcomes, responsive TOC, grouped chapters, decision cards, private evidence boundary, and inspected Jobs/private captures | Re-capture light/dark desktop/mobile from final preview |
 | P11.08 | Add accessible deferred architecture maps and text equivalents | DONE | P11.06–P11.07 | Deferred React Flow map, keyboard node selection, fit controls, ordered text equivalent, no-JS coverage, and 10 two-theme axe routes passing | Verify touch/zoom and final preview interaction |
-| P11.09 | Capture and review light/dark desktop/mobile visuals including 200% zoom | NOT STARTED | P11.04–P11.08 | Pending | User approval required before visual merge |
-| P11.10 | Pass clean install, lint, typecheck, unit, browser, axe, build, audit, and Lighthouse gates | NOT STARTED | P11.04–P11.09 | Pending | Measure core and deferred chunks separately |
-| P11.11 | Add Phase 11 completion report and release through reviewed PRs | NOT STARTED | P11.01–P11.10 | Pending | Do not merge visual work before screenshot review |
+| P11.09 | Capture and review light/dark desktop/mobile visuals including 200% zoom | IN PROGRESS | P11.04–P11.08 | `release-visual.spec.ts` captures 12 light/dark desktop/mobile views plus two 200%-equivalent reflow views; automated overflow assertions pass | User must review the final QA preview and captures before visual merge |
+| P11.10 | Pass clean install, lint, typecheck, unit, browser, axe, build, audit, and Lighthouse gates | DONE | P11.04–P11.09 | `npm ci`; lint; typecheck; 21 unit tests; 36 browser tests; 10 two-theme axe route checks; build; zero-vulnerability production audit; Phase 11 report records three-run Lighthouse medians and core/deferred script measurements | Re-run against production after the reviewed PR stack merges |
+| P11.11 | Add Phase 11 completion report and release through reviewed PRs | IN PROGRESS | P11.01–P11.10 | Interim `docs/phase-reports/phase-11-visual-systems-and-dossiers.md`; draft PRs #14–#16 plus final QA PR | Obtain screenshot/interaction approval, then merge in order and append production verification |
 
 ## Blockers
 

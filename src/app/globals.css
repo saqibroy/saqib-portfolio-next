@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
 :root {
+  --font-source-sans: Arial;
+  --font-source-serif: Georgia;
   --canvas: #f7f9fa;
   --surface: #ffffff;
   --surface-muted: #eaf0f2;
