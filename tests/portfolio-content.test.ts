@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { portfolioContent } from '@/content/portfolio';
-import { caseStudies, caseStudySectionKeys, validateCaseStudies } from '@/content/caseStudies';
+import { caseStudies, requiredCaseStudySectionKeys, validateCaseStudies } from '@/content/caseStudies';
 
 describe('portfolio content', () => {
   it('keeps the prominent title distinct from descriptive positioning', () => {
@@ -52,10 +52,27 @@ describe('portfolio content', () => {
 });
 
 describe('case studies', () => {
-  it('validates unique slugs, approved evidence, and every narrative key', () => {
+  it('validates unique slugs, approved evidence, and required narrative sections', () => {
     expect(() => validateCaseStudies(caseStudies)).not.toThrow();
     expect(new Set(caseStudies.map(({ slug }) => slug)).size).toBe(caseStudies.length);
-    for (const item of caseStudies) expect(caseStudySectionKeys.every((key) => key in item.sections)).toBe(true);
+    for (const item of caseStudies) {
+      expect(requiredCaseStudySectionKeys.every((key) => Boolean(item.sections[key]))).toBe(true);
+    }
+  });
+
+  it('rejects dangling architecture edges', () => {
+    const fixture = structuredClone(caseStudies);
+    fixture[0].architecture.edges.push({ source: fixture[0].architecture.nodes[0].id, target: 'missing-node' });
+
+    expect(() => validateCaseStudies(fixture)).toThrow(/Dangling architecture edge/);
+  });
+
+  it('omits unsupported optional sections instead of publishing disclaimers', () => {
+    const privateCase = caseStudies.find(({ slug }) => slug === 'ai-assisted-contract-workflow');
+
+    expect(privateCase?.sections.testingDelivery).toBeUndefined();
+    expect(privateCase?.sections.nextImprovements).toBeUndefined();
+    expect(JSON.stringify(caseStudies)).not.toMatch(/under review|follow later|return later|not publicly documented|details? (?:are|is) (?:omitted|unavailable)/i);
   });
 
   it('does not publish the gated accessibility platform', () => {

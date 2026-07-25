@@ -8,6 +8,11 @@ test('primary content remains understandable without JavaScript', async ({ brows
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
   await expect(page.getByText('Product problem → Interface → API boundary → Service → Data/AI → Production')).toBeVisible();
 
+  await page.goto('/work/jobs-tracker-bot');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Jobs Tracker Bot');
+  await expect(page.getByText('Read the architecture as text')).toBeVisible();
+  await expect(page.getByRole('listitem').filter({ hasText: 'ATS adapters' })).toBeVisible();
+
   await page.goto('/writing/web-accessibility-2025');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('A practical accessibility baseline');
   await expect(page.getByRole('heading', { level: 2, name: 'Test in layers' })).toBeVisible();
