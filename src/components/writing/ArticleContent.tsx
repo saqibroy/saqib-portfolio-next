@@ -7,6 +7,7 @@ import { UrlShortenerArchitecture } from './UrlShortenerArchitecture';
 const components = {
   pre: (props: ComponentProps<'pre'>) => <pre {...props} />,
   code: (props: ComponentProps<'code'>) => <code {...props} />,
+  table: ({ children, ...props }: ComponentProps<'table'>) => <div className="writing-content-table"><table {...props}>{children}</table></div>,
   UrlShortenerArchitecture,
   ShortCodeTradeoffMatrix,
 };
