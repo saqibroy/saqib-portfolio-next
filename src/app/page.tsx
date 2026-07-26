@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { ProjectSystemVisual } from '@/components/home/ProjectSystemVisuals';
 import { SystemShowcase } from '@/components/home/SystemShowcase';
 import { caseStudies } from '@/content/caseStudies';
 import { portfolioContent } from '@/content/portfolio';
@@ -22,7 +21,6 @@ export default async function HomePage() {
           <h1 id="homepage-title">{profile.title}</h1>
           <p className="homepage-proposition">I build accessible product interfaces and connect them to reliable backend and AI services.</p>
           <p className="homepage-supporting-copy">Eight years of experience across React, Next.js, TypeScript, Django and FastAPI—modernising platforms, designing product workflows and shipping features end to end.</p>
-          <p className="homepage-signature"><strong>8+ years</strong><span aria-hidden="true">·</span><strong>5+ public-facing platforms</strong><span aria-hidden="true">·</span>{profile.location}</p>
           <div className="homepage-actions">
             <Link className="button button-primary" href="/work">View selected work</Link>
             <a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a>
@@ -34,7 +32,7 @@ export default async function HomePage() {
       <section className="homepage-section selected-work-section" aria-labelledby="work-title">
         <div className="section-intro section-intro-row">
           <div><p className="eyebrow">Selected work</p><h2 id="work-title">Real systems, concise stories</h2></div>
-          <p>Three projects show the product boundaries, decisions, and outcomes behind the work.</p>
+          <Link href="/work">View work <span aria-hidden="true">→</span></Link>
         </div>
         <div className="visual-work-stories">
           {featuredProjects.map((project) => {
@@ -47,15 +45,14 @@ export default async function HomePage() {
                 : ['FastAPI AI service', 'Vector retrieval / RAG', 'Structured updates'];
             return (
               <article key={project.id} className={`visual-work-story visual-work-story--${project.id}`}>
-                <div className="visual-work-story-copy">
+                <div className="visual-work-story-heading">
                   <p className="project-card-label">{project.visibility === 'private-redacted' ? 'Private / redacted' : 'Public project'}</p>
                   <h3>{project.title}</h3>
+                </div>
+                <div className="visual-work-story-details">
                   <p>{project.summary}</p>
                   <ul aria-label={`${project.title} facts`}>{facts.map((fact) => <li key={fact}>{fact}</li>)}</ul>
                   <Link href={`/work/${project.slug}`}>Read case study <span aria-hidden="true">→</span></Link>
-                </div>
-                <div className="visual-work-story-diagram">
-                  <ProjectSystemVisual variant={project.id === 'tactical-tech-modernisation' ? 'content' : project.id === 'jobs-tracker-bot' ? 'jobs' : 'ai'} />
                 </div>
               </article>
             );

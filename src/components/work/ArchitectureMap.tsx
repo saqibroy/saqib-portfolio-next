@@ -8,5 +8,5 @@ const visualByTitle = {
 } as const;
 
 export function ArchitectureMap({ title }: { title: keyof typeof visualByTitle }) {
-  return <div className="architecture-map"><ProjectSystemVisual variant={visualByTitle[title]} /></div>;
+  return <div className="architecture-map"><ProjectSystemVisual variant={visualByTitle[title]} size="expanded" /></div>;
 }
