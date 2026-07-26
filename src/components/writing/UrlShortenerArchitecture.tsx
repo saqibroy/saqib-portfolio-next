@@ -21,7 +21,6 @@ export function UrlShortenerArchitecture() {
       {paths.map((path, index) => <motion.path key={path} d={path} markerEnd="url(#url-arrow)" initial={{ pathLength: reducedMotion ? 1 : 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true, amount: .5 }} transition={{ duration: .45, delay: index * .1 }} />)}
       {nodes.map(([label, x, y], index) => <g key={`${label}-${index}`}><rect x={x} y={y} width="120" height="44" rx="7" /><text x={x + 60} y={y + 27} textAnchor="middle">{label}</text></g>)}
       <g className="url-analytics-node"><rect x="440" y="254" width="142" height="44" rx="7" /><text x="511" y="273" textAnchor="middle">Async analytics</text><text x="511" y="287" textAnchor="middle">event processing</text></g>
-      {!reducedMotion ? <motion.circle r="5" initial={{ offsetDistance: '0%' }} whileInView={{ offsetDistance: '100%' }} viewport={{ once: true, amount: .6 }} transition={{ duration: 1.25, delay: .35 }} style={{ offsetPath: "path('M 126 212 H 180 H 332 H 484')" }} /> : null}
     </svg>
     <details className="url-shortener-text-equivalent"><summary>Read the request paths as text</summary><ul><li><strong>Create:</strong> Client → Link API → PostgreSQL.</li><li><strong>Redirect:</strong> Visitor → Redirect service → Cache → PostgreSQL.</li><li><strong>Analytics:</strong> The redirect service sends an event asynchronously, outside the critical redirect response.</li></ul></details>
   </figure>;

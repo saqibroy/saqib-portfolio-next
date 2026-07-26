@@ -18,7 +18,6 @@ export default async function WritingPage() {
     <header className="writing-hero">
       <p className="eyebrow">Technical writing</p>
       <h1>Notes for building dependable web products</h1>
-      <p>Reviewed engineering notes on accessible interfaces, search quality, and delivery practices.</p>
     </header>
 
     <section className="writing-list" aria-label="Published articles">

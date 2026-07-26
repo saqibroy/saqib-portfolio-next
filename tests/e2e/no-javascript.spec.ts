@@ -7,7 +7,7 @@ test('primary content remains understandable without JavaScript', async ({ brows
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
   const textFallback = page.locator('.system-showcase-all-flows');
-  await expect(textFallback.getByText('Applied AI', { exact: true })).toBeVisible();
+  await expect(textFallback.getByText('Contract assistant', { exact: true })).toBeVisible();
   await expect(textFallback.locator('details').first()).not.toHaveAttribute('open', '');
 
   await page.goto('/work/jobs-tracker-bot');
