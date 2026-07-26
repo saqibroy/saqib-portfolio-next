@@ -27,7 +27,7 @@ I would start by confirming the smallest useful scope.
 - The system generates a unique short code.
 - Visiting the short URL redirects to the original URL.
 - The mapping remains available after a restart or deployment.
-- Duplicate short codes are never allowed.
+- Every short code resolves unambiguously to at most one active mapping.
 
 ### Questions that change the design
 
@@ -37,7 +37,7 @@ I would start by confirming the smallest useful scope.
 - Is authentication required?
 - Do we need click analytics?
 - What traffic should the system support?
-- Are links private, public, or both?
+- Are links publicly accessible, unlisted, or protected by authentication?
 
 For an interview-sized first version, I would support creation and redirection, then describe custom aliases, expiry and analytics as extensions.
 
@@ -82,10 +82,10 @@ GET /aZ91kQ
 
 Possible responses:
 
-- `302 Found` with a `Location` header when destinations may change;
-- `301 Moved Permanently` when mappings are immutable and long-term caching is desirable;
-- `404 Not Found` when the code does not exist;
-- `410 Gone` when the link existed but has expired.
+- `302 Found` with a `Location` header when destinations may change
+- `301 Moved Permanently` when mappings are immutable and long-term caching is desirable
+- `404 Not Found` when the code does not exist
+- `410 Gone` when the link existed but has expired
 
 I would begin with `302` unless the product explicitly guarantees immutable destinations. It gives the system more control if links need to be corrected, disabled or moderated later.
 
@@ -102,11 +102,9 @@ CREATE TABLE links (
   expires_at TIMESTAMPTZ NULL,
   created_by BIGINT NULL
 );
-
-CREATE UNIQUE INDEX links_code_unique ON links (code);
 ```
 
-The most important constraint is the unique index on `code`. Application-level checks alone are not sufficient because two requests may generate the same candidate at the same time.
+The most important constraint is the uniqueness requirement on `code`. Application-level checks alone are not sufficient because two requests may generate the same candidate at the same time. In PostgreSQL, the `UNIQUE` constraint automatically creates the supporting unique index.
 
 The redirect query stays simple:
 
@@ -115,6 +113,8 @@ SELECT original_url, expires_at
 FROM links
 WHERE code = $1;
 ```
+
+The optional `created_by` field would only be populated if authenticated link ownership is part of the product scope.
 
 ## 5. Choose the short-code strategy deliberately
 
@@ -128,7 +128,7 @@ Base62 uses:
 - `A-Z`
 - `0-9`
 
-A six-character code provides a large namespace while remaining easy to type and share. The exact length should depend on expected volume and acceptable collision retries.
+A six-character code provides approximately 56.8 billion possible values, although the appropriate length should account for expected volume, collision probability and retry rates.
 
 Creation flow:
 
@@ -137,16 +137,17 @@ Creation flow:
 3. If the unique constraint fails, generate a new code and retry.
 4. Limit retries and return an internal error if the unlikely collision loop cannot complete.
 
-A database sequence encoded as Base62 is also practical, but sequential codes make enumeration easier. A hash of the original URL appears deterministic, but truncation still creates collisions and identical destinations do not always need identical short links.
+A database sequence encoded as Base62 is also practical, but sequential codes make enumeration easier. Hashing the original URL does not eliminate collisions once the hash is shortened, and it couples code generation to deduplication semantics that the product may not want.
 
 ## 6. Separate validation from fetching
 
 The service should validate that the submitted destination:
 
-- parses as a URL;
-- uses `http` or `https`;
-- stays within the maximum accepted length;
-- does not use unsupported schemes such as `javascript:` or `data:`.
+- parses as a URL
+- uses `http` or `https`
+- stays within the maximum accepted length
+- does not use unsupported schemes such as `javascript:` or `data:`
+- does not create an obvious self-referential redirect loop
 
 A basic URL shortener does not need to fetch the destination during creation. Avoiding that network call keeps the create path smaller and avoids introducing unnecessary server-side request risks.
 
@@ -164,9 +165,11 @@ A simple read-through flow:
 4. Cache the result with a suitable TTL.
 5. Return the redirect.
 
-The database remains the source of truth.
+The application controls the fallback to PostgreSQL. Redis does not query the database itself, and PostgreSQL remains the source of truth.
 
 I would not add Redis automatically for a small internal product. A unique index and a healthy PostgreSQL instance may already be enough. The cache becomes valuable when measurements show that redirect traffic or database load justifies another operational dependency.
+
+If destinations can be edited, disabled or expired, the corresponding cache entry must be invalidated or updated during the write operation. The cache TTL acts only as a fallback, not as the primary consistency mechanism.
 
 Negative caching can also help with repeated requests for unknown codes, but the TTL should be short so a newly created code does not remain incorrectly cached as missing.
 
@@ -177,16 +180,16 @@ Click analytics are useful, but recording them synchronously can slow every redi
 A better design is:
 
 1. Resolve the destination.
-2. Publish a lightweight click event.
+2. Publish a lightweight click event to a queue.
 3. Return the redirect.
 4. Process analytics separately.
 
 The event might contain:
 
-- short code;
-- timestamp;
-- coarse referrer information;
-- privacy-safe location or device categories when permitted.
+- short code
+- timestamp
+- coarse referrer information
+- privacy-safe location or device categories when permitted
 
 The redirect should still succeed when the analytics consumer is delayed. Analytics are valuable, but they are not more important than the redirect itself.
 
@@ -196,32 +199,30 @@ The first production review should cover:
 
 ### Reliability
 
-- database connection failures;
-- cache outages;
-- retry behaviour;
-- timeouts;
-- expired links;
-- safe deployment and migration strategy;
-- health checks and monitoring.
+- timeout and fallback behaviour for database or cache failures
+- retry behaviour for non-user-facing background work
+- expired and disabled links
+- backward-compatible database migrations
+- health checks, redirect latency metrics and error-rate monitoring
 
 ### Abuse controls
 
-- rate limiting on link creation;
-- maximum URL length;
-- reserved custom aliases;
-- disabling malicious links;
-- reporting and moderation workflow;
-- protection against automated enumeration;
-- logs that avoid unnecessary personal data.
+- rate limiting on link creation
+- maximum URL length
+- reserved custom aliases
+- disabling malicious links
+- reporting and moderation workflow
+- protection against automated enumeration
+- logs that avoid unnecessary personal data
 
 ### Security
 
-- validate schemes;
-- encode output correctly;
-- avoid open administration endpoints;
-- protect authenticated link-management routes;
-- keep secrets outside the repository;
-- apply least-privilege database access.
+- validate schemes
+- encode output correctly
+- avoid open administration endpoints
+- protect authenticated link-management routes
+- keep secrets outside the repository
+- apply least-privilege database access
 
 ## 10. Scale in measured steps
 
@@ -229,32 +230,32 @@ I would explain scaling as a sequence rather than designing the largest possible
 
 ### Stage 1 — Simple application
 
-- one application service;
-- PostgreSQL;
-- indexed code lookup;
-- basic monitoring.
+- one application service
+- PostgreSQL
+- indexed code lookup
+- basic monitoring
 
 ### Stage 2 — Read optimisation
 
-- Redis read-through cache;
-- connection pooling;
-- separate create and redirect metrics;
-- rate limiting.
+- Redis read-through cache
+- connection pooling
+- separate create and redirect metrics
+- rate limiting
 
 ### Stage 3 — Higher traffic
 
-- multiple stateless service instances;
-- load balancer;
-- asynchronous analytics queue;
-- cache replication or managed cache;
-- database read strategy based on measured load.
+- multiple stateless service instances
+- load balancer
+- asynchronous analytics queue
+- cache replication or managed cache
+- database read strategy based on measured load
 
 ### Stage 4 — Global redirect traffic
 
-- regional or edge caching;
-- careful cache invalidation;
-- globally unique code generation;
-- operational tooling for abuse and link takedowns.
+- regional or edge caching
+- careful cache invalidation
+- globally unique code generation
+- operational tooling for abuse and link takedowns
 
 The important interview point is not to predict every future component. It is to show which measurement or product requirement would justify each one.
 
@@ -262,13 +263,13 @@ The important interview point is not to predict every future component. It is to
 
 My first-version decision would be:
 
-- PostgreSQL as the source of truth;
-- random Base62 codes;
-- a database unique constraint with collision retry;
-- `302` redirects while destinations remain changeable;
-- no cache until traffic justifies it;
-- asynchronous analytics;
-- explicit validation and creation rate limits.
+- PostgreSQL as the source of truth
+- random Base62 codes
+- a database unique constraint with collision retry
+- `302` redirects while destinations remain changeable
+- no cache until traffic justifies it
+- asynchronous analytics through a queue
+- explicit validation and creation rate limits
 
 This is intentionally simple. It gives the product a correct and maintainable base while leaving clear extension points for caching, analytics, expiry, custom aliases and global delivery.
 
@@ -279,12 +280,13 @@ I would use this order:
 1. Restate the goal.
 2. Confirm functional requirements.
 3. Ask about traffic, mutability, expiry and analytics.
-4. Draw create and redirect paths separately.
-5. Define the API and data model.
-6. Choose a code-generation strategy.
-7. Explain correctness through the unique constraint.
-8. Discuss caching only after the basic design.
-9. Cover failure, abuse and security.
-10. End with trade-offs and the next scaling step.
+4. Write confirmed answers under headings such as users, requirements, constraints and scale.
+5. Draw create and redirect paths separately.
+6. Define the API and data model.
+7. Choose a code-generation strategy.
+8. Explain correctness through the unique constraint.
+9. Discuss caching only after the basic design.
+10. Cover failure, abuse and security.
+11. End with trade-offs and the next scaling step.
 
 That structure matters as much as the final diagram. It helps the interviewer follow the reasoning and makes it easier to recover when a requirement changes.
