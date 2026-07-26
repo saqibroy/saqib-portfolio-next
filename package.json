@@ -17,7 +17,6 @@
     "generate-favicons": "node scripts/generate-favicons.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "framer-motion": "^12.42.2",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.513.0",
