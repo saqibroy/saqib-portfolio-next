@@ -1,27 +1,43 @@
-'use client';
-
-import { motion, useReducedMotion } from 'framer-motion';
-
 const nodes = [
-  ['Client', 18, 56], ['Link API', 170, 56], ['PostgreSQL', 322, 56],
-  ['Visitor', 18, 190], ['Redirect service', 170, 190], ['Cache', 322, 190], ['PostgreSQL', 474, 190],
+  { label: 'Link creator', type: 'External actor', x: 20, y: 90 },
+  { label: 'Visitor', type: 'External actor', x: 20, y: 265 },
+  { label: 'Next.js application', type: 'UI + API + redirects', x: 235, y: 175 },
+  { label: 'PostgreSQL', type: 'Data store', x: 475, y: 90 },
+  { label: 'Cache', type: 'Cache', x: 475, y: 265 },
+  { label: 'Analytics worker', type: 'Async component', x: 650, y: 265 },
 ] as const;
 
-const paths = [
-  'M 138 78 H 170', 'M 290 78 H 322', 'M 138 212 H 170', 'M 290 212 H 322', 'M 442 212 H 474', 'M 230 234 V 276 H 510',
-];
+const nodeWidth = 145;
+const nodeHeight = 64;
+
+function arrow(sourceX: number, sourceY: number, targetX: number, targetY: number) {
+  return `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`;
+}
 
 export function UrlShortenerArchitecture() {
-  const reducedMotion = useReducedMotion();
   return <figure className="url-shortener-architecture">
-    <figcaption>Two paths, with analytics off the redirect critical path</figcaption>
-    <svg viewBox="0 0 620 340" role="img" aria-label="Creation path from client to Link API to PostgreSQL, redirect path from visitor to redirect service to cache to PostgreSQL, and an asynchronous analytics branch.">
+    <figcaption>One Next.js application: creation UI, API route handlers, and redirects</figcaption>
+    <svg viewBox="0 0 820 405" aria-hidden="true">
       <defs><marker id="url-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" /></marker></defs>
-      <text className="url-path-label" x="28" y="28">Create link</text><text className="url-path-label" x="28" y="162">Redirect</text>
-      {paths.map((path, index) => <motion.path key={path} d={path} markerEnd="url(#url-arrow)" initial={{ pathLength: reducedMotion ? 1 : 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true, amount: .5 }} transition={{ duration: .45, delay: index * .1 }} />)}
-      {nodes.map(([label, x, y], index) => <g key={`${label}-${index}`}><rect x={x} y={y} width="120" height="44" rx="7" /><text x={x + 60} y={y + 27} textAnchor="middle">{label}</text></g>)}
-      <g className="url-analytics-node"><rect x="440" y="254" width="142" height="44" rx="7" /><text x="511" y="273" textAnchor="middle">Async analytics</text><text x="511" y="287" textAnchor="middle">event processing</text></g>
+      <g className="url-system-boundary"><rect x="205" y="40" width="595" height="335" rx="8" /><text x="221" y="65">URL shortener</text></g>
+      <g className="url-architecture-relationships">
+        <path d={arrow(165, 122, 235, 207)} markerEnd="url(#url-arrow)" />
+        <path d={arrow(165, 297, 235, 239)} markerEnd="url(#url-arrow)" />
+        <path d={arrow(380, 207, 475, 122)} markerEnd="url(#url-arrow)" />
+        <path d={arrow(380, 239, 475, 297)} markerEnd="url(#url-arrow)" />
+        <path d={arrow(547, 265, 547, 154)} markerEnd="url(#url-arrow)" />
+        <path className="url-async-path" d={arrow(380, 239, 650, 297)} markerEnd="url(#url-arrow)" />
+      </g>
+      {nodes.map((node) => <g key={node.label} className={`url-architecture-node url-architecture-node--${node.type.toLowerCase().replaceAll(' ', '-').replaceAll(':', '')}`}><rect x={node.x} y={node.y} width={nodeWidth} height={nodeHeight} rx="7" /><text x={node.x + nodeWidth / 2} y={node.y + 27} textAnchor="middle">{node.label}</text><text className="url-architecture-node-type" x={node.x + nodeWidth / 2} y={node.y + 48} textAnchor="middle">{node.type}</text></g>)}
+      <g className="url-architecture-labels">
+        <text x="190" y="158" textAnchor="middle">submits original URL</text>
+        <text x="190" y="276" textAnchor="middle">visits short URL</text>
+        <text x="425" y="151" textAnchor="middle">creates mapping</text>
+        <text x="425" y="282" textAnchor="middle">resolves code</text>
+        <text x="572" y="211" textAnchor="middle">cache miss</text>
+        <text x="520" y="355" textAnchor="middle">event; not on redirect response</text>
+      </g>
     </svg>
-    <details className="url-shortener-text-equivalent"><summary>Read the request paths as text</summary><ul><li><strong>Create:</strong> Client → Link API → PostgreSQL.</li><li><strong>Redirect:</strong> Visitor → Redirect service → Cache → PostgreSQL.</li><li><strong>Analytics:</strong> The redirect service sends an event asynchronously, outside the critical redirect response.</li></ul></details>
+    <details className="url-shortener-text-equivalent"><summary>Read the architecture as text</summary><ul><li><strong>Single application:</strong> one Next.js deployment contains the creation UI, the <code>POST /api/links</code> handler, and the short-link redirect route.</li><li><strong>Create:</strong> a link creator submits an original URL. The Next.js handler validates it, generates a code, and stores the mapping in PostgreSQL.</li><li><strong>Redirect:</strong> a visitor reaches the Next.js redirect route, which checks the cache before PostgreSQL on a miss.</li><li><strong>Analytics:</strong> the redirect route emits an event to an asynchronous worker; it does not delay the redirect response.</li></ul></details>
   </figure>;
 }

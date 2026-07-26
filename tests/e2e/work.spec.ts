@@ -27,7 +27,7 @@ test('Jobs Tracker exposes its compact outcomes, evidence, decisions, and projec
   await expect(page.getByRole('link', { name: /Public repository/i })).toHaveAttribute('href', 'https://github.com/saqibroy/jobs-tracker-bot');
   await expect(page.locator('.case-study-decisions article')).toHaveCount(3);
   await page.locator('.architecture-map').scrollIntoViewIfNeeded();
-  await expect(page.locator('.architecture-map .project-system-visual--jobs svg')).toBeVisible();
+  await expect(page.locator('.architecture-map svg')).toBeVisible();
   const textEquivalent = page.getByText('Read the system as text');
   await expect(textEquivalent.locator('xpath=..')).not.toHaveAttribute('open', '');
   await page.screenshot({ path: testInfo.outputPath('jobs-case-study-desktop.png'), fullPage: true });

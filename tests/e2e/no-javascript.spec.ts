@@ -13,7 +13,7 @@ test('primary content remains understandable without JavaScript', async ({ brows
   await page.goto('/work/jobs-tracker-bot');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Jobs Tracker Bot');
   await page.getByText('Read the system as text').click();
-  await expect(page.getByRole('listitem').filter({ hasText: 'ATS adapters' })).toBeVisible();
+  await expect(page.getByRole('listitem').filter({ hasText: 'ATS and employer boards' })).toBeVisible();
 
   await page.goto('/writing/designing-a-url-shortener');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Designing a URL Shortener');

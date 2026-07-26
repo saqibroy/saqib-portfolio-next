@@ -28,8 +28,8 @@ test('writing index exposes only reviewed notes', async ({ page }, testInfo) => 
 
 test('URL-shortener article exposes its system-design visuals accessibly', async ({ page }) => {
   await page.goto('/writing/designing-a-url-shortener');
-  await expect(page.getByText('Two paths, with analytics off the redirect critical path')).toBeVisible();
-  await expect(page.getByText('Async analytics')).toBeVisible();
+  await expect(page.getByText('One Next.js application: creation UI, API route handlers, and redirects')).toBeVisible();
+  await expect(page.getByText('event; not on redirect response')).toBeVisible();
   await expect(page.getByRole('table', { name: 'Short-code strategy trade-offs' })).toBeVisible();
   await expect(page.getByRole('rowheader', { name: 'Random Base62' })).toBeVisible();
 });

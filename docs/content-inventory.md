@@ -104,7 +104,7 @@ Do not attribute Tactical Tech organisation-wide reach to Saqib personally.
 | `/blog/[slug]` | Legacy article routes | DONE in Phase 8 | Permanent redirect to `/writing/[slug]`; slugs preserved |
 | `/accessibility-checker` | Experimental public-URL automated scan with bounded proxy | DONE locally in Phase 9; promotion DEFERRED | Keep unlinked and `noindex` until external microservice and rate-limit evidence exists |
 | `/api/check-accessibility` | Proxy plus Gemini explanations | Defer | Security-gated API |
-| `/api/generate-audio-summary` | Gemini summary generation endpoint | Verify | Retain only if feature/privacy/cost review passes |
+| `/api/generate-audio-summary` | Gemini summary generation endpoint | REMOVED | Unused public endpoint and Gemini dependency removed; audio is not a public feature. |
 | not-found/error UI | Animated template-style error surfaces | Rewrite | Shared design foundation |
 
 ## Current homepage content
@@ -243,7 +243,7 @@ positioning. It is **Rewrite** to the approved engineering positioning.
 | Article derivatives | Six WebP variants per article under `public/optimized-images/` | Preserve until image-pipeline decision |
 | Framework placeholders | `next.svg`, `vercel.svg`, `file.svg`, `globe.svg`, `window.svg` | Remove if confirmed unused |
 | Static sitemap | `public/sitemap.xml` | Removed in Phase 10; dynamic sitemap route is authoritative |
-| TTS worker | `public/tts-worker.js` | Verify with the audio feature; remove if unused |
+| TTS worker | `public/tts-worker.js` | REMOVED with the unused audio endpoint; no public audio feature remains. |
 | CV downloads | `public/downloads/saqib-sohail-cv-ats.pdf` and `public/downloads/saqib-sohail-cv-visual.pdf` | Added in Phase 1; ATS is primary |
 | OG image | Referenced but absent | Generate in Phase 10 |
 

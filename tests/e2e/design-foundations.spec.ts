@@ -39,7 +39,7 @@ test('Selected systems tabs expose the Jobs Tracker flow with keyboard controls'
   const automation = page.getByRole('tab', { name: 'Automation pipeline' });
   await expect(automation).toBeFocused();
   await expect(automation).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('deduplication, and persistence');
+  await expect(page.getByRole('tabpanel')).toContainText('SQLite, then routed to immediate Discord and Telegram alerts');
   await page.screenshot({ path: testInfo.outputPath('homepage-desktop.png'), fullPage: true });
 });
 
@@ -68,7 +68,7 @@ test('Selected systems supports touch tab selection', async ({ browser }) => {
   await page.goto('/');
 
   await page.getByRole('tab', { name: 'Automation pipeline' }).tap();
-  await expect(page.getByRole('tabpanel')).toContainText('immediate or digest alert routing');
+  await expect(page.getByRole('tabpanel')).toContainText('immediate Discord and Telegram alerts, a six-hour digest, or diagnostics');
   await context.close();
 });
 

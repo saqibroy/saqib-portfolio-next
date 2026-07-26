@@ -48,7 +48,7 @@ The largest risks are:
 | `/blog/[slug]` | Static server page with large MDX/audio/social client components | 384 kB first-load JS |
 | `/accessibility-checker` | 542-line client component | Fake progress, security-gated external URL flow |
 | `/api/check-accessibility` | Dynamic route handler | Weak validation, unsafe upstream boundary |
-| `/api/generate-audio-summary` | Dynamic route handler | External AI dependency, cost/privacy/availability review needed |
+| `/api/generate-audio-summary` | Dynamic route handler | Removed in the launch cleanup because it was unused and had no reviewed privacy, rate, or cost controls. |
 | not-found/error | Client components | Pull full animated layout into error states |
 
 Global `src/components/Layout.tsx` is a 557-line client component. It includes

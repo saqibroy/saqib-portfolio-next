@@ -281,7 +281,7 @@ const projects: ProjectSummary[] = [
     id: 'jobs-tracker-bot',
     slug: 'jobs-tracker-bot',
     title: 'Jobs Tracker Bot',
-    summary: 'An async Python job aggregation pipeline with provider adapters, deterministic eligibility rules, scoring, deduplication, persistence, and alert routing.',
+    summary: 'An async Python bot that reads ATS, employer, and curated job feeds, applies hard eligibility and fit checks, persists deduplicated matches in SQLite, and routes immediate or digest alerts to Discord and Telegram.',
     visibility: 'public',
     technologies: ['Python', 'Docker', 'GitHub Actions', 'Discord', 'Telegram'],
     repositoryUrl: 'https://github.com/saqibroy/jobs-tracker-bot',

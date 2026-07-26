@@ -16,8 +16,8 @@ const systems = [
   },
   {
     id: 'automation', label: 'Automation pipeline',
-    text: 'Jobs move from ATS and provider adapters through normalisation, deterministic eligibility, fit scoring, deduplication, and persistence before immediate or digest alert routing.',
-    nodes: ['Providers', 'Adapters', 'Normalised job', 'Eligibility', 'Fit score', 'Dedupe / persistence', 'Alerts'],
+    text: 'An async scheduled scan reads ATS, employer, and curated feeds through source adapters. Hard eligibility, role, stack, language, and recency filters run before NGO classification and match scoring. Accepted jobs are deduplicated in SQLite, then routed to immediate Discord and Telegram alerts, a six-hour digest, or diagnostics.',
+    nodes: ['ATS / job feeds', 'Async adapters', 'Hard filters', 'Match + NGO score', 'SQLite dedupe', 'Tier routing', 'Discord / Telegram'],
   },
 ] as const;
 
