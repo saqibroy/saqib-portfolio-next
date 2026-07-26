@@ -39,15 +39,10 @@ function labelLines(label: string) {
 export function SystemShowcase() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [enhanced, setEnhanced] = useState(false);
   const reducedMotion = useReducedMotion();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const panelId = useId();
   const system = systems[active];
-
-  useEffect(() => {
-    setEnhanced(true);
-  }, []);
 
   useEffect(() => {
     if (paused || reducedMotion) return;
@@ -62,7 +57,7 @@ export function SystemShowcase() {
     tabRefs.current[next]?.focus();
   };
 
-  return <section className={`system-showcase${enhanced ? ' system-showcase--enhanced' : ''}`} aria-labelledby="system-showcase-title" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false); }}>
+  return <section className="system-showcase" aria-labelledby="system-showcase-title" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false); }}>
     <div className="system-showcase-heading"><p className="eyebrow">Selected systems</p><h2 id="system-showcase-title" className="sr-only">Selected systems</h2></div>
     <div className="system-showcase-tabs" role="tablist" aria-label="Selected systems">
       {systems.map((item, index) => <button key={item.id} ref={(element) => { tabRefs.current[index] = element; }} type="button" role="tab" aria-selected={active === index} aria-controls={panelId} tabIndex={active === index ? 0 : -1} onClick={() => { setActive(index); setPaused(true); }} onKeyDown={(event) => { if (event.key === 'ArrowRight') move(1); if (event.key === 'ArrowLeft') move(-1); }}>{item.label}</button>)}
@@ -75,6 +70,6 @@ export function SystemShowcase() {
       </motion.svg></AnimatePresence>
       <details><summary>Read the {system.label.toLowerCase()} summary</summary><p>{system.text}</p></details>
     </div>
-    <div className="system-showcase-all-flows" aria-label="All selected systems, text version">{systems.map((item) => <details key={item.id} open><summary>{item.label}</summary><p>{item.text}</p></details>)}</div>
+    <noscript><div className="system-showcase-all-flows" aria-label="All selected systems, text version">{systems.map((item) => <details key={item.id}><summary>{item.label}</summary><p>{item.text}</p></details>)}</div></noscript>
   </section>;
 }
