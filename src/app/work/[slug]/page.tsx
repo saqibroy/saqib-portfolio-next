@@ -33,7 +33,6 @@ export default async function CaseStudyPage({ params }: Props) {
   const { slug } = await params;
   const item = caseStudies.find((entry) => entry.slug === slug);
   if (!item) notFound();
-
   const evidence = portfolioContent.evidence.find((entry) => entry.id === item.evidence.evidenceId);
 
   return <article className="case-study">
@@ -44,14 +43,13 @@ export default async function CaseStudyPage({ params }: Props) {
       <div className="case-study-snapshot-copy">
         <p className="eyebrow">{item.visibility === 'private-redacted' ? 'Private / redacted' : 'Public project'}</p>
         <h1>{item.title}</h1><p>{item.summary}</p>
-        <dl><div><dt>Role</dt><dd>{item.role}</dd></div><div><dt>Result</dt><dd>{item.result}</dd></div><div><dt>Stack</dt><dd>{item.stack.join(' · ')}</dd></div></dl>
+        <dl><div className="case-study-snapshot-role"><dt>Role</dt><dd>{item.role}</dd></div><div><dt>Result</dt><dd>{item.result}</dd></div><div><dt>Stack</dt><dd>{item.stack.join(' · ')}</dd></div></dl>
       </div>
     </header>
 
     <section className="case-study-system" aria-labelledby="system-title">
       <div className="case-study-section-heading"><p className="eyebrow">System</p><h2 id="system-title">The workflow in view</h2></div>
-      <figure className="case-study-architecture"><figcaption>{item.title} architecture and workflow</figcaption><ArchitectureMap title={item.title as Parameters<typeof ArchitectureMap>[0]['title']} /><ArchitectureText item={item} /></figure>
-      <p>{item.system}</p>
+      <figure className="case-study-architecture"><ArchitectureMap title={item.title as Parameters<typeof ArchitectureMap>[0]['title']} /><ArchitectureText item={item} /></figure>
     </section>
 
     <section className="case-study-decisions" aria-labelledby="decisions-title">
@@ -62,8 +60,7 @@ export default async function CaseStudyPage({ params }: Props) {
     <section className="case-study-outcome" aria-labelledby="outcome-title">
       <div className="case-study-section-heading"><p className="eyebrow">Outcome</p><h2 id="outcome-title">Verified delivery</h2></div>
       <div className="case-study-outcomes">{item.outcomes.map((outcome) => <article key={`${outcome.value}-${outcome.label}`}><strong>{outcome.value}</strong><h3>{outcome.label}</h3>{outcome.context ? <p>{outcome.context}</p> : null}</article>)}</div>
-      <div className="case-study-evidence">{evidence?.url ? <a href={evidence.url} target="_blank" rel="noreferrer">{item.evidence.label} <span aria-hidden="true">↗</span></a> : <p>{item.evidence.label}</p>}{item.nextImprovement ? <p><strong>Next improvement:</strong> {item.nextImprovement}</p> : null}</div>
-      {item.evidenceBoundary ? <aside className="evidence-boundary" aria-label="Evidence boundary"><p>{item.evidenceBoundary}</p></aside> : null}
+      {evidence?.url ? <div className="case-study-evidence"><a href={evidence.url} target="_blank" rel="noreferrer">{item.evidence.label} <span aria-hidden="true">↗</span></a></div> : null}
     </section>
   </article>;
 }

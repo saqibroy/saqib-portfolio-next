@@ -7,11 +7,11 @@ test('work index links every published case study', async ({ page }, testInfo) =
   await page.screenshot({ path: testInfo.outputPath('work-desktop.png'), fullPage: true });
 });
 
-test('redacted case study keeps its boundary and collapsed text equivalent', async ({ page }, testInfo) => {
+test('redacted case study keeps its collapsed text equivalent without a generic evidence footer', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/work/ai-assisted-contract-workflow');
   await expect(page.getByText('Private / redacted', { exact: true })).toBeVisible();
-  await expect(page.getByRole('complementary', { name: 'Evidence boundary' })).toBeVisible();
+  await expect(page.getByRole('complementary', { name: 'Evidence boundary' })).toHaveCount(0);
   const textEquivalent = page.getByText('Read the system as text');
   await expect(textEquivalent).toBeVisible();
   await expect(textEquivalent.locator('xpath=..')).not.toHaveAttribute('open', '');
@@ -26,7 +26,7 @@ test('Jobs Tracker exposes its compact outcomes, evidence, decisions, and projec
   await expect(page.getByText('520+', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /Public repository/i })).toHaveAttribute('href', 'https://github.com/saqibroy/jobs-tracker-bot');
   await expect(page.locator('.case-study-decisions article')).toHaveCount(3);
-  await page.getByText('Jobs Tracker Bot architecture and workflow').scrollIntoViewIfNeeded();
+  await page.locator('.architecture-map').scrollIntoViewIfNeeded();
   await expect(page.locator('.architecture-map .project-system-visual--jobs svg')).toBeVisible();
   const textEquivalent = page.getByText('Read the system as text');
   await expect(textEquivalent.locator('xpath=..')).not.toHaveAttribute('open', '');
