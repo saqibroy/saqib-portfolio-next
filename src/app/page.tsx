@@ -20,7 +20,7 @@ export default async function HomePage() {
           <p className="eyebrow">{profile.location}</p>
           <h1 id="homepage-title">{profile.title}</h1>
           <p className="homepage-proposition">I build accessible product interfaces and connect them to reliable backend and AI services.</p>
-          <p className="homepage-supporting-copy">Eight years of experience across React, Next.js, TypeScript, Django and FastAPI—modernising platforms, designing product workflows and shipping features end to end.</p>
+          <p className="homepage-supporting-copy">Eight years of experience across React, Next.js, TypeScript, Django and FastAPI, modernising platforms, designing product workflows and shipping features end to end.</p>
           <div className="homepage-actions">
             <Link className="button button-primary" href="/work">View selected work</Link>
             <a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a>
@@ -42,7 +42,7 @@ export default async function HomePage() {
               ? ['520+ tests', 'Docker', 'GitHub Actions', 'Public repository']
               : project.id === 'tactical-tech-modernisation'
                 ? ['Git-backed CMS', 'REST Content API', 'Central search']
-                : ['FastAPI AI service', 'Vector retrieval / RAG', 'Structured updates'];
+                : ['React chatbot', 'Django editing sessions', 'FastAPI AI service'];
             return (
               <article key={project.id} className={`visual-work-story visual-work-story--${project.id}`}>
                 <div className="visual-work-story-heading">

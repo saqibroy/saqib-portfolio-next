@@ -5,9 +5,9 @@ import { useEffect, useId, useRef, useState } from 'react';
 
 const systems = [
   {
-    id: 'ai', label: 'Applied AI',
-    text: 'Structured contract input moves through the React editor and Django application API to a bounded FastAPI service for retrieval, model output, and structured document updates. Stripe remains a separate access branch.',
-    nodes: ['Structured input', 'React editor', 'Django API', 'FastAPI AI', 'Vector retrieval / RAG', 'Model', 'Structured update'],
+    id: 'ai', label: 'Contract assistant',
+    text: 'Two React applications share Django-backed contract data. The chatbot uses a multi-step LLM flow to gather missing details, then creates or updates an editing session. The generated contract opens in the configurator with editable fields populated.',
+    nodes: ['Django data', 'React chatbot', 'FastAPI AI', 'Editing session', 'Generated contract', 'Contract configurator'],
   },
   {
     id: 'content', label: 'Content & search',
@@ -66,7 +66,7 @@ export function SystemShowcase() {
       <AnimatePresence mode="wait"><motion.svg key={system.id} viewBox="0 0 540 410" role="img" aria-label={`${system.label} architecture`}>
         <defs><marker id="system-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" /></marker></defs>
         {connectorPaths.slice(0, system.nodes.length - 1).map((path, index) => <motion.path key={path} d={path} markerEnd="url(#system-arrow)" initial={{ pathLength: reducedMotion ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ delay: index * .12, duration: .45 }} />)}
-        {system.nodes.map((node, index) => { const [x, y] = nodePositions[index]; const lines = labelLines(node); return <g key={node}><rect x={x} y={y} width="140" height="70" rx="8" /><text x={x + 70} y={lines.length === 1 ? y + 42 : y + 30} textAnchor="middle">{lines.map((line, lineIndex) => <tspan key={line} x={x + 70} dy={lineIndex === 0 ? 0 : 19}>{line}</tspan>)}</text>{!reducedMotion && index === Math.min(active + 1, system.nodes.length - 1) ? <motion.circle cx={x + 70} cy={y + 58} r="4" initial={{ opacity: 0, scale: 1 }} animate={{ opacity: [0, 1, 0], scale: [1, 1.7, 1] }} transition={{ duration: 1.8 }} /> : null}</g>; })}
+        {system.nodes.map((node, index) => { const [x, y] = nodePositions[index]; const lines = labelLines(node); return <g key={node}><rect x={x} y={y} width="140" height="70" rx="8" /><text x={x + 70} y={lines.length === 1 ? y + 42 : y + 30} textAnchor="middle">{lines.map((line, lineIndex) => <tspan key={line} x={x + 70} dy={lineIndex === 0 ? 0 : 19}>{line}</tspan>)}</text></g>; })}
       </motion.svg></AnimatePresence>
       <details><summary>Read the {system.label.toLowerCase()} summary</summary><p>{system.text}</p></details>
     </div>

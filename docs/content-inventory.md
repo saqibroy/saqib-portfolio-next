@@ -36,15 +36,16 @@ These facts may enter the Phase 1 claim registry as `approved`.
 
 ### Velsa Technologies, 08/2025–05/2026
 
-- Designed the application flow and service integration for an AI-assisted
-  contract workflow connecting a React/TypeScript editor, Django backend, and
-  FastAPI AI service.
-- Owned end-to-end delivery across the editor, application backend, AI service,
-  and production integration.
+- Designed the application flow and service integration for a React contract
+  configurator and conversational assistant sharing Django-backed contract
+  data.
+- Owned end-to-end delivery across both React applications, the application
+  backend, AI service, and production integration.
 - Built a browser-based editor with merge fields, inline option controls, and
   conditional clauses.
-- Developed a conversational workflow that collected structured input and
-  populated contract content through backend APIs.
+- Developed a conversational workflow that gathered missing information,
+  created or updated editing sessions, and opened generated contracts in the
+  configurator.
 - Designed and deployed a FastAPI service integrating LLM inference and vector
   retrieval with Django.
 - Integrated Stripe payments/webhooks for purchasing and controlled document

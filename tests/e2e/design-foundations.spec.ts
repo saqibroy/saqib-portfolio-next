@@ -32,7 +32,7 @@ test('mobile navigation exposes the primary routes', async ({ page }, testInfo) 
 
 test('Selected systems tabs expose the Jobs Tracker flow with keyboard controls', async ({ page }, testInfo) => {
   await page.goto('/');
-  const appliedAi = page.getByRole('tab', { name: 'Applied AI' });
+  const appliedAi = page.getByRole('tab', { name: 'Contract assistant' });
   await appliedAi.focus();
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowRight');
@@ -43,14 +43,14 @@ test('Selected systems tabs expose the Jobs Tracker flow with keyboard controls'
   await page.screenshot({ path: testInfo.outputPath('homepage-desktop.png'), fullPage: true });
 });
 
-test('homepage uses approved copy, compact credibility signature, and no generic Systems Lab', async ({ page }) => {
+test('homepage uses approved copy and no removed generic systems section', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByText('Berlin, Germany', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
   await expect(page.getByText('I build accessible product interfaces and connect them to reliable backend and AI services.')).toBeVisible();
-  await expect(page.locator('.homepage-signature')).toContainText('8+ years');
-  await expect(page.locator('.homepage-signature')).toContainText('5+ public-facing platforms');
+  await expect(page.getByText(/Eight years of experience across React, Next\.js, TypeScript, Django and FastAPI/)).toBeVisible();
+  await expect(page.locator('.homepage-signature')).toHaveCount(0);
   await expect(page.getByText('30%', { exact: true })).toHaveCount(0);
   await expect(page.getByText('50%+', { exact: true })).toHaveCount(0);
   await expect(page.locator('.systems-lab')).toHaveCount(0);

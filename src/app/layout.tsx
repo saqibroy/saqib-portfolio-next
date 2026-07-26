@@ -58,9 +58,10 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: `${profile.name} — ${profile.title}`,
     description: profile.proposition,
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Saqib Sohail — Senior full-stack engineer' }],
   },
   robots: {
     index: true,
