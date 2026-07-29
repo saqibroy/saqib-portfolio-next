@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react'
 import { RagArchitecture } from './RagArchitecture'
 import { RagFailureModes } from './RagFailureModes'
 import { RagReliabilityLoop } from './RagReliabilityLoop'
+import { RagSafeAnswerFlow } from './RagSafeAnswerFlow'
 import { ShortCodeTradeoffMatrix } from './ShortCodeTradeoffMatrix'
 import { UrlShortenerArchitecture } from './UrlShortenerArchitecture'
 
@@ -20,6 +21,7 @@ const components = {
   RagArchitecture,
   RagFailureModes,
   RagReliabilityLoop,
+  RagSafeAnswerFlow,
 }
 
 export default async function ArticleContent({ source }: { source: string }) {
