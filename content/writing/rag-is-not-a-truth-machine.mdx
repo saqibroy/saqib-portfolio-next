@@ -1,0 +1,314 @@
+---
+title: "RAG Is Not a Truth Machine: Designing AI Assistants That Fail Safely"
+date: "2026-07-29"
+description: "A practical look at what retrieval-augmented generation can and cannot guarantee, using the Air Canada chatbot case to examine retrieval, evidence checks, evaluation and safe failure."
+author: "Saqib Sohail"
+tags:
+  - AI
+  - RAG
+  - System design
+  - LLMs
+  - Reliability
+reviewStatus: "publicly-verified"
+---
+
+A customer asks a chatbot a policy question. The answer is clear, confident and wrong.
+
+That is not only a model-quality problem. Once the assistant represents a company, its answer can affect money, trust and legal responsibility.
+
+The widely discussed Air Canada chatbot case is a useful example. A passenger asked about bereavement fares and was told that the discount could be requested after travel. Air Canada later rejected the request because its actual policy did not allow that. In *Moffatt v. Air Canada*, the British Columbia Civil Resolution Tribunal held the airline responsible for the inaccurate information and awarded damages, interest and tribunal fees.
+
+The engineering lesson is broader than one chatbot:
+
+> A fluent answer is not the same as a verified answer, and adding retrieval does not make that distinction disappear.
+
+This article was inspired by Netguru's webinar on retrieval-augmented generation. The architecture and conclusions below are my own analysis, supported by the sources listed at the end.
+
+## 1. What RAG changes
+
+A language model generates an answer from the information available in its context and from patterns encoded in its parameters. It does not automatically know which internal policy is current, which source is authoritative or whether two documents contradict each other.
+
+Retrieval-augmented generation, usually shortened to RAG, adds an external knowledge step:
+
+1. The user asks a question.
+2. The system searches an approved knowledge base.
+3. Relevant passages are added to the model context.
+4. The model generates an answer using those passages.
+
+The original RAG research described this as combining a model's parametric memory with an external, non-parametric memory. In practical product terms, it means that company documents can be updated without retraining the model, and answers can be linked back to source material.
+
+<RagArchitecture />
+
+This is a meaningful improvement over asking a general model to answer a company-specific question from memory. It gives the model evidence that is current, private and domain-specific.
+
+It does not prove that the final answer is correct.
+
+## 2. The ingestion pipeline is part of the product
+
+A RAG request starts long before the user sends a message.
+
+Documents first need to be collected, parsed, cleaned, divided into useful chunks and enriched with metadata. Embeddings may then represent those chunks as vectors so the system can retrieve semantically related content.
+
+A basic ingestion pipeline might look like this:
+
+```text
+Source systems
+  → extract documents
+  → parse and clean content
+  → split into chunks
+  → attach metadata
+  → create embeddings
+  → store text and vectors
+```
+
+Useful metadata can include:
+
+- source URL or document identifier;
+- title and section;
+- page number;
+- product, country or customer segment;
+- publication and effective dates;
+- document version;
+- owner and approval status;
+- access-control information.
+
+This data is not decorative. It determines whether the retrieval layer can distinguish a current German refund policy from an expired Canadian policy, or an approved document from an internal draft.
+
+Poor ingestion creates errors that no prompt can reliably repair later.
+
+## 3. Retrieval is a ranking problem, not a lookup guarantee
+
+Vector similarity is useful because users rarely phrase questions exactly like the source material. However, semantic similarity does not necessarily mean that a passage answers the question.
+
+A query about whether a refund is available may retrieve:
+
+- a general refund overview;
+- an expired exception;
+- a document for another market;
+- a policy that mentions similar terminology but applies to a different fare;
+- a support article that omits an important condition.
+
+A production system therefore needs more than "take the nearest ten vectors."
+
+Possible improvements include:
+
+- hybrid keyword and vector search;
+- metadata filtering before retrieval;
+- query rewriting for ambiguous questions;
+- multiple retrieval queries;
+- reranking the candidate passages;
+- diversity controls to avoid ten near-duplicate chunks;
+- permission filtering;
+- an evidence-sufficiency check before generation.
+
+Agent-assisted retrieval, discussed in the webinar, can generate several searches instead of relying on the user's wording alone. That may improve recall, but it also adds latency, cost and another probabilistic component. I would introduce it only when evaluation shows that simpler retrieval misses important evidence.
+
+## 4. Where RAG still fails
+
+<RagFailureModes />
+
+A RAG system can fail at several independent layers.
+
+### Ingestion failure
+
+The source may be missing, badly parsed or split at the wrong boundaries. A table may lose its headings. A PDF footnote may become detached from the rule it qualifies.
+
+### Source-governance failure
+
+The knowledge base may contain outdated, duplicated or contradictory policies. Retrieval can faithfully return the wrong version.
+
+### Retrieval failure
+
+The correct source exists but is not returned, or a superficially similar passage receives a higher score.
+
+### Context failure
+
+The correct evidence is retrieved but truncated, mixed with conflicting evidence or placed in a context that is too large and noisy.
+
+### Generation failure
+
+The model may overgeneralise, combine separate rules or add an unsupported detail while producing a fluent answer.
+
+### Citation failure
+
+A response may display a real source even though the source does not support every claim in the answer. A citation is useful only when the claim-to-source relationship is checked.
+
+This is why I would avoid saying that RAG "stops hallucinations." It can substantially reduce unsupported answers, especially for domain-specific knowledge, but the system still needs controls around retrieval, generation and source quality.
+
+## 5. Refusal is a product feature
+
+One of the most important behaviours in a trustworthy assistant is the ability to say:
+
+> I do not have enough approved information to answer that.
+
+A similarity threshold can help, but a fixed number such as `0.60` is not a universal truth boundary. Scores vary by embedding model, index, chunking strategy and query type. Thresholds should be calibrated against an evaluation dataset.
+
+For a policy assistant, I would separate answers into three paths:
+
+1. **Supported answer** — sufficient, consistent evidence is available.
+2. **Clarification required** — the question is missing a country, product, date or other condition.
+3. **Refuse or escalate** — evidence is missing, conflicting or too weak.
+
+High-impact topics such as eligibility, prices, refunds, medical guidance or legal rights should use stricter evidence rules than low-risk questions such as navigation or opening hours.
+
+The assistant should not hide uncertainty behind polished language.
+
+## 6. Design the answer contract
+
+A safe architecture constrains not only what the model receives, but also what it is allowed to return.
+
+For policy questions, the response contract could require:
+
+```json
+{
+  "status": "supported | clarification_required | insufficient_evidence",
+  "answer": "string",
+  "claims": [
+    {
+      "text": "string",
+      "sourceIds": ["policy-2026-04"],
+      "support": "direct | inferred"
+    }
+  ],
+  "effectiveDate": "2026-04-01",
+  "escalationRequired": false
+}
+```
+
+The application can then validate:
+
+- every material claim has a source;
+- each source is current and approved;
+- the answer does not cite inaccessible documents;
+- unsupported statuses do not contain definitive advice;
+- high-risk responses meet stricter rules;
+- the displayed link resolves to the cited source.
+
+Structured output does not eliminate model errors, but it gives the rest of the system something testable.
+
+## 7. Evaluate retrieval and generation separately
+
+A few successful manual conversations are not enough to evaluate a RAG product.
+
+The test dataset should represent real questions, including difficult cases:
+
+- direct questions with one clear answer;
+- paraphrased and misspelled questions;
+- questions requiring multiple passages;
+- questions with no answer in the knowledge base;
+- ambiguous questions requiring clarification;
+- outdated or conflicting sources;
+- attempts to override the assistant's policy;
+- high-risk questions that should escalate.
+
+I would measure at least two layers.
+
+### Retrieval quality
+
+- Did the system retrieve the required source?
+- At what rank did it appear?
+- Did irrelevant passages dominate the context?
+- Were permissions and metadata filters applied correctly?
+
+### Answer quality
+
+- Is the response supported by the retrieved context?
+- Is it relevant to the question?
+- Does it include all necessary conditions?
+- Are citations attached to the claims they support?
+- Did the system refuse when evidence was insufficient?
+
+Microsoft's RAG evaluation guidance, for example, treats retrieval, groundedness, relevance and completeness as separate concerns. NVIDIA's guidance similarly distinguishes groundedness from context recall. That separation matters because an excellent generator cannot recover evidence that retrieval never supplied.
+
+## 8. Build a production feedback loop
+
+<RagReliabilityLoop />
+
+Offline evaluation catches known cases. Production observability reveals cases the team did not anticipate.
+
+I would log enough information to reconstruct a failure:
+
+- original and rewritten queries;
+- retrieved document identifiers and scores;
+- versions and effective dates;
+- the context supplied to the model;
+- model and prompt versions;
+- structured response and citations;
+- latency, token usage and failure status;
+- user feedback or human-review outcome.
+
+Sensitive content should be minimised, redacted where necessary and retained according to a defined policy.
+
+The useful loop is:
+
+1. Detect a weak or disputed production answer.
+2. Reproduce it from the trace.
+3. Decide whether the problem came from data, retrieval, prompting or validation.
+4. Add the case to the evaluation dataset.
+5. Fix the narrowest responsible layer.
+6. Run the full regression suite.
+7. Deploy and continue monitoring.
+
+This turns observability into engineering feedback rather than a dashboard that nobody uses.
+
+## 9. A safer architecture for company policy
+
+My first production design would use:
+
+- approved, versioned policy documents as the source of truth;
+- ingestion with parsing checks and metadata validation;
+- hybrid retrieval with product, market and effective-date filters;
+- reranking before context assembly;
+- explicit evidence sufficiency and conflict detection;
+- structured generation with claim-level source identifiers;
+- post-generation validation;
+- refusal or human escalation for weak evidence;
+- offline regression tests and production tracing.
+
+I would not begin with a complex autonomous agent unless simpler retrieval failed measured use cases. The goal is not to maximise the number of AI components. The goal is to make the decision path understandable and testable.
+
+## 10. What the Air Canada case changes for engineers
+
+The case does not establish a universal technical standard for every chatbot. It does show why teams cannot treat a public assistant as an independent actor that owns its own mistakes.
+
+From an engineering perspective, that means:
+
+- product owners must define which questions the assistant may answer;
+- content owners must maintain authoritative sources;
+- engineers must design refusal and escalation paths;
+- QA must test unsupported and contradictory cases;
+- operations teams must be able to reconstruct disputed answers;
+- the organisation must remain accountable for the experience it deploys.
+
+A chatbot response is part of the product surface. Reliability cannot be delegated to the model.
+
+## 11. The practical conclusion
+
+RAG is valuable because it can connect generation to current, private and inspectable evidence. It can improve factuality, make updates easier and provide provenance.
+
+But RAG is not a truth machine.
+
+The reliability of the final product depends on the whole path:
+
+```text
+source quality
+  → ingestion quality
+  → retrieval quality
+  → context quality
+  → generation constraints
+  → validation
+  → evaluation
+  → production feedback
+```
+
+The strongest design is not the one that always produces an answer. It is the one that knows when an answer is supported, shows the evidence and fails safely when it is not.
+
+## Sources and further reading
+
+- [Netguru webinar: How RAG Stops Your AI From Making Things Up](https://www.linkedin.com/posts/netguru_air-canadas-chatbot-promised-a-passenger-activity-7482382071508819969-fmhs)
+- [Moffatt v. Air Canada, 2024 BCCRT 149 (CanLII)](https://www.canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html)
+- [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)
+- [Retrieval-Augmented Generation for Large Language Models: A Survey](https://arxiv.org/abs/2312.10997)
+- [Microsoft Foundry: RAG evaluators](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/evaluation-evaluators/rag-evaluators)
+- [NVIDIA RAG Blueprint: evaluation guidance](https://docs.nvidia.com/rag/latest/evaluate.html)
+- [Netguru: Trusted AI chatbot for dental professionals](https://www.netguru.com/clients/trusted-ai-chatbot-for-dental-professionals)
