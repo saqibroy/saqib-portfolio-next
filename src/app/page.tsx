@@ -82,7 +82,7 @@ export default async function HomePage() {
       </section>
 
       <section className="contact-panel" aria-labelledby="contact-title">
-        <div><p className="eyebrow">Let&apos;s talk</p><h2 id="contact-title">Have a product workflow worth simplifying?</h2><p>I&apos;m open to senior frontend and full-stack engineering conversations in Germany and across Europe.</p></div>
+        <div><p className="eyebrow">Let&apos;s talk</p><h2 id="contact-title">Have a product workflow worth simplifying?</h2><p>I&apos;m open to senior software and frontend engineering opportunities in Germany and across Europe.</p></div>
         <div className="homepage-actions"><a className="button button-primary" href={`mailto:${profile.email}`}>Email Saqib</a><a className="button button-secondary" href={profile.downloads.ats}>Download ATS CV</a></div>
       </section>
     </div>

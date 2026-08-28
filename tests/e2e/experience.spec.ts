@@ -7,7 +7,11 @@ test('legacy CV redirects permanently to experience', async ({ page, request }) 
 
   await page.goto('/cv');
   await expect(page).toHaveURL(/\/experience$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior software engineer');
+  const tacticalTech = page.locator('#tactical-tech');
+  await expect(tacticalTech.getByRole('heading', { name: 'Software Engineer / Web Developer' })).toBeVisible();
+  await expect(tacticalTech.getByText('Aug 2019 – Mar 2025')).toBeVisible();
+  await expect(page.locator('#velsa-technologies').getByRole('heading', { name: 'Senior Full-Stack Engineer' })).toBeVisible();
 });
 
 test('experience exposes both CV downloads', async ({ page, request }, testInfo) => {

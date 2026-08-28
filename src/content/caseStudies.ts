@@ -160,11 +160,11 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'tactical-tech-platform-modernisation',
     title: 'Tactical Tech Platform Modernisation',
-    summary: 'Frontend delivery and modernisation across public-facing platforms for research, education, and civil-society audiences.',
+    summary: 'Software engineering and platform modernisation across public-facing products and shared content services, including framework and CMS migrations, performance work, APIs, and editorial workflows.',
     visibility: 'private-redacted',
-    role: 'As Front-End Developer, owned frontend delivery and modernisation decisions across 5+ public-facing platforms and partnered with product, design, research, and editorial teams.',
+    role: 'As Software Engineer / Web Developer, led and contributed to platform modernisation across public-facing products, including architecture decisions, framework and CMS migrations, shared content services, performance work, and close collaboration with research, design and editorial teams.',
     result: 'Migrated three legacy applications while improving initial loads and editorial workflows.',
-    stack: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS'],
+    stack: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS', 'REST APIs', 'WCAG 2.1'],
     visual: {
       nodes: [
         { id: 'editors', label: 'Editors', kind: 'source', detail: 'Editorial users manage public content.' },
@@ -208,7 +208,7 @@ export const caseStudies: CaseStudy[] = [
       { value: '30%', label: 'Faster initial loads', context: 'Code splitting, lazy loading, and frontend optimisation.' },
       { value: '50%+', label: 'Faster editorial workflows', context: 'Refactored Decap CMS content architecture.' },
     ],
-    evidence: { evidenceId: 'approved-tactical-tech', label: 'Approved portfolio brief', relatedEvidenceIds: ['publicly-verified-tactical-content-system'] },
+    evidence: { evidenceId: 'approved-tactical-tech', label: 'Tactical Tech employment reference', relatedEvidenceIds: ['publicly-verified-tactical-content-system'] },
     evidenceBoundary: 'Approved contribution scope only; it does not attribute organisation-wide reach or sole ownership.',
   },
   {

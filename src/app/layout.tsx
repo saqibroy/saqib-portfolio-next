@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   },
   description: profile.proposition,
   keywords: [
+    'Senior Software Engineer',
     'Senior Frontend Engineer',
-    'Senior Full-Stack Engineer',
     'React',
     'Next.js',
     'TypeScript',
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${profile.name} — ${profile.title}`,
     description: profile.proposition,
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Saqib Sohail — Senior full-stack engineer' }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Saqib Sohail — Senior software engineer' }],
   },
   robots: {
     index: true,

@@ -47,7 +47,7 @@ test('homepage uses approved copy and no removed generic systems section', async
   await page.goto('/');
 
   await expect(page.getByText('Berlin, Germany', { exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior full-stack engineer');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Senior software engineer');
   await expect(page.getByText('I build accessible product interfaces and connect them to reliable backend and AI services.')).toBeVisible();
   await expect(page.getByText(/Eight years of experience across React, Next\.js, TypeScript, Django and FastAPI/)).toBeVisible();
   await expect(page.locator('.homepage-signature')).toHaveCount(0);
