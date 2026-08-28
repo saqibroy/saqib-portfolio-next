@@ -84,8 +84,8 @@ const evidence: EvidenceRef[] = [
   {
     id: 'approved-tactical-tech',
     status: 'approved',
-    source: 'Approved portfolio brief',
-    description: 'Tactical Tech title, modernisation work, outcomes, and contribution wording.',
+    source: 'Tactical Tech employment reference',
+    description: 'Reference-backed Tactical Tech title, dates, software-engineering scope, modernisation work, outcomes, and contribution wording.',
   },
   {
     id: 'publicly-verified-tactical-content-system',
@@ -127,7 +127,7 @@ const metrics: Metric[] = [
     id: 'experience-years',
     value: '8+',
     label: 'years in software engineering',
-    context: 'Senior frontend-leaning full-stack engineering experience.',
+    context: 'Frontend-leaning senior software engineering experience.',
     evidenceIds: ['approved-profile'],
   },
   {
@@ -141,7 +141,7 @@ const metrics: Metric[] = [
     id: 'tactical-platforms',
     value: '5+',
     label: 'public-facing platforms',
-    context: 'Frontend delivery and modernisation at Tactical Tech.',
+    context: 'Software engineering and platform modernisation at Tactical Tech.',
     evidenceIds: ['approved-tactical-tech'],
   },
   {
@@ -182,18 +182,19 @@ const roles: Role[] = [
   },
   {
     id: 'tactical-tech',
-    title: 'Front-End Developer',
+    title: 'Software Engineer / Web Developer',
     company: 'Tactical Tech',
     location: 'Berlin, Germany (remote)',
     employmentType: 'Full-time',
     startDate: '2019-08',
-    endDate: '2025-04',
-    technologies: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS', 'WCAG 2.1'],
+    endDate: '2025-03',
+    technologies: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS', 'REST APIs', 'WCAG 2.1'],
     highlights: [
-      'Owned frontend delivery and modernisation decisions across 5+ public-facing platforms for researchers, educators, international users, and civil-society organisations.',
-      'Migrated 3 legacy applications to Next.js and Nuxt.js, reducing initial load times by 30% through code splitting, lazy loading, and frontend optimisation.',
-      'Refactored Decap CMS content architecture, reducing editorial workflow time by more than 50%.',
-      'Partnered with product, design, research, and editorial teams on accessible, maintainable frontend systems and contributed to WCAG 2.1 AA.',
+      'Led the technical modernisation of Exposing the Invisible (ETI), owning architecture and implementation decisions for its React-to-Vue and CMS migrations.',
+      "Modernised Tactical Tech's main website from React to Next.js and delivered Influence Industry from planning through deployment, alongside work on The Glass Room, Data Detox Kit, Everything Will Be Fine and Digital Enquirer.",
+      'Built and maintained reusable Content API and Search API services and consent-management functionality supporting GDPR-compliant workflows; improved CMS workflows and investigated issues across the application stack.',
+      'Worked with project managers, researchers, designers and editors to turn requirements and Figma designs into implementation plans and reusable, responsive, accessible components, from planning and architecture discussions through code review.',
+      'Improved performance, accessibility, maintainability and developer experience across production applications, including 30% faster initial loads and more than 50% faster editorial workflows.',
     ],
     evidenceIds: ['approved-tactical-tech'],
   },
@@ -291,9 +292,9 @@ const projects: ProjectSummary[] = [
     id: 'tactical-tech-modernisation',
     slug: 'tactical-tech-platform-modernisation',
     title: 'Tactical Tech Platform Modernisation',
-    summary: 'Frontend delivery and modernisation across public-facing platforms, including Next.js/Nuxt.js migrations, performance work, and CMS content architecture.',
+    summary: 'Software engineering and platform modernisation across public-facing products and shared content services, including framework and CMS migrations, performance work, APIs, and editorial workflows.',
     visibility: 'private-redacted',
-    technologies: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS'],
+    technologies: ['React', 'Vue.js', 'Next.js', 'Nuxt.js', 'TypeScript', 'Decap CMS', 'REST APIs', 'WCAG 2.1'],
     evidenceIds: ['approved-tactical-tech'],
   },
   {
@@ -373,10 +374,10 @@ export const portfolioContent = {
   profile: {
     name: 'Saqib Sohail',
     location: 'Berlin, Germany',
-    title: 'Senior full-stack engineer',
-    positioning: 'Frontend-leaning full-stack engineer',
-    proposition: 'Frontend-leaning engineer building accessible product interfaces, dependable service boundaries, and applied-AI workflows.',
-    summary: 'Eight years of experience turning complex workflows into maintainable web products, from frontend architecture and legacy modernisation to API integration and AI-assisted features.',
+    title: 'Senior software engineer',
+    positioning: 'Frontend-leaning software engineer',
+    proposition: 'Frontend-leaning software engineer building accessible product interfaces, dependable service boundaries, and applied-AI workflows.',
+    summary: 'Eight years of experience delivering production web applications across frontend architecture, backend and service integration, legacy modernisation, and AI-assisted product workflows.',
     email: 'saqib@ssohail.com',
     website: 'https://ssohail.com',
     githubUrl: 'https://github.com/saqibroy',
@@ -507,8 +508,8 @@ export function validatePortfolioContent(content: PortfolioContent = portfolioCo
     }
   }
 
-  assert(content.profile.title === 'Senior full-stack engineer', 'profile title must use the approved prominent title');
-  assert(content.profile.positioning === 'Frontend-leaning full-stack engineer', 'profile positioning must use the approved descriptive wording');
+  assert(content.profile.title === 'Senior software engineer', 'profile title must use the approved prominent title');
+  assert(content.profile.positioning === 'Frontend-leaning software engineer', 'profile positioning must use the approved descriptive wording');
   assert(content.profile.downloads.ats.startsWith('/downloads/'), 'ATS download path is invalid');
   assert(content.profile.downloads.visual.startsWith('/downloads/'), 'visual download path is invalid');
 }

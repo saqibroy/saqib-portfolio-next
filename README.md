@@ -1,6 +1,6 @@
 # Saqib Sohail — Engineering Portfolio
 
-The public portfolio for a senior frontend-leaning full-stack engineer in
+The public portfolio for a senior frontend-leaning software engineer in
 Berlin. It is a Next.js application with server-rendered portfolio content,
 reviewed MDX writing, accessible interaction islands, and a small test suite.
 

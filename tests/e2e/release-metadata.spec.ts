@@ -1,6 +1,13 @@
 import { expect, test } from '@playwright/test';
 
 test('public metadata uses the canonical domain and structured data', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveTitle('Saqib Sohail — Senior software engineer');
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'Saqib Sohail — Senior software engineer');
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', 'Saqib Sohail — Senior software engineer');
+  await expect(page.locator('meta[name="twitter:image:alt"]')).toHaveAttribute('content', 'Saqib Sohail — Senior software engineer');
+  expect(await page.locator('script[type="application/ld+json"]').first().evaluate((element) => element.textContent)).toContain('Senior software engineer');
+
   await page.goto('/writing/designing-a-url-shortener');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://ssohail.com/writing/designing-a-url-shortener');
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://ssohail.com/writing/designing-a-url-shortener');

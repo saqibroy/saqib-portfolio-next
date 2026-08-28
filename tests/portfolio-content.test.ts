@@ -7,8 +7,22 @@ import { portfolioContent } from '@/content/portfolio';
 
 describe('portfolio content', () => {
   it('keeps the prominent title distinct from descriptive positioning', () => {
-    expect(portfolioContent.profile.title).toBe('Senior full-stack engineer');
-    expect(portfolioContent.profile.positioning).toBe('Frontend-leaning full-stack engineer');
+    expect(portfolioContent.profile.title).toBe('Senior software engineer');
+    expect(portfolioContent.profile.positioning).toBe('Frontend-leaning software engineer');
+  });
+
+  it('keeps reference-backed Tactical Tech facts and the Velsa employment title distinct', () => {
+    const tacticalTech = portfolioContent.roles.find(({ id }) => id === 'tactical-tech');
+    const velsa = portfolioContent.roles.find(({ id }) => id === 'velsa-technologies');
+
+    expect(tacticalTech).toMatchObject({
+      title: 'Software Engineer / Web Developer',
+      startDate: '2019-08',
+      endDate: '2025-03',
+    });
+    expect(tacticalTech?.highlights).toHaveLength(5);
+    expect(tacticalTech?.highlights.join(' ')).toContain('supporting GDPR-compliant workflows');
+    expect(velsa?.title).toBe('Senior Full-Stack Engineer');
   });
 
   it('keeps the four approved homepage proof metrics available', () => {
